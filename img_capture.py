@@ -19,34 +19,19 @@ import climate as climate
 
 
 ######################################################
-# setPins
-# initialize power and data pins for each camera
-######################################################
-def setPins():
-    gp.setup(7, gp.OUT) #Pin 7 needed for all cameras
-
-    # Listed pins according to arducam adapter number
-    # Camera #    1       2       3       4
-    setup_pins = [11, 12, 15, 16, 21, 22, 23, 24]
-    for pin in setup_pins:
-        gp.setup(pin, gp.OUT)
-        gp.output(pin, True)
-
-
-######################################################
 # cameraProcess
 # take a photo for a given camera and push it to s3
 ######################################################
-def cameraProcess(pathway):
-    camera = PiCamera()
-    camera.rotation = 270
-    camera.start_preview()
-    time.sleep(3) # >2 seconds of sleep time required for the camera to focus
+def cameraProcess(cameraIP, stack_num, module_num):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    camera.capture("/home/pi/inHouse_rpi/camera_%s.jpg" %date)
-    camera.stop_preview()
-    os.system('s3cmd put /home/pi/inHouse_rpi/camera_%s.jpg %s' %(date, pathway)) #push image to s3
-    os.system('rm /home/pi/inHouse_rpi/camera_%s.jpg' %date) #delete image locally
+    filename = "camera_%s.jpg" %date
+    os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
+    
+    pathway = pathway + filename
+    cwd = '{}/{}'.format(os.getcwd(), filename)
+
+    os.system('s3cmd put %s %s' %(cwd, pathway)) #push image to s3
+    os.system('rm %s' %cwd) #delete image locally
     climate.main(date)
 
 
@@ -59,26 +44,21 @@ def main():
     gp.setwarnings(False) #set warnings OFF
     gp.setmode(gp.BOARD)
 
-    setPins()
     config = configparser.ConfigParser()
 
-    if not os.path.isfile('/home/pi/inHouse_rpi/ihp_config.ini'):
+    if not os.path.isfile('/home/pi/inHouse_rpi/config.json'):
         rpi_config.main()
+    config.read('/home/pi/inHouse_rpi/config.json')
 
-    config.read('/home/pi/inHouse_rpi/ihp_config.ini')
-    pathways = config['pathways']
+    sitename = config['site']
+    sysname = config['system']
+    stacks = config['stacks']
 
-    capture_pins = {
-        1: {7: False, 11: False, 12: True},
-        2: {7: True, 11: False, 12: True},
-        3: {7: False, 11: True, 12: False},
-        4: {7: True, 11: True, 12: False}
-    }
-
-    for camera, pins in capture_pins.items():
-        for pin, value in pins.items():
-            gp.output(pin, value)
-        cameraProcess(pathways[str(camera)])
+    for stacknum, stack in enumerate(stacks):
+        for module_num, module in enumerate(stack):
+            ip = module['host']
+            pathway = "s3://inhouseproduce-sites/{}/{}/stack{}/module{}/".format(sitename, sysname, stack_num, module_num)
+            cameraProcess(ip, pathway)
         time.sleep(60)
 
 
