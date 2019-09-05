@@ -25,9 +25,11 @@ import climate as climate
 def cameraProcess(cameraIP, stack_num, module_num):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
     filename = "camera_%s.jpg" %date
+    #Command to get image from the ip address and store at CWD
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
     
     pathway = pathway + filename
+    #directory to locally saved image
     cwd = '{}/{}'.format(os.getcwd(), filename)
 
     os.system('s3cmd put %s %s' %(cwd, pathway)) #push image to s3
@@ -50,13 +52,16 @@ def main():
         rpi_config.main()
     config.read('/home/pi/inHouse_rpi/config.json')
 
+    #reads the JSON file
     sitename = config['site']
     sysname = config['system']
     stacks = config['stacks']
 
+    #Iterate through stacks and modules for the IP address of camera images
     for stacknum, stack in enumerate(stacks):
         for module_num, module in enumerate(stack):
             ip = module['host']
+            #pathway to s3
             pathway = "s3://inhouseproduce-sites/{}/{}/stack{}/module{}/".format(sitename, sysname, stack_num, module_num)
             cameraProcess(ip, pathway)
         time.sleep(60)
