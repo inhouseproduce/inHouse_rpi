@@ -30,10 +30,10 @@ def cameraProcess(cameraIP, stack_num, module_num):
     
     pathway = pathway + filename
     #directory to locally saved image
-    cwd = '{}/{}'.format(os.getcwd(), filename)
+    # cwd = '{}/{}'.format(os.getcwd(), filename)
 
-    os.system('s3cmd put %s %s' %(cwd, pathway)) #push image to s3
-    os.system('rm %s' %cwd) #delete image locally
+    os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
+    os.system('rm %s' %filename) #delete image locally
     climate.main(date)
 
 
@@ -43,9 +43,6 @@ def cameraProcess(cameraIP, stack_num, module_num):
 # source to s3 on regular intervals
 ######################################################
 def main():
-    gp.setwarnings(False) #set warnings OFF
-    gp.setmode(gp.BOARD)
-
     config = configparser.ConfigParser()
 
     if not os.path.isfile('/home/pi/inHouse_rpi/config.json'):
@@ -62,7 +59,7 @@ def main():
         for module_num, module in enumerate(stack):
             ip = module['host']
             #pathway to s3
-            pathway = "s3://inhouseproduce-sites/{}/{}/stack{}/module{}/".format(sitename, sysname, stack_num, module_num)
+            pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
             cameraProcess(ip, pathway)
         time.sleep(60)
 
