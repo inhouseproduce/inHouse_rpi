@@ -8,7 +8,7 @@ def main():
     gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
-    if now.hour >= 6 and now < 22:
+    if now.hour >= 6 and now.hour < 22:
         gp.output(pin, False) # no voltage defaults to connected
     else:
         gp.output(pin, True)
