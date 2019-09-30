@@ -11,6 +11,8 @@ def main():
     now = datetime.datetime.now()
     if now.hour % 4 == 0 and now.minute < 5:
         gp.output(pin, True)
+        time.sleep(60*5)
+        gp.output(pin, False)
     else:
         gp.output(pin, False)
 

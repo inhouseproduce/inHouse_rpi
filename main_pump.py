@@ -1,5 +1,6 @@
 import RPi.GPIO as gp
 import datetime
+import time
 
 #every 6 minutes for 1 minute
 def main():
@@ -11,6 +12,8 @@ def main():
     now = datetime.datetime.now()
     if now.minute % 6 == 0:
         gp.output(pin, True)
+        time.sleep(60)
+        gp.output(pin, False)
     else:
         gp.output(pin, False)
 
