@@ -25,7 +25,7 @@ def main():
 
     # Set Lights
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
-    lights.min.every(1)
+    lights.minute.every(1)
 
     pi_cron.write()
 
