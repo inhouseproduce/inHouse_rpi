@@ -1,0 +1,15 @@
+import RPi.GPIO as gp
+
+
+def main():
+    pin = 7
+    runtime = 60000 # 1 minute
+    gp.setmode(gp.BOARD)
+    gp.setup(pin, gp.OUT)
+
+    gp.output(pin, True)
+    time.sleep(runtime)
+    gp.output(pin, False)
+
+if __name__ == "__main__":
+    main()
