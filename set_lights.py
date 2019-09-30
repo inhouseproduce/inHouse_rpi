@@ -10,7 +10,7 @@ def main():
     now = datetime.datetime.now()
     today6am = now.replace(hour=6, minute=0, second=0, microsecond=0)
     today10pm = now.replace(hour=22, minute=0, second=0, microsecond=0)
-    if now >= today8am and now < today10pm:
+    if now >= today6am and now < today10pm:
         gp.output(pin, True)
     else:
         gp.output(pin, False)
