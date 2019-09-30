@@ -12,8 +12,12 @@ def main():
     today10pm = now.replace(hour=22, minute=0, second=0, microsecond=0)
     if now >= today6am and now < today10pm:
         gp.output(pin, True)
+        print(gp.input(pin))
+        print('lights should be on!')
     else:
         gp.output(pin, False)
+        print(gp.input(pin))
+        print('lights should be off!')
         
 
 if __name__ == "__main__":
