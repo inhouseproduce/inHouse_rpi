@@ -21,15 +21,15 @@ def main():
 
     # Run Main Pump
     main_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/main_pump.py')
-    main_pump.second.every(15)
+    main_pump.minute.every(1)
 
     # Run Germination Pump
     germination_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/germination_pump.py')
-    germination_pump.second.every(15)
+    germination_pump.minute.every(1)
 
     # Set Lights
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
-    lights.second.every(15)
+    lights.minute.every(1)
 
     pi_cron.write()
 
