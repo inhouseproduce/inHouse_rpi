@@ -2,7 +2,7 @@ import RPi.GPIO as gp
 
 
 def main():
-    pin = 7
+    pin = 11
     runtime = 60000 # 1 minute
     gp.setmode(gp.BOARD)
     gp.setup(pin, gp.OUT)
