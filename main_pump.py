@@ -6,16 +6,14 @@ import time
 def main():
     pin = 11
     gp.setmode(gp.BOARD)
-    # gp.setwarnings(False)
+    gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
     if now.minute % 6 == 0:
-        gp.output(pin, True)
-        time.sleep(60)
         gp.output(pin, False)
     else:
-        gp.output(pin, False)
+        gp.output(pin, True)
 
 if __name__ == "__main__":
     main()
