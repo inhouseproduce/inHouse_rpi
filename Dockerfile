@@ -4,7 +4,7 @@ ENV INITSYSTEM on
 
 RUN apt-get -y update
 RUN apt-get -y dist-upgrade
-RUN apt-get install python3.6 gcc libc-dev parted-dev python3-dev wget
+RUN apt-get install python3.6 gcc libc-dev python3-dev wget
 
 # install RPi.GPIO
 RUN wget http://pypi.python.org/packages/source/R/RPi.GPIO/RPi.GPIO-0.7.0.tar.gz
