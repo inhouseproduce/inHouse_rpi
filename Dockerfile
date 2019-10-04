@@ -4,7 +4,7 @@ ENV INITSYSTEM on
 
 RUN apt-get -y update
 RUN apt-get -y dist-upgrade
-RUN apt-get install python3 rpi.gpio
+RUN apt-get -y install python3 rpi.gpio python-crontab
 
 COPY . .
 
