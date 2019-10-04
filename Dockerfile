@@ -2,10 +2,7 @@ FROM balenalib/raspberrypi4-64-python
 
 ENV INITSYSTEM on
 
-# RUN yum -y install wget
-
-RUN apk add --no-cache \
-    python3 gcc libc-dev parted-dev python3-dev
+RUN apt-get install python3 gcc libc-dev parted-dev python3-dev wget
 
 # install RPi.GPIO
 RUN wget http://pypi.python.org/packages/source/R/RPi.GPIO/RPi.GPIO-0.7.0.tar.gz
