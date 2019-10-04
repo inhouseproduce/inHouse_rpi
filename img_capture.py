@@ -12,7 +12,6 @@ import os
 import time
 import datetime
 import configparser
-from picamera import PiCamera
 
 import rpi_config as rpi_config
 import climate as climate
