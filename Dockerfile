@@ -6,7 +6,7 @@ RUN apt-get -y update
 RUN apt-get -y dist-upgrade
 RUN apt-get install python3.6 rpi.gpio
 
-
+COPY . .
 
 RUN apt-get -y update
 CMD ["python3", "init.py"]
