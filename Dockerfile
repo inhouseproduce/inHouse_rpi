@@ -2,7 +2,7 @@ FROM balenalib/raspberrypi4-64-python
 
 ENV INITSYSTEM on
 
-RUN yum -y install wget
+# RUN yum -y install wget
 
 RUN apk add --no-cache \
     python3 gcc libc-dev parted-dev python3-dev
