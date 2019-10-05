@@ -1,8 +1,9 @@
-import set_cron as set_cron
-import os
+# import set_cron as set_cron
+# import os
 
 
-os.system('printenv')
+# os.system('printenv')
 # set_cron.main()
 
 
+pass
