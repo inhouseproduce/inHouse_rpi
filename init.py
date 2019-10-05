@@ -3,6 +3,6 @@ import os
 
 
 os.system('printenv')
-set_cron.main()
+# set_cron.main()
 
 
