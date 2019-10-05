@@ -1,4 +1,4 @@
-FROM balenalib/raspberrypi4-64-python
+FROM balenalib/raspberrypi4-64-python:3.6.9
 
 ENV INITSYSTEM on
 
