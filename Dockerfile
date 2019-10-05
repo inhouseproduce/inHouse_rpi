@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-python
+FROM balenalib/raspberrypi4-64-python
 
 ENV INITSYSTEM on
 
