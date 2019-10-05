@@ -9,4 +9,5 @@ RUN apt-get -y install python3 rpi.gpio python-crontab
 COPY . .
 
 RUN apt-get -y update
+RUN whoami
 CMD ["python3", "init.py"]
