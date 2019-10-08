@@ -12,9 +12,9 @@ import time
 
 def main():
     pi_cron = CronTab(user='root')
-    pi_cron.get('MAILTO') = 'andrin@inhouseproduce.com'
+    # pi_cron.get('MAILTO') = 'andrin@inhouseproduce.com'
 
-    Capture data and send to s3
+    # Capture data and send to s3
     img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
     img_capture.minute.on(0,30)
 
