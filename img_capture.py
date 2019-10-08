@@ -63,8 +63,6 @@ def main():
                         #pathway to s3
                         pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/{}".format(sitename, sysname, stack_num, module_num, camera_num)
                         cameraProcess(ip, pathway)
-            time.sleep(60)
-
 
 if __name__ == "__main__":
     main()
