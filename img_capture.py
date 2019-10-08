@@ -7,12 +7,12 @@
 # The following code uses an ArduCam header to multiplex four cameras at 30 minute intervals and sends 
 # the received picture right to the Amazon S3 web server before deleting it locally
 #######################################################################################################################
+#!/usr/bin/python3
 import RPi.GPIO as gp
 import os
 import time
 import datetime
 import configparser
-from picamera import PiCamera
 
 import rpi_config as rpi_config
 import climate as climate
