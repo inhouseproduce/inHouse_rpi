@@ -55,7 +55,7 @@ def main():
                     ip = camera['host']
                     if ip:
                         #pathway to s3
-                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num+1, module_num+1, camera_num+1
+                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num+1, module_num+1, camera_num+1)
                         cameraProcess(ip, pathway)
 
 if __name__ == "__main__":
