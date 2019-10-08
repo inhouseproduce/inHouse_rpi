@@ -12,6 +12,7 @@ import RPi.GPIO as gp
 import os
 import time
 import datetime
+import json
 
 import rpi_config as rpi_config
 import climate as climate
@@ -42,25 +43,22 @@ def cameraProcess(cameraIP, stack_num, module_num):
 # source to s3 on regular intervals
 ######################################################
 def main():
-    config = configparser.ConfigParser()
-
-    if not os.path.isfile('/home/pi/inHouse_rpi/config.json'):
-        rpi_config.main()
-    config.read('/home/pi/inHouse_rpi/config.json')
-
     #reads the JSON file
-    sitename = config['site']
-    sysname = config['system']
-    stacks = config['stacks']
+    with open('config.json') as config_file:
+        config = json.load(config_file)
+        
+        sitename = config['site']
+        sysname = config['system']
+        stacks = config['stacks']
 
-    #Iterate through stacks and modules for the IP address of camera images
-    for stacknum, stack in enumerate(stacks):
-        for module_num, module in enumerate(stack):
-            ip = module['host']
-            #pathway to s3
-            pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
-            cameraProcess(ip, pathway)
-        time.sleep(60)
+        #Iterate through stacks and modules for the IP address of camera images
+        for stacknum, stack in enumerate(stacks):
+            for module_num, module in enumerate(stack):
+                ip = module['host']
+                #pathway to s3
+                pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
+                cameraProcess(ip, pathway)
+            time.sleep(60)
 
 
 if __name__ == "__main__":
