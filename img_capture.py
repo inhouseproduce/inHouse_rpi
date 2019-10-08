@@ -54,7 +54,7 @@ def main():
         #Iterate through stacks and modules for the IP address of camera images
         for stacknum, stack in enumerate(stacks):
             for module_num, module in enumerate(stack):
-                ip = module['host']
+                ip = module.'host'
                 #pathway to s3
                 pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
                 cameraProcess(ip, pathway)
