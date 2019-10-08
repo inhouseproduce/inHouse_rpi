@@ -8,7 +8,6 @@
 # the received picture right to the Amazon S3 web server before deleting it locally
 #######################################################################################################################
 #!/usr/bin/python3
-import RPi.GPIO as gp
 import os
 import time
 import datetime
@@ -22,7 +21,7 @@ import rpi_config as rpi_config
 # cameraProcess
 # take a photo for a given camera and push it to s3
 ######################################################
-def cameraProcess(cameraIP, stack_num, module_num):
+def cameraProcess(cameraIP, pathway):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
     filename = "camera_%s.jpg" %date
     #Command to get image from the ip address and store at CWD
@@ -30,7 +29,6 @@ def cameraProcess(cameraIP, stack_num, module_num):
     
     pathway = pathway + filename
     #directory to locally saved image
-    # cwd = '{}/{}'.format(os.getcwd(), filename)
 
     os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
@@ -48,16 +46,23 @@ def main():
         config = json.load(config_file)
 
         sitename = config['site']
+        print("sitename: ", sitename)
         sysname = config['system']
-        stacks = config['stacks']
+        print("sysname: ", sysname)
 
         #Iterate through stacks and modules for the IP address of camera images
-        for stacknum, stack in enumerate(stacks):
-            for module_num, module in enumerate(stack):
-                ip = module.'host'
-                #pathway to s3
-                pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
-                cameraProcess(ip, pathway)
+        for stack_num, stack in enumerate(config['stacks']):
+            print("stack_num: ", stack_num)
+            print("stack: ", stack)
+            for module_num, module in enumerate(stack['modules']):
+                print("module_num:", module_num)
+                print("module: ", module)
+                for camera_num, camera in enumerate(module['cameras']):
+                    ip = camera['host']
+                    if ip:
+                        #pathway to s3
+                        pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/{}".format(sitename, sysname, stack_num, module_num, camera_num)
+                        cameraProcess(ip, pathway)
             time.sleep(60)
 
 
