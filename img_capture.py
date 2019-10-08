@@ -23,7 +23,7 @@ import rpi_config as rpi_config
 ######################################################
 def cameraProcess(cameraIP, pathway):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    filename = "camera_%s.jpg" %date
+    filename = "capture_%s.jpg" %date
     #Command to get image from the ip address and store at CWD
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
     
@@ -46,22 +46,16 @@ def main():
         config = json.load(config_file)
 
         sitename = config['site']
-        print("sitename: ", sitename)
         sysname = config['system']
-        print("sysname: ", sysname)
 
         #Iterate through stacks and modules for the IP address of camera images
         for stack_num, stack in enumerate(config['stacks']):
-            print("stack_num: ", stack_num)
-            print("stack: ", stack)
             for module_num, module in enumerate(stack['modules']):
-                print("module_num:", module_num)
-                print("module: ", module)
                 for camera_num, camera in enumerate(module['cameras']):
                     ip = camera['host']
                     if ip:
                         #pathway to s3
-                        pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/{}".format(sitename, sysname, stack_num, module_num, camera_num)
+                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num, module_num, camera_num)
                         cameraProcess(ip, pathway)
 
 if __name__ == "__main__":
