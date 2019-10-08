@@ -14,8 +14,7 @@ import datetime
 import json
 
 import rpi_config as rpi_config
-
-#import climate as climate
+import climate as climate
 
 
 ######################################################
@@ -33,7 +32,7 @@ def cameraProcess(cameraIP, pathway):
 
     os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
-    #climate.main(date)
+    climate.main(date)
 
 
 ######################################################
@@ -56,7 +55,7 @@ def main():
                     ip = camera['host']
                     if ip:
                         #pathway to s3
-                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num, module_num, camera_num)
+                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num+1, module_num+1, camera_num+1
                         cameraProcess(ip, pathway)
 
 if __name__ == "__main__":
