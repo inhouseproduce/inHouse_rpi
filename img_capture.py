@@ -12,7 +12,6 @@ import RPi.GPIO as gp
 import os
 import time
 import datetime
-import configparser
 
 import rpi_config as rpi_config
 import climate as climate
