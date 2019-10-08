@@ -11,9 +11,9 @@ def main():
 
     now = datetime.datetime.now()
     if now.hour >= 6 and now.hour < 22:
-        gp.output(pin, False) # no voltage defaults to connected
+        gp.output(pin, True) # signal results in default
     else:
-        gp.output(pin, True)
+        gp.output(pin, False)
         
 
 if __name__ == "__main__":
