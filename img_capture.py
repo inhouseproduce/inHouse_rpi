@@ -42,7 +42,7 @@ def cameraProcess(cameraIP, pathway):
 ######################################################
 def main():
     #reads the JSON file
-    with open('config.json') as config_file:
+    with open('/home/pi/inHouse_rpi/config.json') as config_file:
         config = json.load(config_file)
 
         sitename = config['site']
