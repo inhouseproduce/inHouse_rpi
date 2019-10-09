@@ -51,9 +51,9 @@ def write_climate(file_path):
     humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
      
     # Output data to file
-    climate_file.write("Outside Temperature in Celsius is : %.1f C\n" %cTemp)
-    climate_file.write("Outside Temperature in Fahrenheit is : %.1f F\n" %fTemp)
-    climate_file.write("Outside Relative Humidity is : %.1f %%RH\n" %humidity)
+    climate_file.write("Temperature in Celsius is : %.1f C\n" %cTemp)
+    climate_file.write("Temperature in Fahrenheit is : %.1f F\n" %fTemp)
+    climate_file.write("Relative Humidity is : %.1f %%RH\n" %humidity)
     climate_file.close()
 
 
