@@ -30,8 +30,8 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return 'Water Temperature in Celsius is : %.1f C\nWater Temperature in Farenheit is : %.1f F\n' %(temp_c,temp_f)
 
-def write_climate(file_path):
-    climate_file = open('%s' %file_path, 'w+')
+def write_climate(filename):
+    climate_file = open('%s' %filename, 'w+')
     # climate_file.write(read_temp())
 
     # Get I2C bus
@@ -62,11 +62,11 @@ def write_climate(file_path):
 
 def main(pathway, date):
     date = date or datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    file_path = '/home/pi/inHouse_rpi/climate_readings_%s.txt' %date
-    write_climate(file_path)
+    filename = 'climate_readings_%s.txt' %date
+    write_climate(filename)
 
-    os.system('s3cmd put %s %s' %(file_path, pathway))
-    os.system('rm %s' %file_path)
+    os.system('s3cmd put %s %s' %(filename, pathway + filename))
+    os.system('rm %s' %filename)
 
 
 if __name__ == "__main__":  

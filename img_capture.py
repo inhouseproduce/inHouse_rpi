@@ -27,10 +27,9 @@ def cameraProcess(cameraIP, pathway):
     #Command to get image from the ip address and store at CWD
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
     
-    pathway = pathway + filename
     #directory to locally saved image
 
-    os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
+    os.system('s3cmd put %s %s' %(filename, pathway + filename)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
     climate.main(pathway, date)
 
