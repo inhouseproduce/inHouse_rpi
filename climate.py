@@ -32,7 +32,7 @@ def read_temp():
 
 def write_climate(file_path):
     climate_file = open('%s' %file_path, 'w+')
-    climate_file.write(read_temp())
+    # climate_file.write(read_temp())
     # Get I2C bus
     bus = smbus.SMBus(1)
      
