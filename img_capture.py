@@ -32,7 +32,7 @@ def cameraProcess(cameraIP, pathway):
 
     os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
-    climate.main(date)
+    climate.main(pathway, date)
 
 
 ######################################################

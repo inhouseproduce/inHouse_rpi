@@ -57,19 +57,12 @@ def write_climate(file_path):
     climate_file.close()
 
 
-def main(date):
-    os.system('modprobe w1-gpio')
-    os.system('modprobe w1-therm')
-    
+def main(pathway, date):
     date = date or datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
     file_path = '/home/pi/inHouse_rpi/climate_readings_%s.txt' %date
     write_climate(file_path)
 
-    config = configparser.ConfigParser()
-    config.read('/home/pi/inHouse_rpi/ihp_config.ini')
-    remote_path = config['climate']['pathway']
-
-    os.system('s3cmd put %s %s' %(file_path, remote_path))
+    os.system('s3cmd put %s %s' %(file_path, pathway))
     os.system('rm %s' %file_path)
 
 
