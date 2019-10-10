@@ -18,7 +18,7 @@ app.post('/camera/:id', function (req, res) {
         let module_num = Math.floor(((id - 1) % 6) / 2);
         let camera_num = (id - 1) % 2;
         config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
-        fs.writeFile('/home/pi/inHouse_rpi/config.json', JSON.stringify(config, 2), (err) => {
+        fs.writeFile('/home/pi/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
         	console.log(err)
         });
     })
