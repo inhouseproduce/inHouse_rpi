@@ -56,7 +56,7 @@ def write_climate(filename):
         # Output data to file
         output = {
             'Temperature': {
-                'Celsius' : round(cTemp,1)
+                'Celsius' : round(cTemp,1),
                 'Fahrenheit': round(fTemp,1)
             },
             'Humidity': round(humidity,1)
