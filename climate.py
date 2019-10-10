@@ -2,9 +2,9 @@
 import os
 import glob
 import time
+import json
 import smbus
 import datetime
-import configparser
 
 
 def read_temp_raw():
@@ -54,9 +54,14 @@ def write_climate(filename):
         humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
 
         # Output data to file
-        climate_file.write("Temperature in Celsius is : %.1f C\n" %cTemp)
-        climate_file.write("Temperature in Fahrenheit is : %.1f F\n" %fTemp)
-        climate_file.write("Relative Humidity is : %.1f %%RH\n" %humidity)
+        output = {
+            'Temperature': {
+                'Celsius' : cTemp,
+                'Fahrenheit': fTemp
+            },
+            'Humidity': humidity
+        }
+        json.dump(output, climate_file)
 
 
 def main(pathway, date):
