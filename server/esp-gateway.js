@@ -5,10 +5,12 @@ const port = 3000
 
 app.use(bodyParser.json())
 
-app.post('/', function (req, res) {
-    console.log('req.body: ',req.body)
-    console.log('req.body.test: ',req.body.test)
-    res.send('Got a POST request')
+app.post('/camera/:id', function (req, res) {
+    let id = req.params.id
+    let address = req.body['address']
+    console.log('id: ',id)
+    console.log('address: ',address)
+    res.send('Got a POST request for camera #', id)
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
