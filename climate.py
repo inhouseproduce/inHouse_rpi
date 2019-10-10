@@ -56,10 +56,10 @@ def write_climate(filename):
         # Output data to file
         output = {
             'Temperature': {
-                'Celsius' : '%.1f' %cTemp,
-                'Fahrenheit': '%.1f' %fTemp
+                'Celsius' : round(cTemp,1)
+                'Fahrenheit': round(fTemp,1)
             },
-            'Humidity': '%.1f' %humidity
+            'Humidity': round(humidity,1)
         }
         json.dump(output, climate_file)
 
