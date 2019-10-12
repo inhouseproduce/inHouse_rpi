@@ -1,10 +1,20 @@
 #!/usr/bin/python3
+import RPi.GPIO as gp
 import os
 import glob
 import time
 import json
 import smbus
 import datetime
+
+
+def get_backup_temperature():
+    pin = 7
+    gp.setmode(gp.BOARD)
+    gp.setwarnings(False)
+    gp.setup(pin, gp.IN)
+
+    return gp.input(pin)
 
 
 def read_temp_raw():
@@ -30,37 +40,45 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return 'Water Temperature in Celsius is : %.1f C\nWater Temperature in Farenheit is : %.1f F\n' %(temp_c,temp_f)
 
+
+def get_climate():
+    # Get I2C bus
+    bus = smbus.SMBus(1)
+
+    # SHT31 address, 0x44(68)
+    bus.write_i2c_block_data(0x44, 0x2C, [0x06])
+
+    time.sleep(0.5)
+
+    # SHT31 address, 0x44(68)
+    # Read data back from 0x00(00), 6 bytes
+    # Temp MSB, Temp LSB, Temp CRC, Humididty MSB, Humidity LSB, Humidity CRC
+    data = bus.read_i2c_block_data(0x44, 0x00, 6)
+
+    # Convert the data
+    temp = data[0] * 256 + data[1]
+    cTemp = -45 + (175 * temp / 65535.0)
+    fTemp = -49 + (315 * temp / 65535.0)
+    humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
+
+    # Output data to file
+
+    return cTemp, fTemp, humidity
+
+
 def write_climate(filename):
     with open('%s' %filename, 'w+') as climate_file:
-        # climate_file.write(read_temp())
 
-        # Get I2C bus
-        bus = smbus.SMBus(1)
+        cTemp, fTemp, humidity = get_climate()
 
-        # SHT31 address, 0x44(68)
-        bus.write_i2c_block_data(0x44, 0x2C, [0x06])
-
-        time.sleep(0.5)
-
-        # SHT31 address, 0x44(68)
-        # Read data back from 0x00(00), 6 bytes
-        # Temp MSB, Temp LSB, Temp CRC, Humididty MSB, Humidity LSB, Humidity CRC
-        data = bus.read_i2c_block_data(0x44, 0x00, 6)
-
-        # Convert the data
-        temp = data[0] * 256 + data[1]
-        cTemp = -45 + (175 * temp / 65535.0)
-        fTemp = -49 + (315 * temp / 65535.0)
-        humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
-
-        # Output data to file
         output = {
-            'Temperature': {
-                'Celsius' : round(cTemp,1),
-                'Fahrenheit': round(fTemp,1)
-            },
-            'Humidity': round(humidity,1)
-        }
+        'Temperature': {
+            'Celsius' : round(cTemp,1),
+            'Fahrenheit': round(fTemp,1)
+        },
+        'Humidity': round(humidity,1)
+    }
+        
         json.dump(output, climate_file)
 
 
