@@ -15,8 +15,8 @@ def main():
     pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
 
     # Capture data and send to s3
-    # img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
-    # img_capture.minute.on(0,30)
+    img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
+    img_capture.minute.on(0,30)
 
     # Check for new versions
     update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
