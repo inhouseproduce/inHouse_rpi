@@ -11,7 +11,7 @@ if [ $LOCAL = $REMOTE ]; then
     echo "Up-to-date"
 elif [ $LOCAL = $BASE ]; then
     echo "Need to pull"
-    git pull origin raspbian-build
+    git pull origin germination
     python3 init.py
 elif [ $REMOTE = $BASE ]; then
     echo "Error codebase changed!"

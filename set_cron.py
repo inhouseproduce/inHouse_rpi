@@ -15,8 +15,8 @@ def main():
     pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
 
     # Check for new versions
-    # update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
-    # update_git.minute.on(15,45)
+    update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
+    update_git.minute.on(15,45)
 
     # Heat & Humidity
     heat_humid = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/heat_and_humidity.py')
