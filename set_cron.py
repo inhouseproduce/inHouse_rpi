@@ -11,28 +11,16 @@ import os
 import time
 
 def main():
-    pi_cron = CronTab(user='root')
-    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
-
-    # Capture data and send to s3
-    # img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
-    # img_capture.minute.on(0,30)
+    pi_cron = CronTab(user='pi')
+    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com']
 
     # Check for new versions
-    update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
-    update_git.minute.on(15,45)
+    # update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
+    # update_git.minute.on(15,45)
 
-    # Run Main Pump
-    main_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/main_pump.py')
-    main_pump.minute.every(1)
-
-    # Run Germination Pump
-    germination_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/germination_pump.py')
-    germination_pump.minute.every(1)
-
-    # Set Lights
-    lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
-    lights.minute.every(1)
+    # Heat & Humidity
+    heat_humid = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/heat_and_humidity.py')
+    heat_humid.minute.every(1)
 
     pi_cron.write()
 
