@@ -12,7 +12,7 @@ import time
 
 def main():
     pi_cron = CronTab(user='pi')
-    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com']
+    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
 
     # Check for new versions
     # update_git = pi_cron.new(command = 'cd /home/pi/inHouse_rpi/; bash update_git.sh')
