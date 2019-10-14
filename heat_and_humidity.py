@@ -61,6 +61,9 @@ def main():
             setHeat(temp, idealTemp, heatPin)
             
     else:
+        print("got sht31 data:")
+        print("fTemp: ",fTemp)
+        print("humidity: ",humidity)
         setHeat(fTemp, idealTemp, heatPin)
         setHumid(humidity, idealHumid, humidPin)
 
