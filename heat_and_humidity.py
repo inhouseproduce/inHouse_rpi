@@ -44,14 +44,18 @@ def main():
         cTemp, fTemp, humidity = climate.get_climate()
     except:
         print("climate failed")
-        temp = climate.get_backup_temperature()
-        print('backup temp: ',temp)
-        setHeat(temp, idealTemp, heatPin)
-        now = datetime.datetime.now()
-        if now.minute < 30:
-            setHumid(0, idealHumid, humidPin)
+        try: 
+            temp = climate.get_backup_temperature()
+        except:
+            print("backup temp failed")
+            if now.minute < 30:
+                setHumid(0, idealHumid, humidPin)
+            else:
+                setHumid(100, idealHumid, humidPin)
         else:
-            setHumid(100, idealHumid, humidPin)
+            print('backup temp: ',temp)
+            setHeat(temp, idealTemp, heatPin)
+            now = datetime.datetime.now()
     else:
         setHeat(fTemp, idealTemp, heatPin)
         setHumid(humidity, idealHumid, humidPin)
