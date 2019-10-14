@@ -1,1 +1,1 @@
-raise Exception("not implemented yet!")
+raise NotImplementedError("not implemented yet!")
