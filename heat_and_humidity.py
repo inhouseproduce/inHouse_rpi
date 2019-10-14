@@ -46,6 +46,7 @@ def main():
         print("climate failed")
         try: 
             temp = climate.get_backup_temperature()
+            raise NotImplementedError("not implemented yet!")
         except:
             print("backup temp failed")
             if now.minute < 30:
