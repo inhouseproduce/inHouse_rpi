@@ -49,6 +49,7 @@ def main():
             raise NotImplementedError("not implemented yet!")
         except:
             print("backup temp failed")
+            now = datetime.datetime.now()
             if now.minute < 30:
                 setHumid(0, idealHumid, humidPin)
             else:
@@ -56,7 +57,7 @@ def main():
         else:
             print('backup temp: ',temp)
             setHeat(temp, idealTemp, heatPin)
-            now = datetime.datetime.now()
+            
     else:
         setHeat(fTemp, idealTemp, heatPin)
         setHumid(humidity, idealHumid, humidPin)
