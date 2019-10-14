@@ -36,7 +36,7 @@ def main():
     setPin(heatPin)
     setPin(humidPin)
 
-    cTemp, fTemp, humidity
+    cTemp, fTemp, humidity = 0
 
     try:
         cTemp, fTemp, humidity = climate.get_climate()
