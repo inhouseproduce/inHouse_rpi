@@ -7,16 +7,16 @@ import datetime
 
 def setHeat(temp, ideal, pin):
     if temp < ideal:
-        gp.output(pin, True)
-    else:
         gp.output(pin, False)
+    else:
+        gp.output(pin, True)
 
 
 def setHumid(humidity, ideal, pin):
     if humidity < ideal:
-        gp.output(pin, True)
-    else:
         gp.output(pin, False)
+    else:
+        gp.output(pin, True)
 
 
 def setPin(pin):
