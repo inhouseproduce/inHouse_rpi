@@ -10,10 +10,12 @@ def main():
     gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
-    if now.hour >= 6 and now.hour < 22:
-        gp.output(pin, True) # signal results in default
-    else:
+    # Off between 2am and 10am
+    if now.hour >= 0 and now.hour < 8:
         gp.output(pin, False)
+    # will later implement dimming from 6PM - 12PM
+    else:
+        gp.output(pin, True)
         
 
 if __name__ == "__main__":
