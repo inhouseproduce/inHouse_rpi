@@ -8,16 +8,7 @@ import smbus
 import datetime
 
 
-def get_backup_temperature():
-    pin = 7
-    gp.setmode(gp.BOARD)
-    gp.setwarnings(False)
-    gp.setup(pin, gp.IN)
-
-    return gp.input(pin)
-
-
-def read_temp_raw():
+def backup_temp_raw():
     base_dir = '/sys/bus/w1/devices/'
     device_folder = glob.glob(base_dir + '28*')[0]
     device_file = device_folder + '/w1_slave'
@@ -28,17 +19,17 @@ def read_temp_raw():
     return lines
  
 
-def read_temp():
-    lines = read_temp_raw()
+def backup_temp():
+    lines = backup_temp_raw()
     while lines[0].strip()[-3:] != 'YES':
         time.sleep(0.2)
-        lines = read_temp_raw()
+        lines = backup_temp_raw()
     equals_pos = lines[1].find('t=')
     if equals_pos != -1:
         temp_string = lines[1][equals_pos+2:]
-        temp_c = float(temp_string) / 1000.0
-        temp_f = temp_c * 9.0 / 5.0 + 32.0
-        return 'Water Temperature in Celsius is : %.1f C\nWater Temperature in Farenheit is : %.1f F\n' %(temp_c,temp_f)
+        cTemp = float(temp_string) / 1000.0
+        fTemp = cTemp * 9.0 / 5.0 + 32.0
+        return cTemp, fTemp
 
 
 def get_climate():
