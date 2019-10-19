@@ -46,7 +46,6 @@ def main():
         print("climate failed")
         try: 
             cTemp, fTemp = climate.backup_temp()
-            raise NotImplementedError("not implemented yet!")
         except:
             print("backup temp failed")
             now = datetime.datetime.now()
