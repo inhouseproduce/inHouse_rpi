@@ -45,7 +45,7 @@ def main():
     except:
         print("climate failed")
         try: 
-            temp = climate.get_backup_temperature()
+            cTemp, fTemp = climate.backup_temp()
             raise NotImplementedError("not implemented yet!")
         except:
             print("backup temp failed")
@@ -57,8 +57,8 @@ def main():
                 setHumid(100, idealHumid, humidPin)
                 setHeat(100, idealHumid, humidPin)
         else:
-            print('backup temp: ',temp)
-            setHeat(temp, idealTemp, heatPin)
+            print('backup temp: ',fTemp)
+            setHeat(fTemp, idealTemp, heatPin)
             
     else:
         print("got sht31 data:")
