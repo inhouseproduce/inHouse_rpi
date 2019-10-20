@@ -14,7 +14,12 @@ def main():
         gp.output(pin, True) # signal results in default
     else:
         gp.output(pin, False)
-        
+    
+def trigger():
+    gp.output(pin, True)
+
+def kill():
+    gp.output(pin, False)
 
 if __name__ == "__main__":
     main()
