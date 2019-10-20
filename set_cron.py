@@ -27,8 +27,8 @@ def main():
     main_pump.minute.every(1)
 
     # Run Germination Pump
-    germination_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/germination_pump.py')
-    germination_pump.minute.every(1)
+    elongation_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/elongation_pump.py')
+    elongation_pump.minute.every(1)
 
     # Set Lights
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
