@@ -16,6 +16,12 @@ def main():
     # will later implement dimming from 6PM - 12PM
     else:
         gp.output(pin, True)
+
+def trigger():
+    gp.output(pin, False)
+
+def kill():
+    gp.output(pin, True)
         
 
 if __name__ == "__main__":
