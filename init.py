@@ -1,4 +1,6 @@
 #!/usr/bin/python3
 import os
+import set_cron as set_cron
 
-os.system("python3 ~/inHouse_rpi/set_cron.py")
+os.system('sudo crontab -u pi -r')
+set_cron.main()
