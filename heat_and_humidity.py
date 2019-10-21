@@ -50,15 +50,17 @@ def main():
             print("backup temp failed")
             now = datetime.datetime.now()
             if now.minute == 0:
-                setHumid(0, idealHumid, humidPin)
                 setHeat(0, idealHumid, humidPin)
             else:
-                setHumid(100, idealHumid, humidPin)
                 setHeat(100, idealHumid, humidPin)
         else:
             print('backup temp: ',fTemp)
             setHeat(fTemp, idealTemp, heatPin)
-            
+
+        if now.minute == 0:
+            setHumid(0, idealHumid, humidPin)
+        else:
+            setHumid(100, idealHumid, humidPin)
     else:
         print("got sht31 data:")
         print("fTemp: ",fTemp)
