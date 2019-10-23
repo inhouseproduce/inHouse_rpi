@@ -1,4 +1,4 @@
-import RPi.GPgp as gp
+import RPi.GPIO as gp
 import time
 
 gp.setwarnings(False)
