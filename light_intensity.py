@@ -1,27 +1,22 @@
 import RPi.GPIO as gp
 import time
 
-# gp.setwarnings(False)
-# gp.setmode(gp.BCM)
-# gp.setup(21,gp.OUT)
-# p = gp.PWM(21,100)
-# p.start(0)
-
-
-# def cool_down(interval):
-#     for x in range (100):
-#         p.ChangeDutyCycle(100-x)
-#         time.sleep(interva/100)
-
-# def warm_up(interval):
-#     for x in range (100):
-#         p.ChangeDutyCycle(x)
-#         time.sleep(interval/100)
-
-def set_duty_cycle(percent):
+def setup():
     gp.setwarnings(False)
     gp.setmode(gp.BCM)
     gp.setup(21,gp.OUT)
-    p = gp.PWM(21,100)
-    p.start(0)
+    pwm = gp.PWM(21,100)
+    pwm.start(0)
+    return pwm
+
+def maintain():
+    pwm = setup()
+    pwm.ChangeDutyCycle(100)
+
+    while(True):
+        time.sleep(60)
+
+def set_duty_cycle(percent):
+    
     p.ChangeDutyCycle(percent)
+    
