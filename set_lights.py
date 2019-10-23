@@ -17,7 +17,7 @@ def main():
         if now.hour == 6:
             light_intensity.set_duty_cycle((now.minute / 60) * 100 )
             # light_intensity.warm_up(60 * 60 * 24)
-        elif now.hour == 21 and now.minute == 0:
+        elif now.hour == 21:
             light_intensity.set_duty_cycle(100 - (now.minute / 60) * 100 )
             # light_intensity.cool_down(60 * 60 * 24)
     else:
