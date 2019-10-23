@@ -6,8 +6,8 @@ import light_intensity
 
 
 def main():
-    pin = 7
-    gp.setmode(gp.BOARD)
+    pin = 4
+    gp.setmode(gp.BCM)
     gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 
