@@ -1,9 +1,9 @@
-import RPi.GPIO as gp
+import RPi.GPgp as gp
 import time
 
 gp.setwarnings(False)
-gp.setmode(IO.BCM)
-gp.setup(21,IO.OUT)
+gp.setmode(gp.BCM)
+gp.setup(21,gp.OUT)
 p = gp.PWM(21,100)
 p.start(0)
 
