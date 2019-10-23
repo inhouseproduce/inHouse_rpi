@@ -11,7 +11,7 @@ import os
 import time
 
 def main():
-    pi_cron = CronTab(user='root')
+    pi_cron = CronTab(user='pi')
     pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
 
     # Capture data and send to s3
