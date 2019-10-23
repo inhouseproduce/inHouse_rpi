@@ -12,24 +12,19 @@ def main():
     gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
-    if now.hour >= 6 and now.hour < 22:
-        gp.output(pin, True) # signal results in default
-        # if now.hour == 6:
-        #     light_intensity.set_duty_cycle((now.minute / 60) * 100 )
-        #     # light_intensity.warm_up(60 * 60 * 24)
-        # elif now.hour == 21:
-        #     light_intensity.set_duty_cycle(100 - (now.minute / 60) * 100 )
-        #     # light_intensity.cool_down(60 * 60 * 24)
-        # else:
-        #     light_intensity.set_duty_cycle(100)
-    else:
+
+    # Off between 2am and 10am
+    if now.hour >= 0 and now.hour < 8:
         gp.output(pin, False)
-    
+    # will later implement dimming from 6PM - 12PM
+    else:
+        gp.output(pin, True)
+
 def trigger():
-    gp.output(pin, True)
+    gp.output(pin, False)
 
 def kill():
-    gp.output(pin, False)
+    gp.output(pin, True)
 
 if __name__ == "__main__":
     main()
