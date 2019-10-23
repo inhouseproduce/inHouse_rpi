@@ -4,7 +4,7 @@ import time
 gp.setwarnings(False)
 gp.setmode(IO.BCM)
 gp.setup(21,IO.OUT)
-p = IO.PWM(21,100)
+p = gp.PWM(21,100)
 p.start(0)
 
 
