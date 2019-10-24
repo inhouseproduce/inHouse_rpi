@@ -14,12 +14,17 @@ def access_brightness(pwm):
     brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     if(path.exists(brightness_path)):
         with open(brightness_path) as brightness_file:
-            brightness = brightness_file.read()
-            pwm.ChangeDutyCycle(int(brightness))
+            try:
+                brightness = int(brightness_file.read())
+            except:
+                print("fail!")
+            else:
+                pwm.ChangeDutyCycle(brightness)
 
 def main():
     pwm = setup()
     while(True):
+        time.sleep(60)
         access_brightness(pwm)
 
 if __name__ == "__main__":
