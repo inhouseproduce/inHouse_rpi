@@ -20,7 +20,7 @@ def main():
     # will later implement dimming from 6PM - 12PM
     else:
         gp.output(pin, False)
-
+#test
 def trigger():
     gp.output(pin, True)
 
