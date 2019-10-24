@@ -22,7 +22,7 @@ def main():
 
 
 def set_brightness(value):
-    brightness_path = "~/inHouse_rpi/brightness.lvl"
+    brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     with open('%s' %brightness_path, 'w') as brightness_file:
         brightness_file.write(value)
 

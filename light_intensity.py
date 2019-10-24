@@ -11,7 +11,7 @@ def setup():
     return pwm
 
 def access_brightness():
-    brightness_path = "~/inHouse_rpi/brightness.lvl"
+    brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     if(path.exists(brightness_path)):
         with open(brightness_path) as brightness_file:
             brightness = brightness_file.read()
