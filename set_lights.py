@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import RPi.GPIO as gp
 import datetime
-
+import light_intensity
 
 def main():
     pin = 7
@@ -11,17 +11,19 @@ def main():
 
     now = datetime.datetime.now()
     # Off between 2am and 10am
-    if now.hour >= 0 and now.hour < 8:
-        gp.output(pin, False)
+    if now.hour > 8:
+        gp.output(pin, True)
+        if now.hour > 18:
+            light_intensity.set_duty_cycle(50)
     # will later implement dimming from 6PM - 12PM
     else:
-        gp.output(pin, True)
+        gp.output(pin, False)
 
 def trigger():
-    gp.output(pin, False)
+    gp.output(pin, True)
 
 def kill():
-    gp.output(pin, True)
+    gp.output(pin, False)
         
 
 if __name__ == "__main__":
