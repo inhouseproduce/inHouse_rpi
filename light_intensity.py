@@ -15,7 +15,7 @@ def access_brightness():
     if(path.exists(brightness_path)):
         with open(brightness_path) as brightness_file:
             brightness = brightness_file.read()
-            pwm.ChangeDutyCycle(brightness)
+            pwm.ChangeDutyCycle(int(brightness))
 
 def main():
     pwm = setup()
