@@ -3,13 +3,15 @@ import RPi.GPIO as gp
 import datetime
 import light_intensity
 
+
 def main():
-    pin = 7
-    gp.setmode(gp.BOARD)
+    pin = 4
+    gp.setmode(gp.BCM)
     gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
+
     # Off between 2am and 10am
     if now.hour > 8:
         gp.output(pin, True)
@@ -25,6 +27,7 @@ def trigger():
 def kill():
     gp.output(pin, False)
         
+
 
 if __name__ == "__main__":
     main()

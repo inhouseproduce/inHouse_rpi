@@ -4,8 +4,8 @@ import datetime
 
 # every 4 hours for 5 minutes
 def main():
-    pin = 13
-    gp.setmode(gp.BOARD)
+    pin = 27
+    gp.setmode(gp.BCM)
     gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 

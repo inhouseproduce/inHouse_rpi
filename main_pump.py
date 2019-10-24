@@ -5,8 +5,8 @@ import time
 
 #every 6 minutes for 1 minute and 10 seconds
 def main():
-    pin = 11
-    gp.setmode(gp.BOARD)
+    pin = 17
+    gp.setmode(gp.BCM)
     gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 
