@@ -13,10 +13,6 @@ def main():
     now = datetime.datetime.now()
     if now.minute % 6 == 0:
         gp.output(pin, False)
-    elif now.minute % 6 == 1:
-        gp.output(pin, False)
-        time.sleep(10)
-        gp.output(pin, True)
     else:
         gp.output(pin, True)
 
