@@ -19,6 +19,7 @@ def access_brightness(pwm):
             except:
                 print("fail!")
             else:
+                print("set brightness to : ",brightness)
                 pwm.ChangeDutyCycle(brightness)
 
 def main():
