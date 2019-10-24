@@ -19,4 +19,3 @@ def maintain():
 def set_duty_cycle(percent):
     pwm = setup()
     pwm.ChangeDutyCycle(percent)
-    
