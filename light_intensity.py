@@ -10,7 +10,7 @@ def setup():
     pwm.start(0)
     return pwm
 
-def access_brightness():
+def access_brightness(pwm):
     brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     if(path.exists(brightness_path)):
         with open(brightness_path) as brightness_file:
@@ -20,7 +20,7 @@ def access_brightness():
 def main():
     pwm = setup()
     while(True):
-        access_brightness()
+        access_brightness(pwm)
 
 if __name__ == "__main__":
     main()
