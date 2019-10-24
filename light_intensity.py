@@ -24,8 +24,8 @@ def access_brightness(pwm):
 def main():
     pwm = setup()
     while(True):
-        time.sleep(60)
         access_brightness(pwm)
+        time.sleep(60)
 
 if __name__ == "__main__":
     main()
