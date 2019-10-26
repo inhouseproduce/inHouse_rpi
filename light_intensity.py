@@ -1,5 +1,6 @@
 import RPi.GPIO as gp
 import time
+from os import path, system
 
 def setup():
     gp.setwarnings(False)
@@ -9,14 +10,23 @@ def setup():
     pwm.start(0)
     return pwm
 
-def maintain():
-    pwm = setup()
-    pwm.ChangeDutyCycle(100)
+def access_brightness(pwm):
+    brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
+    if(path.exists(brightness_path)):
+        with open(brightness_path) as brightness_file:
+            try:
+                brightness = int(brightness_file.read())
+            except:
+                print("fail!")
+            else:
+                print("set brightness to : ",brightness)
+                pwm.ChangeDutyCycle(brightness)
 
+def main():
+    pwm = setup()
     while(True):
+        access_brightness(pwm)
         time.sleep(60)
 
-def set_duty_cycle(percent):
-    
-    p.ChangeDutyCycle(percent)
-    
+if __name__ == "__main__":
+    main()
