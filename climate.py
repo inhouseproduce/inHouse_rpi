@@ -2,9 +2,9 @@
 import os
 import glob
 import time
+import json
 import smbus
 import datetime
-import configparser
 
 
 def read_temp_raw():
@@ -30,47 +30,47 @@ def read_temp():
         temp_f = temp_c * 9.0 / 5.0 + 32.0
         return 'Water Temperature in Celsius is : %.1f C\nWater Temperature in Farenheit is : %.1f F\n' %(temp_c,temp_f)
 
-def write_climate(file_path):
-    climate_file = open('%s' %file_path, 'w+')
-    climate_file.write(read_temp())
-    # Get I2C bus
-    bus = smbus.SMBus(1)
-     
-    # SHT31 address, 0x44(68)
-    bus.write_i2c_block_data(0x44, 0x2C, [0x06])
-     
-    # SHT31 address, 0x44(68)
-    # Read data back from 0x00(00), 6 bytes
-    # Temp MSB, Temp LSB, Temp CRC, Humididty MSB, Humidity LSB, Humidity CRC
-    data = bus.read_i2c_block_data(0x44, 0x00, 6)
-     
-    # Convert the data
-    temp = data[0] * 256 + data[1]
-    cTemp = -45 + (175 * temp / 65535.0)
-    fTemp = -49 + (315 * temp / 65535.0)
-    humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
-     
-    # Output data to file
-    climate_file.write("Outside Temperature in Celsius is : %.1f C\n" %cTemp)
-    climate_file.write("Outside Temperature in Fahrenheit is : %.1f F\n" %fTemp)
-    climate_file.write("Outside Relative Humidity is : %.1f %%RH\n" %humidity)
-    climate_file.close()
+def write_climate(filename):
+    with open('%s' %filename, 'w+') as climate_file:
+        # climate_file.write(read_temp())
+
+        # Get I2C bus
+        bus = smbus.SMBus(1)
+
+        # SHT31 address, 0x44(68)
+        bus.write_i2c_block_data(0x44, 0x2C, [0x06])
+
+        time.sleep(0.5)
+
+        # SHT31 address, 0x44(68)
+        # Read data back from 0x00(00), 6 bytes
+        # Temp MSB, Temp LSB, Temp CRC, Humididty MSB, Humidity LSB, Humidity CRC
+        data = bus.read_i2c_block_data(0x44, 0x00, 6)
+
+        # Convert the data
+        temp = data[0] * 256 + data[1]
+        cTemp = -45 + (175 * temp / 65535.0)
+        fTemp = -49 + (315 * temp / 65535.0)
+        humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
+
+        # Output data to file
+        output = {
+            'Temperature': {
+                'Celsius' : round(cTemp,1),
+                'Fahrenheit': round(fTemp,1)
+            },
+            'Humidity': round(humidity,1)
+        }
+        json.dump(output, climate_file)
 
 
-def main(date):
-    os.system('modprobe w1-gpio')
-    os.system('modprobe w1-therm')
-    
+def main(pathway, date):
     date = date or datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    file_path = '/home/pi/inHouse_rpi/climate_readings_%s.txt' %date
-    write_climate(file_path)
+    filename = 'climate_readings_%s.txt' %date
+    write_climate(filename)
 
-    config = configparser.ConfigParser()
-    config.read('/home/pi/inHouse_rpi/ihp_config.ini')
-    remote_path = config['climate']['pathway']
-
-    os.system('s3cmd put %s %s' %(file_path, remote_path))
-    os.system('rm %s' %file_path)
+    os.system('s3cmd put %s %s' %(filename, pathway + filename))
+    os.system('rm %s' %filename)
 
 
 if __name__ == "__main__":  

@@ -11,8 +11,8 @@ import os
 import time
 
 def main():
-    pi_cron = CronTab(user='root')
-    # pi_cron.get('MAILTO') = 'andrin@inhouseproduce.com'
+    pi_cron = CronTab(user='pi')
+    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
 
     # Capture data and send to s3
     img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
@@ -27,8 +27,8 @@ def main():
     main_pump.minute.every(1)
 
     # Run Germination Pump
-    germination_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/germination_pump.py')
-    germination_pump.minute.every(1)
+    elongation_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/elongation_pump.py')
+    elongation_pump.minute.every(1)
 
     # Set Lights
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')

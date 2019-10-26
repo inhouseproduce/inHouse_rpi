@@ -8,11 +8,10 @@
 # the received picture right to the Amazon S3 web server before deleting it locally
 #######################################################################################################################
 #!/usr/bin/python3
-import RPi.GPIO as gp
 import os
 import time
 import datetime
-import configparser
+import json
 
 import rpi_config as rpi_config
 import climate as climate
@@ -22,19 +21,17 @@ import climate as climate
 # cameraProcess
 # take a photo for a given camera and push it to s3
 ######################################################
-def cameraProcess(cameraIP, stack_num, module_num):
+def cameraProcess(cameraIP, pathway):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-    filename = "camera_%s.jpg" %date
+    filename = "capture_%s.jpg" %date
     #Command to get image from the ip address and store at CWD
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
     
-    pathway = pathway + filename
     #directory to locally saved image
-    # cwd = '{}/{}'.format(os.getcwd(), filename)
 
-    os.system('s3cmd put %s %s' %(filename, pathway)) #push image to s3
+    os.system('s3cmd put %s %s' %(filename, pathway + filename)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
-    climate.main(date)
+    climate.main(pathway, date)
 
 
 ######################################################
@@ -43,26 +40,22 @@ def cameraProcess(cameraIP, stack_num, module_num):
 # source to s3 on regular intervals
 ######################################################
 def main():
-    config = configparser.ConfigParser()
-
-    if not os.path.isfile('/home/pi/inHouse_rpi/config.json'):
-        rpi_config.main()
-    config.read('/home/pi/inHouse_rpi/config.json')
-
     #reads the JSON file
-    sitename = config['site']
-    sysname = config['system']
-    stacks = config['stacks']
+    with open('/home/pi/inHouse_rpi/config.json') as config_file:
+        config = json.load(config_file)
 
-    #Iterate through stacks and modules for the IP address of camera images
-    for stacknum, stack in enumerate(stacks):
-        for module_num, module in enumerate(stack):
-            ip = module['host']
-            #pathway to s3
-            pathway = "s3://inhouseproduce-sites/{}/{}/{}/{}/".format(sitename, sysname, stack_num, module_num)
-            cameraProcess(ip, pathway)
-        time.sleep(60)
+        sitename = config['site']
+        sysname = config['system']
 
+        #Iterate through stacks and modules for the IP address of camera images
+        for stack_num, stack in enumerate(config['stacks']):
+            for module_num, module in enumerate(stack['modules']):
+                for camera_num, camera in enumerate(module['cameras']):
+                    ip = camera['host']
+                    if ip:
+                        #pathway to s3
+                        pathway = "s3://inhouseproduce-sites/{}/system{}/stack{}/module{}/camera{}/".format(sitename, sysname, stack_num+1, module_num+1, camera_num+1)
+                        cameraProcess(ip, pathway)
 
 if __name__ == "__main__":
     main()
