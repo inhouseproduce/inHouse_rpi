@@ -10,11 +10,11 @@ def main():
 
     now = datetime.datetime.now()
 
-    # Off between 2am and 10am
-    if now.hour > 8:
+    # Off between 10pm and 6am
+    if now.hour >= 6 and now.hour < 22:
         gp.output(pin, True)
-        if now.hour >= 18:
-            set_brightness('50')
+        if now.hour >= 17:
+            set_brightness('25')
         else:
             set_brightness('100')
     else:
@@ -31,7 +31,6 @@ def trigger():
 
 def kill():
     gp.output(pin, False)
-
 
 if __name__ == "__main__":
     main()
