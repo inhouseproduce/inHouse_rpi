@@ -2,7 +2,6 @@
 import RPi.GPIO as gp
 import datetime
 import time
-import controls
 
 #every 6 minutes for 1 minute and 10 seconds
 def main():
@@ -18,10 +17,10 @@ def main():
         gp.output(pin, True)
 
 def trigger():
-    main_pump.trigger()
+    gp.output(pin, False)
 
 def kill():
-    main_pump.kill()
+    gp.output(pin, True)
 
 if __name__ == "__main__":
     main()
