@@ -6,7 +6,7 @@ def setup():
     gp.setwarnings(False)
     gp.setmode(gp.BCM)
     gp.setup(21,gp.OUT)
-    pwm = gp.PWM(21,100)
+    pwm = gp.PWM(21,1000)
     pwm.start(0)
     return pwm
 
