@@ -24,7 +24,7 @@ def main():
 def get_brightness():
     brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     with open('%s' %brightness_path, 'w') as brightness_file:
-        return brightness_file.read
+        return brightness_file.read()
 
 def set_brightness(value):
     brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
