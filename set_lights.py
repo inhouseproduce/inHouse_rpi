@@ -4,9 +4,6 @@ import datetime
 
 def main():
     pin = 4
-    gp.setmode(gp.BCM)
-    gp.setwarnings(False)
-    gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
 

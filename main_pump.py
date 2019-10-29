@@ -6,9 +6,6 @@ import time
 #every 6 minutes for 1 minute and 10 seconds
 def main():
     pin = 17
-    gp.setmode(gp.BCM)
-    gp.setwarnings(False)
-    gp.setup(pin, gp.OUT)
 
     now = datetime.datetime.now()
     if now.minute % 6 == 0:

@@ -34,6 +34,14 @@ def main():
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
     lights.minute.every(1)
 
+    # Set Brightness
+    brightness = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/light_intensity.py')
+    brightness.every_reboot()
+
+    # Init GPIO
+    gpio = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/GPIO_init.py')
+    gpio.every_reboot()
+
     pi_cron.write()
 
 if __name__ == "__main__":
