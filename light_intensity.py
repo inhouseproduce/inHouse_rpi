@@ -3,7 +3,6 @@ import time
 from os import path, system
 
 def setup():
-    time.sleep(10)
     gp.setwarnings(False)
     gp.setmode(gp.BCM)
     gp.setup(21,gp.OUT)
