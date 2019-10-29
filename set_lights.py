@@ -4,7 +4,7 @@ import datetime
 
 def main():
     pin = 4
-
+    gp.setmode(gp.BCM)
     now = datetime.datetime.now()
 
     # Off between 10pm and 6am

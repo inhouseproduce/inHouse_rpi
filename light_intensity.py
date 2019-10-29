@@ -4,6 +4,7 @@ from os import path, system
 
 def setup():
     pin = 21
+    gp.setmode(gp.BCM)
     pwm = gp.PWM(pin,1000)
     pwm.start(0)
     return pwm

@@ -5,7 +5,8 @@ import datetime
 # every 4 hours for 5 minutes
 def main():
     pin = 27
-
+    gp.setmode(gp.BCM)
+    
     now = datetime.datetime.now()
     if now.hour % 4 == 0 and now.minute < 5:
         gp.output(pin, False)
