@@ -3,8 +3,6 @@ const bodyParser = require("body-parser")
 const fs = require('fs')
 const app = express()
 const port = 3000
-const AWS = require('aws-sdk');
-var s3 = new AWS.S3()
 
 app.use(bodyParser.json())
 
@@ -36,7 +34,7 @@ app.post('/germination/', (req, res) => {
     // let params = {
     //     Bucket: "inhouseproduce-sites"
     // }
-    
+
     res.send('New germination reading received and uploaded to server.')
 })
 
