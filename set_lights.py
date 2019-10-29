@@ -8,7 +8,8 @@ def run(now, pin):
         if gp.input(pin) == False:
             gp.output(pin, True)
         if now.hour >= 18:
-            set_brightness('30')
+            if get_brightness() != '30':
+                set_brightness('30')
         else:
             set_brightness('100')
     else:
@@ -29,6 +30,11 @@ def set_brightness(value):
     brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
     with open('%s' %brightness_path, 'w') as brightness_file:
         brightness_file.write(value)
+
+def get_brightness():
+    brightness_path = "/home/pi/inHouse_rpi/brightness.lvl"
+    with open('%s' %brightness_path, 'w') as brightness_file:
+        return brightness_file.read()
 
 def trigger():
     gp.output(pin, True)

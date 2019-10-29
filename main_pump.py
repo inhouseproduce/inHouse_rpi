@@ -4,7 +4,7 @@ import datetime
 import time
 
 def run(now, pin):
-    if now.minute % 6 == 0:
+    if now.minute % 6 == 0 and now.second < 29:
         gp.output(pin, False)
     else:
         gp.output(pin, True)
@@ -17,9 +17,8 @@ def main():
     while(True):
         now = datetime.datetime.now()
         run(now, pin)
-        time.sleep(60)
+        time.sleep(30)
     
-
 def trigger():
     gp.output(pin, False)
 
