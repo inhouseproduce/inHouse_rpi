@@ -17,7 +17,8 @@ def main():
 
 def do_time_check():
     if now.hour >= 6 and now.hour < 22:
-        gp.output(pin, True)
+        if gp.input(pin) == False:
+            gp.output(pin, True)
         if now.hour >= 11:
             if get_brightness() == '25':
                 return
