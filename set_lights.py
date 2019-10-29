@@ -3,11 +3,11 @@ import RPi.GPIO as gp
 import datetime
 
 def run(now, pin):
-    # Off between 10pm and 6am
-    if now.hour >= 6 and now.hour < 22:
+    # On between 10am and 2am
+    if now.hour >= 10 and now.hour < 2:
         gp.output(pin, True)
-        if now.hour >= 11:
-            set_brightness('25')
+        if now.hour >= 18:
+            set_brightness('30')
         else:
             set_brightness('100')
     else:
