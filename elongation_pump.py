@@ -1,9 +1,13 @@
 #!/usr/bin/python3
-import RPi.GPIO as gp
+from EmulatorGUI import GPIO as gp
 import datetime
+import time
+import json
 
 
-def run(now, pin):
+def run(now, pin, schedule):
+    for trigger in schedule.data:
+
     if now.hour % 4 == 0 and now.minute < 5:
         gp.output(pin, False)
     else:
@@ -11,13 +15,15 @@ def run(now, pin):
 
 # every 4 hours for 5 minutes
 def main():
-    pin = 27
-    gp.setmode(gp.BCM)
-    gp.setup(pin, gp.OUT)
-    while(True):
-        now = datetime.datetime.now()
-        run(now, pin)
-        time.sleep(60)
+    with open('/home/pi/inHouse_rpi/config.json') as config_file:
+        schedule = json.load(config_file).scheduling.elongation_pump
+        pin = 27
+        gp.setmode(gp.BCM)
+        gp.setup(pin, gp.OUT)
+        while(True):
+            now = datetime.datetime.now()
+            run(now, pin, schedule)
+            time.sleep(60)
 
 def trigger():
     gp.output(pin, False)

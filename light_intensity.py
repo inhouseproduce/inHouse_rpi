@@ -1,4 +1,4 @@
-import RPi.GPIO as gp
+from EmulatorGUI import GPIO as gp
 import time
 from os import path, system
 

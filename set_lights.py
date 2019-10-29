@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import RPi.GPIO as gp
+from EmulatorGUI import GPIO as gp
 import datetime
 
 def run(now, pin):
