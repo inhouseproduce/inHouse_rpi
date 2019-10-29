@@ -24,11 +24,7 @@ import climate as climate
 def cameraProcess(cameraIP, pathway):
     date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
     filename = "capture_%s.jpg" %date
-    #Command to get image from the ip address and store at CWD
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
-    
-    #directory to locally saved image
-
     os.system('s3cmd put %s %s' %(filename, pathway + filename)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
     climate.main(pathway, date)
