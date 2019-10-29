@@ -38,10 +38,6 @@ def main():
     brightness = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/light_intensity.py')
     brightness.every_reboot()
 
-    # Set Brightness
-    brightness = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/light_intensity.py')
-    brightness.every_reboot()
-
     pi_cron.write()
 
 if __name__ == "__main__":
