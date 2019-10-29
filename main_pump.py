@@ -3,18 +3,22 @@ import RPi.GPIO as gp
 import datetime
 import time
 
-#every 6 minutes for 1 minute and 10 seconds
-def main():
-    pin = 17
-    gp.setmode(gp.BCM)
-    gp.setwarnings(False)
-    gp.setup(pin, gp.OUT)
-
-    now = datetime.datetime.now()
+def run(now, pin):
     if now.minute % 6 == 0:
         gp.output(pin, False)
     else:
         gp.output(pin, True)
+
+#every 6 minutes for 1 minute and 10 seconds
+def main():
+    pin = 17
+    gp.setmode(gp.BCM)
+    gp.setup(pin, gp.OUT)
+    while(True):
+        now = datetime.datetime.now()
+        run(now, pin)
+        time.sleep(60)
+    
 
 def trigger():
     gp.output(pin, False)
