@@ -30,8 +30,6 @@ def main():
     elongation_pump = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/elongation_pump.py')
     elongation_pump.minute.every(1)
 
-    time.sleep(5)
-
     # Set Lights
     lights = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/set_lights.py')
     lights.minute.every(1)
