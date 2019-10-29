@@ -2,16 +2,22 @@
 import RPi.GPIO as gp
 import datetime
 
-# every 4 hours for 5 minutes
-def main():
-    pin = 27
-    gp.setmode(gp.BCM)
-    
-    now = datetime.datetime.now()
+
+def run(now):
     if now.hour % 4 == 0 and now.minute < 5:
         gp.output(pin, False)
     else:
         gp.output(pin, True)
+
+# every 4 hours for 5 minutes
+def main():
+    pin = 27
+    gp.setmode(gp.BCM)
+    gp.setup(pin, gp.OUT)
+    while(True):
+        now = datetime.datetime.now()
+        run(now)
+        time.sleep(60)
 
 def trigger():
     gp.output(pin, False)

@@ -2,11 +2,7 @@
 import RPi.GPIO as gp
 import datetime
 
-def main():
-    pin = 4
-    gp.setmode(gp.BCM)
-    now = datetime.datetime.now()
-
+def run(now):
     # Off between 10pm and 6am
     if now.hour >= 6 and now.hour < 22:
         gp.output(pin, True)
@@ -16,6 +12,16 @@ def main():
             set_brightness('100')
     else:
         gp.output(pin, False)
+
+# every 4 hours for 5 minutes
+def main():
+    pin = 4
+    gp.setmode(gp.BCM)
+    gp.setup(pin, gp.OUT)
+    while(True):
+        now = datetime.datetime.now()
+        run(now)
+        time.sleep(60)
 
 
 def set_brightness(value):
