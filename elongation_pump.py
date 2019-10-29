@@ -3,7 +3,7 @@ import RPi.GPIO as gp
 import datetime
 
 
-def run(now):
+def run(now, pin):
     if now.hour % 4 == 0 and now.minute < 5:
         gp.output(pin, False)
     else:
@@ -16,7 +16,7 @@ def main():
     gp.setup(pin, gp.OUT)
     while(True):
         now = datetime.datetime.now()
-        run(now)
+        run(now, pin)
         time.sleep(60)
 
 def trigger():

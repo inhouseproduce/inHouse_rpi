@@ -2,7 +2,7 @@
 import RPi.GPIO as gp
 import datetime
 
-def run(now):
+def run(now, pin):
     # Off between 10pm and 6am
     if now.hour >= 6 and now.hour < 22:
         gp.output(pin, True)
@@ -20,7 +20,7 @@ def main():
     gp.setup(pin, gp.OUT)
     while(True):
         now = datetime.datetime.now()
-        run(now)
+        run(now, pin)
         time.sleep(60)
 
 
