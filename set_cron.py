@@ -35,11 +35,11 @@ def main():
     lights.minute.every(1)
 
     # Set Brightness
-    brightness = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/light_intensity.py')
+    brightness = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/light_intensity.py')
     brightness.every_reboot()
 
     # Init GPIO
-    gpio = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/GPIO_init.py')
+    gpio = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/GPIO_init.py')
     gpio.every_reboot()
 
     pi_cron.write()
