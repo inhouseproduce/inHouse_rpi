@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 import RPi.GPIO as gp
 import datetime
+import time
 
 def main():
+    time.sleep(10)
     pin = 4
     gp.setmode(gp.BCM)
     gp.setwarnings(False)
