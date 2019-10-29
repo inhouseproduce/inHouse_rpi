@@ -10,9 +10,11 @@ def main():
     gp.setwarnings(False)
     gp.setup(pin, gp.OUT)
 
-    gp.output(pin, False)
-    time.sleep(60)
-    gp.output(pin, True)
+    now = datetime.datetime.now()
+    if now.minute % 6 == 0:
+        gp.output(pin, False)
+    else:
+        gp.output(pin, True)
 
 def trigger():
     gp.output(pin, False)
