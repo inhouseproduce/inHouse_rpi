@@ -4,7 +4,7 @@ pins = {
     "lights": 4,
     "main_pump": 17,
     "elongation_pump": 27,
-    "brightness": 21,
+    "brightness": 21
 }
 
 gp.setmode(gp.BCM)
