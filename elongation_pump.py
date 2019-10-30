@@ -4,14 +4,15 @@ import datetime
 import time
 import json
 
-
 def run(now, pin, schedule):
     for trigger in schedule.data:
-
-    if now.hour % 4 == 0 and now.minute < 5:
-        gp.output(pin, False)
-    else:
-        gp.output(pin, True)
+        if now.hour = datetime.datetime.strptime(trigger.on, "%H:%M").hour or trigger.on:
+            if now.minute = datetime.datetime.strptime(trigger.on, "%H:%M").minute or 0:
+                gp.output(pin, False)
+            else:
+                gp.output(pin, True)
+        else: 
+            gp.output(pin, True)
 
 # every 4 hours for 5 minutes
 def main():
