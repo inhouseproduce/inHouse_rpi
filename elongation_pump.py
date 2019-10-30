@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import RPi.GPIO as gp
 import datetime
+import time
 
 
 def run(now, pin):
