@@ -4,7 +4,7 @@ import datetime
 
 def run(now, pin):
     # Off between 10pm and 6am
-    if now.hour >= 6 and now.hour < 22:
+    if now.hour >= 6 and now.hour < 16 and now.minute < 20:
         gp.output(pin, True)
         # if now.hour >= 11:
         #     set_brightness('25')
