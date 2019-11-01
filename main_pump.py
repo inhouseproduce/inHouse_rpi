@@ -4,7 +4,7 @@ import datetime
 import time
 
 def run(now, pin):
-    if now.minute % 6 == 0 and now.second < 29:
+    if now.minute % 5 == 0 and now.second < 29:
         gp.output(pin, False)
     else:
         gp.output(pin, True)

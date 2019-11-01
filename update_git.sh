@@ -1,4 +1,4 @@
 #!/bin/sh
 
-git pull origin raspbian-build
+git pull origin preux
 python3 init.py
