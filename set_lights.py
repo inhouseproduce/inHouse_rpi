@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from EmulatorGUI import GPIO as gp
 import datetime
+import time
 
 def run(now, pin):
     # Off between 10pm and 6am
