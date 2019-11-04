@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import RPi.GPIO as gp
 import datetime
+import time
 
 def run(now, pin):
     # On between 10am and 2am
@@ -14,7 +15,6 @@ def run(now, pin):
     else:
         gp.output(pin, False)
 
-# every 4 hours for 5 minutes
 def main():
     pin = 4
     gp.setmode(gp.BCM)
