@@ -52,12 +52,11 @@ app.post('/germination/', (req, res) => {
         // let params = {
         //     Bucket: "inhouseproduce-sites"
         //     Key: key
-        //     Body: JSON.stringify(body, null, 2)
+        //     Body: JSON.stringify(data, null, 2)
         // }
         // s3.upload(params, (err, data) => {
         //     console.log(err)
         // })
-        console.log(key)
     })
     
     res.send('New germination reading received and uploaded to S3.')
