@@ -47,7 +47,7 @@ app.post('/germination/', (req, res) => {
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         let datetime = date+'_'+time;
 
-        let filename = 'germination_reading_${datetime}.txt'
+        let filename = 'germination_reading_' + datetime + '.txt'
         let key = sitename + '/system' + system + '/' + filename
         // let params = {
         //     Bucket: "inhouseproduce-sites"
