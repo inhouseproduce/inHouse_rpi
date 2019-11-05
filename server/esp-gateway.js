@@ -27,6 +27,8 @@ app.post('/camera/:id', (req, res) => {
 
 app.post('/germination/', (req, res) => {
     console.log("New POST request detected")
+    let data = req.body
+    console.log(data)
     // let body = req.body
     // fs.writeFile('/home/pi/inHouse_rpi/germination_reading.txt', JSON.stringify(body), (err) => {
     //     console.log(err)
