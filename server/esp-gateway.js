@@ -4,10 +4,10 @@ const fs = require('fs')
 const app = express()
 const port = 3000
 const AWS = require('aws-sdk');
-// const s3 = new AWS.S3({
-//     accessKeyId: process.env.AWS_ACCESS_KEY
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-// })
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+})
 
 app.use(bodyParser.json())
 
@@ -49,14 +49,14 @@ app.post('/germination/', (req, res) => {
 
         let filename = 'germination_reading_' + datetime + '.txt'
         let key = sitename + '/system' + system + '/' + filename
-        // let params = {
-        //     Bucket: "inhouseproduce-sites"
-        //     Key: key
-        //     Body: JSON.stringify(data, null, 2)
-        // }
-        // s3.upload(params, (err, data) => {
-        //     console.log(err)
-        // })
+        let params = {
+            Bucket: "inhouseproduce-sites"
+            Key: key
+            Body: JSON.stringify(data, null, 2)
+        }
+        s3.upload(params, (err, data) => {
+            console.log(err)
+        })
     })
     
     res.send('New germination reading received and uploaded to S3.')
