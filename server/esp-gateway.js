@@ -34,7 +34,7 @@ app.post('/germination/', (req, res) => {
     console.log("New POST request detected")
     let data = req.body
     console.log(data)
-    fs.writeFile('/home/pi/inHouse_rpi/germination_reading.txt', JSON.stringify(body), (err) => {
+    fs.writeFile('/home/pi/inHouse_rpi/germination_reading.txt', JSON.stringify(data), (err) => {
         console.log(err)
     });
     fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
