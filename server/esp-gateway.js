@@ -12,6 +12,7 @@ const s3 = new AWS.S3({
 app.use(bodyParser.json())
 
 app.post('/camera/:id', (req, res) => {
+    console.log("New POST request detected")
     let id = req.params.id
     let address = req.body['address']
     console.log('id: ',id)
