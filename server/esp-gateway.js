@@ -34,7 +34,13 @@ app.post('/germination/', (req, res) => {
     console.log("New POST request detected")
     let data = req.body
     console.log(data)
-    fs.writeFile('/home/pi/inHouse_rpi/germination_reading.txt', JSON.stringify(data), (err) => {
+    let today = new Date();
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    let datetime = date+'_'+time;
+    let filename = 'germination_reading_' + datetime + '.txt'   // the filename of the germination data
+
+    fs.writeFile('/home/pi/inHouse_rpi/' + filename, JSON.stringify(data), (err) => {
         console.log(err)
     });
     fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
@@ -42,13 +48,7 @@ app.post('/germination/', (req, res) => {
         let sitename = config.site
         let system = config.system
 
-        let today = new Date();
-        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let datetime = date+'_'+time;
-
-        let filename = 'germination_reading_' + datetime + '.txt'
-        let key = sitename + '/system' + system + '/' + filename
+        let key = sitename + '/' + system + '/' + filename      // the pathway
         let params = {
             Bucket: "inhouseproduce-sites"
             Key: key
