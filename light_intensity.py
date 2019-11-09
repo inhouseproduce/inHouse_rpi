@@ -3,7 +3,7 @@ import time
 from os import path, system
 
 def setup():
-    pin = 18
+    pin = 21
     gp.setmode(gp.BCM)
     gp.setup(pin,gp.OUT)
     pwm = gp.PWM(pin,1000)
