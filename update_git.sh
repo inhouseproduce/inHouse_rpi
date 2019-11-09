@@ -1,4 +1,4 @@
 #!/bin/sh
 
-git pull origin raspbian-build
+git pull origin workshop
 python3 init.py
