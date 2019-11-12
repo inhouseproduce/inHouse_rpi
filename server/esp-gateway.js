@@ -23,7 +23,7 @@ app.post('/camera/:id', (req, res) => {
         config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
         fs.writeFile('/home/pi/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
         	console.log(err)
-        });
+        })
     })
     res.send('new address '+ address +' received for camera ' + id)
 })
@@ -32,30 +32,30 @@ app.post('/germination/', (req, res) => {
     console.log("New POST request detected")
     let body = req.body
     console.log(body)
-    let today = new Date();
-    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    let datetime = date+'_'+time;
+    let today = new Date()
+    let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+    let datetime = date + '_' + time
     let filename = 'germination_readings_' + datetime + '.txt'   // the filename of the germination reading
 
     fs.writeFile('/home/pi/germination/' + filename, JSON.stringify(body), (err) => {
         if (err) {
             console.log(err)
         }
-    });
-    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, body) => {
-        let config = JSON.parse(body)
+    })
+    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
+        let config = JSON.parse(data)
         let sitename = config.site
         let system = config.system
 
         let key = sitename + '/system' + system + '/' + filename      // the pathway
-        console.log(key)
+        let base64data = new Buffer(body, 'binary')
         let params = {
             Bucket: "inhouseproduce-sites",
             Key: key,
-            Body: JSON.stringify(body, null, 2)
+            Body: base64data
         }
-        s3.putObject(params, (err, body) => {
+        s3.putObject(params, (err) => {
             if (err) {
                 console.log(err)
             } else {
