@@ -37,7 +37,7 @@ app.post('/germination/', (req, res) => {
     let datetime = date + '_' + time
     let filename = 'germination_readings_' + datetime + '.txt'   // the filename of the germination reading
 
-    fs.writeFile('/germination/'+filename, JSON.stringify(body), (err) => {
+    fs.writeFile(filename, JSON.stringify(body), (err) => {
         if (err) {
             console.log(err)
         }
@@ -48,7 +48,7 @@ app.post('/germination/', (req, res) => {
         let system = config.system
         let pathway = "s3://inhouseproduce-sites/" + sitename + "/system" + system + "/" + "germination/" + filename
 
-        cmd.get('s3cmd put ' + 'germination/' + filename + ' ' + pathway, (err, data) => {
+        cmd.get('s3cmd put ' +  filename + ' ' + pathway, (err, data) => {
             if (err) {
                 console.log(err)
             } else {
@@ -57,12 +57,12 @@ app.post('/germination/', (req, res) => {
         })
         
     })
-    // cmd.get('rm ' + 'germination/' + filename, (err, data) => {
+    // cmd.get('rm ' + filename, (err, data) => {
     //     if (err) {
     //         console.log(err)
     //     }
     // })
-    // fs.unlink('germination/' +filename)
+    // fs.unlink(filename)
     res.send('New germination reading received and uploaded to S3.')
 })
 
