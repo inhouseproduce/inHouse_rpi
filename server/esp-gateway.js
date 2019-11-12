@@ -65,11 +65,11 @@ app.post('/germination/', (req, res) => {
         })
     })
     // delete file locally
-    // fs.unlink('/home/pi/germination/' + filename, (err) => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
+    fs.unlink('/home/pi/germination/' + filename, (err) => {
+        if (err) {
+            console.log(err)
+        }
+    })
     
     res.send('New germination reading received and uploaded to S3.')
 })
