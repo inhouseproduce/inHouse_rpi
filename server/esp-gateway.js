@@ -5,6 +5,7 @@ const app = express()
 const port = 3000
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
+const cmd = require('node-cmd');
 
 app.use(bodyParser.json())
 
@@ -47,22 +48,27 @@ app.post('/germination/', (req, res) => {
         let config = JSON.parse(data)
         let sitename = config.site
         let system = config.system
-
-        let key = sitename + '/system' + system + '/' + filename      // the pathway
-        fs.readFile('/home/pi/germination/' +filename, 'utf8', (err, data) => {
-            let params = {
-                Bucket: "inhouseproduce-sites",
-                Key: key,
-                Body: data
+        let pathway = "s3://inhouseproduce-sites/" + sitename + "/system" + system + "/" + filename
+        cmd.get('s3cmd put ' + filename + ' ' + pathway, (err, data) => {
+            if (err) {
+                console.log(err)
             }
-            s3.putObject(params, (err) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log("Update successful.")
-                }
-            })
         })
+        // let key = sitename + '/system' + system + '/' + filename      // the pathway
+        // fs.readFile('/home/pi/germination/' +filename, 'utf8', (err, data) => {
+        //     let params = {
+        //         Bucket: "inhouseproduce-sites",
+        //         Key: key,
+        //         Body: data
+        //     }
+        //     s3.putObject(params, (err) => {
+        //         if (err) {
+        //             console.log(err)
+        //         } else {
+        //             console.log("Update successful.")
+        //         }
+        //     })
+        // })
     })
     // delete file locally
     fs.unlink('/home/pi/germination/' + filename, (err) => {
