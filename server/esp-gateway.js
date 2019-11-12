@@ -54,6 +54,11 @@ app.post('/germination/', (req, res) => {
             } else {
                 console.log("Update successful.")
             }
+        });
+        fs.unlink(filename, (err, data) => {
+            if (err) {
+                console.log(err)
+            }
         })
         
     })
@@ -62,7 +67,7 @@ app.post('/germination/', (req, res) => {
     //         console.log(err)
     //     }
     // })
-    // fs.unlink(filename)
+    
     res.send('New germination reading received and uploaded to S3.')
 })
 
