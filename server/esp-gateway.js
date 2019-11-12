@@ -49,19 +49,18 @@ app.post('/germination/', (req, res) => {
         let system = config.system
 
         let key = sitename + '/system' + system + '/' + filename      // the pathway
-        fs.readFile('/home/pi/germination/' +filename, 'utf8', (err, data) => {
-            let params = {
-                Bucket: "inhouseproduce-sites",
-                Key: filename,
-                Body: data
+        let fileContent = fs.readFileSync('/home/pi/germination/' + filename)
+        let params = {
+            Bucket: "inhouseproduce-sites",
+            Key: filename,
+            Body: fileContent
+        }
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Update successful.")
             }
-            s3.putObject(params, (err) => {
-                if (err) {
-                    console.log(err)
-                } else {
-                    console.log("Update successful.")
-                }
-            })
         })
     })
     // delete file locally
