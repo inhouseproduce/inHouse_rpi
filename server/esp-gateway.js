@@ -49,6 +49,7 @@ app.post('/germination/', (req, res) => {
         let system = config.system
 
         let key = sitename + '/system' + system + '/' + filename      // the pathway
+        console.log(key)
         let params = {
             Bucket: "inhouseproduce-sites",
             Key: key,
@@ -62,6 +63,7 @@ app.post('/germination/', (req, res) => {
             }
         })
     })
+    // delete file locally
     fs.unlink('/home/pi/germination/' + filename, (err) => {
         if (err) {
             console.log(err)
