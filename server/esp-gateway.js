@@ -53,13 +53,14 @@ app.post('/germination/', (req, res) => {
                 console.log(err)
             } else {
                 console.log("Update successful.")
-            }
-        });
-        fs.unlink(filename, (err, data) => {
-            if (err) {
-                console.log(err)
+                fs.unlink(filename, (err, data) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                })
             }
         })
+        
         
     })
     // cmd.get('rm ' + filename, (err, data) => {
