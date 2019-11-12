@@ -55,28 +55,13 @@ app.post('/germination/', (req, res) => {
                 console.log("Update successful.")
             }
         })
-        // let key = sitename + '/system' + system + '/' + filename      // the pathway
-        // fs.readFile('/home/pi/germination/' +filename, 'utf8', (err, data) => {
-        //     let params = {
-        //         Bucket: "inhouseproduce-sites",
-        //         Key: key,
-        //         Body: data
-        //     }
-        //     s3.putObject(params, (err) => {
-        //         if (err) {
-        //             console.log(err)
-        //         } else {
-        //             console.log("Update successful.")
-        //         }
-        //     })
-        // })
+        fs.unlinkSync(filename, (err) => {          // delete file locally
+            if (err) {
+                console.log(err)
+            }
+        })
     })
-    // delete file locally
-    fs.unlinkSync(filename, (err) => {
-        if (err) {
-            console.log(err)
-        }
-    })
+    
     
     res.send('New germination reading received and uploaded to S3.')
 })
