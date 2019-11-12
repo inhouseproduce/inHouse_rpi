@@ -41,7 +41,7 @@ app.post('/germination/', (req, res) => {
     fs.writeFile('/home/pi/germination/' + filename, JSON.stringify(body), (err) => {
         console.log(err)
     });
-    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
+    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, body) => {
         let config = JSON.parse(body)
         let sitename = config.site
         let system = config.system
@@ -52,7 +52,7 @@ app.post('/germination/', (req, res) => {
             Key: key,
             Body: JSON.stringify(body, null, 2)
         }
-        s3.putObject(params, (err, data) => {
+        s3.putObject(params, (err, body) => {
             console.log(err)
         })
         console.log("Update successful.")
