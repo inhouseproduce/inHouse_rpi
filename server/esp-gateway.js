@@ -55,11 +55,7 @@ app.post('/germination/', (req, res) => {
                 console.log("Update successful.")
             }
         })
-        fs.unlinkSync(filename, (err) => {          // delete file locally
-            if (err) {
-                console.log(err)
-            }
-        })
+        cmd.run('rm ' + filename)         // delete file locally
     })
     
     
