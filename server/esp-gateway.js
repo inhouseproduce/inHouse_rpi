@@ -46,10 +46,10 @@ app.post('/germination/', (req, res) => {
         let sitename = config.site
         let system = config.system
 
-        let key = sitename + '/' + system + '/' + filename      // the pathway
+        let key = sitename + '/system' + system + '/' + filename      // the pathway
         let params = {
             Bucket: "inhouseproduce-sites"
-            Key: key
+            Key: ''
             Body: JSON.stringify(data, null, 2)
         }
         s3.putObject(params, (err, data) => {
