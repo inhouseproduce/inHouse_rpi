@@ -46,7 +46,7 @@ app.post('/germination/', (req, res) => {
         let config = JSON.parse(data)
         let sitename = config.site
         let system = config.system
-        let pathway = "s3://inhouseproduce-sites/" + sitename + "/system" + system + "/" + filename
+        let pathway = "s3://inhouseproduce-sites/" + sitename + "/system" + system + "/" + "germination" + filename
 
         cmd.get('s3cmd put ' + filename + ' ' + pathway, (err, data) => {
             if (err) {
