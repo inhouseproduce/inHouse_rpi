@@ -48,8 +48,8 @@ app.post('/germination/', (req, res) => {
 
         let key = sitename + '/system' + system + '/' + filename      // the pathway
         let params = {
-            Bucket: "inhouseproduce-sites"
-            Key: key
+            Bucket: "inhouseproduce-sites",
+            Key: key,
             Body: JSON.stringify(data, null, 2)
         }
         s3.putObject(params, (err, data) => {
