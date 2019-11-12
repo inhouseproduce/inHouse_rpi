@@ -55,7 +55,7 @@ app.post('/germination/', (req, res) => {
                 console.log("Update successful.")
             }
         })
-        cmd.run('rm ' + filename)         // delete file locally
+        // cmd.run('rm ' + filename)         // delete file locally
     })
     
     
