@@ -39,7 +39,9 @@ app.post('/germination/', (req, res) => {
     let filename = 'germination_readings_' + datetime + '.txt'   // the filename of the germination reading
 
     fs.writeFile('/home/pi/germination/' + filename, JSON.stringify(body), (err) => {
-        console.log(err)
+        if (err) {
+            console.log(err)
+        }
     });
     fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, body) => {
         let config = JSON.parse(body)
@@ -53,12 +55,17 @@ app.post('/germination/', (req, res) => {
             Body: JSON.stringify(body, null, 2)
         }
         s3.putObject(params, (err, body) => {
-            console.log(err)
+            if (err) {
+                console.log(err)
+            } else {
+                console.log("Update successful.")
+            }
         })
-        console.log("Update successful.")
     })
     fs.unlink('/home/pi/germination/' + filename, (err) => {
-        console.log(err)
+        if (err) {
+            console.log(err)
+        }
     })
     
     res.send('New germination reading received and uploaded to S3.')
