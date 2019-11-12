@@ -49,7 +49,7 @@ app.post('/germination/', (req, res) => {
         let system = config.system
 
         let key = sitename + '/system' + system + '/' + filename      // the pathway
-        let fileContent = fs.readFileSync('/home/pi/germination/' + filename)
+        let fileContent = fs.readFile('/home/pi/germination/' + filename)
         let params = {
             Bucket: "inhouseproduce-sites",
             Key: filename,
