@@ -72,7 +72,7 @@ app.post('/germination/', (req, res) => {
         // })
     })
     // delete file locally
-    fs.unlink(filename, (err) => {
+    fs.unlinkSync(filename, (err) => {
         if (err) {
             console.log(err)
         }
