@@ -3,8 +3,6 @@ const bodyParser = require("body-parser")
 const fs = require('fs')
 const app = express()
 const port = 3000
-const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
 const cmd = require('node-cmd');
 
 app.use(bodyParser.json())
@@ -53,6 +51,8 @@ app.post('/germination/', (req, res) => {
         cmd.get('s3cmd put ' + filename + ' ' + pathway, (err, data) => {
             if (err) {
                 console.log(err)
+            } else {
+                console.log("Update successful.")
             }
         })
         // let key = sitename + '/system' + system + '/' + filename      // the pathway
@@ -72,11 +72,11 @@ app.post('/germination/', (req, res) => {
         // })
     })
     // delete file locally
-    // fs.unlink('/home/pi/germination/' + filename, (err) => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
+    fs.unlink(filename, (err) => {
+        if (err) {
+            console.log(err)
+        }
+    })
     
     res.send('New germination reading received and uploaded to S3.')
 })
