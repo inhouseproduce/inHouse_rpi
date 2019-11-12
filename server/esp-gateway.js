@@ -55,10 +55,13 @@ app.post('/germination/', (req, res) => {
                 console.log("Update successful.")
             }
         })
-        // cmd.run('rm ' + filename)         // delete file locally
+        
     })
-    
-    
+    cmd.get('rm ' + filename, (err, data) => {
+        if (err) {
+            console.log(err)
+        }
+    })         // delete file locally
     res.send('New germination reading received and uploaded to S3.')
 })
 
