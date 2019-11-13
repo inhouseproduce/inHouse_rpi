@@ -35,7 +35,7 @@ app.post('/germination/', (req, res) => {
     let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
     let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
     let datetime = date + '_' + time
-    let filename = 'germination_readings_' + datetime + '.txt'   // the filename of the germination reading
+    let filename = 'germination_readings_' + datetime + '.txt'
 
     fs.writeFile(filename, JSON.stringify(body), (err) => {
         if (err) {
@@ -60,14 +60,7 @@ app.post('/germination/', (req, res) => {
                 })
             }
         })
-        
-        
     })
-    // cmd.get('rm ' + filename, (err, data) => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
     
     res.send('New germination reading received and uploaded to S3.')
 })
