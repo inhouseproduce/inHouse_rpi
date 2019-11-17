@@ -1,4 +1,4 @@
 #!/bin/sh
 
-git pull origin workshop
+git pull origin hugos
 python3 init.py
