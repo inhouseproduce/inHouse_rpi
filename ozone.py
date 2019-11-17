@@ -12,7 +12,7 @@ def run(now, pin):
 
 # every 4 hours for 5 minutes
 def main():
-    pin = 22
+    pin = 23
     gp.setmode(gp.BCM)
     gp.setup(pin, gp.OUT)
 
