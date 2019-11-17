@@ -23,19 +23,23 @@ def main():
     update_git.minute.on(15,45)
 
     # Run Main Pump
-    main_pump = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/main_pump.py')
+    main_pump = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/main_pump.py')
     main_pump.every_reboot()
 
     # Run Germination Pump
-    elongation_pump = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/elongation_pump.py')
+    elongation_pump = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/elongation_pump.py')
     elongation_pump.every_reboot()
 
+    # Run Ozone
+    ozone = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/ozone.py')
+    ozone.every_reboot()
+
     # Set Lights
-    lights = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/set_lights.py')
+    lights = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/set_lights.py')
     lights.every_reboot()
 
     # Set Brightness
-    brightness = pi_cron.new(command = 'sleep 60 && python3 /home/pi/inHouse_rpi/light_intensity.py')
+    brightness = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/light_intensity.py')
     brightness.every_reboot()
 
     # Set Brightness

@@ -3,11 +3,12 @@ const bodyParser = require("body-parser")
 const fs = require('fs')
 const app = express()
 const port = 3000
-const cmd = require('node-cmd')
+const cmd = require('node-cmd');
 
 app.use(bodyParser.json())
 
 app.post('/camera/:id', (req, res) => {
+    console.log("New POST request detected")
     let id = req.params.id
     let address = req.body['address']
     console.log('id: ',id)
@@ -60,7 +61,7 @@ app.post('/germination/', (req, res) => {
             }
         })
     })
-    
+
     res.send('New germination reading received and uploaded to S3.')
 })
 
