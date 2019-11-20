@@ -1,0 +1,16 @@
+{
+    "pump": {
+        "type": "interval",
+        "time_interval": 2,
+        "run_period": 1,
+        "pin": 18
+    },
+
+    "lighting": {
+        "type": "interval",
+        "time_interval": 1440,
+        "run_period": 960,
+        "on_days": "1-5",
+        "pin": 16
+    }
+}
