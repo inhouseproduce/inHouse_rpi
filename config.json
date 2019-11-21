@@ -1,16 +1,27 @@
 {
-    "pump": {
+    "mainPump": {
         "type": "interval",
         "time_interval": 2,
         "run_period": 1,
-        "pin": 18
+        "pin": 17,
+        "direction": "OUT",
+        "errorCheck": true
+    },
+
+    "secondPump": {
+        "type": "interval",
+        "time_interval": 2,
+        "run_period": 1,
+        "pin": 27,
+        "direction": "OUT"
     },
 
     "lighting": {
         "type": "interval",
-        "time_interval": 1440,
-        "run_period": 960,
-        "on_days": "1-5",
-        "pin": 16
+        "time_interval": 1,
+        "run_period": 2,
+        "pin": 4,
+        "direction": "OUT",
+        "int": true
     }
 }

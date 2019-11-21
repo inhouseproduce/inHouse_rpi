@@ -1,23 +1,37 @@
-const config = require('./config.json');
 const scheduler = require('./scheduler');
+let { mainPump, secondPump, lighting } = require('./config.json');
 
-var gpio = require('gpio');
 
-let { pump, lighting } = config;
-
-var gpio4 = gpio.export(18, {
-    direction: gpio.DIRECTION.OUT,
- });
-
-// Pump action
-scheduler[pump.type](config.pump, {
+scheduler[mainPump.type](mainPump, { 
     on: () => {
-        console.log('pump is on ')
-        gpio4.set(1);
+        console.log('main pump is on ')
     },
         
     off: () => {
-        console.log('pump is off ')
-        gpio4.set(0);
+        console.log('main pump is off ')
     }
 });
+
+
+scheduler[secondPump.type](secondPump, { 
+    on: () => {
+        console.log('secondery pump is on ')
+    },
+        
+    off: () => {
+        console.log('secondery pump is off ')
+    }
+});
+
+
+scheduler[lighting.type](lighting, { 
+    on: () => {
+        console.log('lighting  is on ')
+    },
+        
+    off: () => {
+        console.log('lighting  is off ')
+    }
+});
+
+
