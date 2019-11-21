@@ -5,7 +5,7 @@ import time
 
 
 def run(now, pin):
-    if now.hour == 0 or now.hour == 3 or now.hour == 6:
+    if now.hour == 11 or now.hour == 2 or now.hour == 5 and now.minute <= 30:
         gp.output(pin, False)
     else:
         gp.output(pin, True)
