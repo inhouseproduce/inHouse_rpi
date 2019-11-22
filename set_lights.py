@@ -6,17 +6,17 @@ import time
 def run(now, pin):
     # On between 10am and 2am
     if now.hour >= 10 or now.hour < 2:
-        gp.output(pin, True)
+        gp.output(pin, False)
         
         if now.hour >= 18:
             set_brightness('40')
         else:
             set_brightness('100')
     else:
-        gp.output(pin, False)
+        gp.output(pin, True)
 
 def main():
-    pin = 4
+    pin = 22
     gp.setmode(gp.BCM)
     gp.setup(pin, gp.OUT)
     while(True):
