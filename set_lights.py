@@ -4,8 +4,8 @@ import datetime
 import time
 
 def run(now, pin):
-    # On between 10am and 2am
-    if now.hour >= 10 or now.hour < 2:
+    # On between 9am and 1am - Normally open relay wiring
+    if now.hour >= 9 or now.hour < 1:
         gp.output(pin, False)
         
         if now.hour >= 18:
