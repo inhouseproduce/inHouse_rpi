@@ -30,6 +30,10 @@ def main():
     elongation_pump = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/elongation_pump.py')
     elongation_pump.every_reboot()
 
+    # Run Ozone
+    ozone = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/ozone.py')
+    ozone.every_reboot()
+
     # Set Lights
     lights = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/set_lights.py')
     lights.every_reboot()

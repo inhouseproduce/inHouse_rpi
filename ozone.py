@@ -3,22 +3,24 @@ import RPi.GPIO as gp
 import datetime
 import time
 
+
 def run(now, pin):
-    if now.minute % 6 == 0 and now.second < 29:
+    if now.hour == 0 or now.hour == 3 or now.hour == 6:
         gp.output(pin, False)
     else:
         gp.output(pin, True)
 
-#every 6 minutes for 1 minute and 10 seconds
+# every 4 hours for 5 minutes
 def main():
-    pin = 17
+    pin = 23
     gp.setmode(gp.BCM)
     gp.setup(pin, gp.OUT)
+
     while(True):
         now = datetime.datetime.now()
         run(now, pin)
-        time.sleep(30)
-    
+        time.sleep(60)
+
 def trigger():
     gp.output(pin, False)
 

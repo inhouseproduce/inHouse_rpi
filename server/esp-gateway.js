@@ -8,6 +8,7 @@ const cmd = require('node-cmd')
 app.use(bodyParser.json())
 
 app.post('/camera/:id', (req, res) => {
+    console.log("New POST request detected")
     let id = req.params.id
     let address = req.body['address']
     console.log('id: ',id)
