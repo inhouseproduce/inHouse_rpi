@@ -3,7 +3,7 @@
     "schedule": {
         "mainPump": {
             "type": "interval",
-            "time_interval": 1,
+            "time_interval": 5,
             "run_period": 1,
             "pin": 17,
             "direction": "OUT",
@@ -20,8 +20,8 @@
     
         "lighting": {
             "type": "clock",
-            "time_interval": 900,
-            "run_period": 440,
+            "time_interval": 1440,
+            "run_period": 960,
             "pin": 4,
             "direction": "OUT",
             "init": true

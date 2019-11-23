@@ -24,23 +24,23 @@ scheduler[mainPump.type](mainPump, {
 });
 
 
-// scheduler[secondPump.type](secondPump, { 
-//     on: () => {
-//         console.log('secondery pump is on ')
-//     },
+scheduler[secondPump.type](secondPump, { 
+    on: () => {
+        console.log('secondery pump is on ')
+    },
         
-//     off: () => {
-//         console.log('secondery pump is off ')
-//     }
-// });
+    off: () => {
+        console.log('secondery pump is off ')
+    }
+});
 
 
-// scheduler[lighting.type](lighting, { 
-//     on: () => {
-//         dataLogger('lighting', 'on')
-//     },
+scheduler[lighting.type](lighting, { 
+    on: () => {
+        dataLogger('lighting', 'on')
+    },
         
-//     off: () => {
-//         dataLogger('lighting', 'off')
-//     }
-// });
+    off: () => {
+        dataLogger('lighting', 'off')
+    }
+});
