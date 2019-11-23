@@ -1,27 +1,30 @@
 {
-    "mainPump": {
-        "type": "interval",
-        "time_interval": 2,
-        "run_period": 1,
-        "pin": 17,
-        "direction": "OUT",
-        "errorCheck": true
-    },
-
-    "secondPump": {
-        "type": "interval",
-        "time_interval": 2,
-        "run_period": 1,
-        "pin": 27,
-        "direction": "OUT"
-    },
-
-    "lighting": {
-        "type": "interval",
-        "time_interval": 1,
-        "run_period": 2,
-        "pin": 4,
-        "direction": "OUT",
-        "int": true
+    "system": "1",
+    "schedule": {
+        "mainPump": {
+            "type": "interval",
+            "time_interval": 1,
+            "run_period": 1,
+            "pin": 17,
+            "direction": "OUT",
+            "errorCheck": true
+        },
+    
+        "secondPump": {
+            "type": "interval",
+            "time_interval": 240,
+            "run_period": 5,
+            "pin": 27,
+            "direction": "OUT"
+        },
+    
+        "lighting": {
+            "type": "clock",
+            "time_interval": 900,
+            "run_period": 440,
+            "pin": 4,
+            "direction": "OUT",
+            "init": true
+        }
     }
 }
