@@ -3,47 +3,36 @@ const GPIO = require('gpio');
 const CronJob = require('cron').CronJob;
 
 const timer = require('./timer');
-const checker = require('./errorLog');
 
 class Scheduler {
     constructor(){
         // Interval based scheduling
         this.interval = (config, action) => {
-            // Initialize pin config
-            let gpio = GPIO.export(config.pin, {
-                direction: GPIO.DIRECTION[config.direction],
-            });
-            gpio.reset()
-            // Run interval specified in config
-            new CronJob(`0 */${config.time_interval+1} * * * *`, () => {
-                action.on();
-                gpio.set();
-                setTimeout(() => { 
-                    action.off();
-                    gpio.set(0)
-                }, config.run_period * 60000);
+            console.log('code is ready')
+            new CronJob(`0 */2 * * * *`, () => {
+                // Initialize pin config
+                let gpio = GPIO.export(22, {
+                    direction: GPIO.DIRECTION[config.direction],
+                });
+                gpio.set()
+                // Switch pin on/off
+                // this.actionSwitch(config, action, gpio);
 			}).start();
         }
 
-        this.clock = (config, action) => {
+        this.clock = () => {
             let gpio = this.initializeGpio(config);
-
-            if( config.init )
-                this.actionSwitch(config, action, gpio );
-
             setInterval(() => {
-                action.on
-            }, config.time_interval+1 * 60000);
+                this.actionSwitch(config, action, gpio);
+            }, 1000);
+
         }
     }
 
     actionSwitch( config, action, gpio ){
-        // Turn on the start
         onoff(true);
-
-        // Turn off based on run period
-        setTimeout(() => { onoff(false) 
-        }, config.run_period * 60000);
+        setTimeout(() => { onoff(false) },
+            config.run_period * 60000);
         
         function onoff(onoff){
             if( config.direction && config.pin ) 

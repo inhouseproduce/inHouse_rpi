@@ -6,9 +6,8 @@ WORKDIR /app
 COPY package.json package.json
 
 RUN npm install
-
 COPY . ./
 
-ENV UDEV=1
+ENV UDEV=1ß
 
 CMD ["node", "index.js"]
