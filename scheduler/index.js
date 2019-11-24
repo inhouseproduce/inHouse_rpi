@@ -6,49 +6,55 @@ const timer = require('./timer');
 
 class Scheduler {
     constructor(){
-        // Interval based scheduling
         this.interval = (config, action) => {
-            console.log('code is ready')
-            new CronJob(`0 */2 * * * *`, () => {
-                // Initialize pin config
-                let gpio = GPIO.export(22, {
+            new CronJob(`0 */${config.time_interval+1} * * * *`, () => {
+                // Gpio configuration
+                let gpio = GPIO.export(config.pin, {
                     direction: GPIO.DIRECTION[config.direction],
+                    ready: () => {
+                        // Swtich on/off the action
+                        this.intervalAction( config, action, gpio );
+                    }
                 });
-                gpio.set()
-                // Switch pin on/off
-                // this.actionSwitch(config, action, gpio);
 			}).start();
-        }
+        };
 
-        this.clock = () => {
-            let gpio = this.initializeGpio(config);
-            setInterval(() => {
-                this.actionSwitch(config, action, gpio);
-            }, 1000);
+        this.clock = (config, action) => {
+            let gpio = GPIO.export(18, {
+                direction: GPIO.DIRECTION[config.direction],
+                ready: () => {
+                    this.clockAction( config, action, gpio );
+                }
+            });
+        };
+    };
 
+    clockAction(config, action, gpio){
+        onoffSwitch(); // Initially on
+
+        setInterval(() => // Swtich based on interval
+            onoffSwitch(), config.time_interval * 60000);
+        
+        function onoffSwitch(){
+            gpio.set(!gpio.value);
+            action[!gpio.value ? 'on' : 'off']();
         }
     }
 
-    actionSwitch( config, action, gpio ){
-        onoff(true);
-        setTimeout(() => { onoff(false) },
-            config.run_period * 60000);
-        
-        function onoff(onoff){
+    intervalAction( config, action, gpio ){
+        onoffSwitch(true); // Initially On
+
+        setTimeout(() => // Off on set time
+            onoffSwitch(false), config.run_period * 60000);
+
+        function onoffSwitch( onoff ){
             if( config.direction && config.pin ) 
                 gpio.set(onoff ? 1 : 0);
 
             if( action && action.on ) 
                 action[onoff ? 'on' : 'off']();
-        }
-    }
-
-    initializeGpio( config ){
-        let gpio = GPIO.export(config.pin, {
-            direction: GPIO.DIRECTION[config.direction],
-        });
-        return gpio;
-    }
+        };
+    };
 };
 
 module.exports = new Scheduler;

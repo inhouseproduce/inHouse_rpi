@@ -3,25 +3,17 @@ const config = require('./config.json');
 
 let { mainPump, secondPump, lighting } = config.schedule;
 
-const dataLogger = ( name, onoff ) => {
-    let hour = new Date().getHours();
-    let minutes = new Date().getMinutes();
-    let seconds = new Date().getSeconds();
+console.log('starting :', new Date().getMinutes())
 
-    console.log('========================')
-    console.log(`${name} is ${onoff}`,hour, minutes, seconds)
-    console.log('========================')
-}
-
-scheduler[mainPump.type](mainPump, { 
-    on: () => {
-        dataLogger('mainpump', 'on')
-    },
+// scheduler[mainPump.type](mainPump, { 
+//     on: () => {
+//         console.log('Main Pump is on :', new Date().getMinutes())
+//     },
         
-    off: () => {
-        dataLogger('mainpump', 'off')
-    }
-});
+//     off: () => {
+//         console.log('Main Pump is off :', new Date().getMinutes())
+//     }
+// });
 
 
 // scheduler[secondPump.type](secondPump, { 
@@ -35,12 +27,12 @@ scheduler[mainPump.type](mainPump, {
 // });
 
 
-// scheduler[lighting.type](lighting, { 
-//     on: () => {
-//         dataLogger('lighting', 'on')
-//     },
+scheduler[lighting.type](lighting, { 
+    on: () => {
+        console.log('Lighting is on :', new Date().getMinutes())
+    },
         
-//     off: () => {
-//         dataLogger('lighting', 'off')
-//     }
-// });
+    off: () => {
+        console.log('Lighting is off :', new Date().getMinutes())
+    }
+});
