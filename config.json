@@ -4,7 +4,7 @@
         "mainPump": {
             "type": "interval",
             "time_interval": 30,
-            "run_period": 5,
+            "run_period": 1,
             "pin": 17,
             "direction": "OUT",
             "errorCheck": true
@@ -19,9 +19,19 @@
         },
     
         "lighting": {
+            "actions": [
+                {
+                    "action": "on",
+                    "time": "6am"
+                },
+                {
+                    "action": "off",
+                    "time": "10pm"
+                }
+            ],    
             "type": "clock",
-            "time_interval": 1440,
-            "run_period": 480,
+            "time_interval": 5,
+            "run_period": 1,
             "pin": 4,
             "direction": "OUT",
             "init": true

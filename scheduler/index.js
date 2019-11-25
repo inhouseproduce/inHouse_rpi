@@ -3,6 +3,7 @@ const GPIO = require('gpio');
 const CronJob = require('cron').CronJob;
 
 const timer = require('./timer');
+const error = require('./errorLog');
 
 class Scheduler {
     constructor(){
@@ -20,7 +21,7 @@ class Scheduler {
         };
 
         this.clock = (config, action) => {
-            let gpio = GPIO.export(18, {
+            let gpio = GPIO.export(config.pin, {
                 direction: GPIO.DIRECTION[config.direction],
                 ready: () => {
                     this.clockAction( config, action, gpio );
@@ -36,10 +37,13 @@ class Scheduler {
             onoffSwitch(), config.time_interval * 60000);
         
         function onoffSwitch(){
-            gpio.set(!gpio.value);
-            action[!gpio.value ? 'on' : 'off']();
-        }
-    }
+            if( config.direction && config.pin ) 
+                gpio.set(gpio.value); // Light is switched 1=>0
+            
+            if( action && action.on )
+                action[!gpio.value ? 'on' : 'off']();
+        };
+    };
 
     intervalAction( config, action, gpio ){
         onoffSwitch(true); // Initially On
@@ -48,8 +52,11 @@ class Scheduler {
             onoffSwitch(false), config.run_period * 60000);
 
         function onoffSwitch( onoff ){
+            if( config.errorCheck )
+                //error.errorCheck();
+
             if( config.direction && config.pin ) 
-                gpio.set(onoff ? 1 : 0);
+                gpio.set(!onoff ? 1 : 0);
 
             if( action && action.on ) 
                 action[onoff ? 'on' : 'off']();
