@@ -7,15 +7,16 @@ const cmd = require('node-cmd');
 
 app.use(bodyParser.json())
 
-app.post('/camera/:id', (req, res) => {
+app.post('/camera/', (req, res) => {
     console.log("New POST request detected")
-    let id = req.params.id
+    let mac = req.body['id']
     let address = req.body['address']
-    console.log('id: ',id)
+    console.log('MAC: ',mac)
     console.log('address: ',address)
     fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
         console.log('fs data: ',data)
         let config = JSON.parse(data)
+        let id = config.esp32[mac]
         let stack_num = Math.floor((id - 1) / 6)
         let module_num = Math.floor(((id - 1) % 6) / 2)
         let camera_num = (id - 1) % 2
@@ -24,7 +25,7 @@ app.post('/camera/:id', (req, res) => {
         	console.log(err)
         })
     })
-    res.send('new address '+ address +' received for camera ' + id)
+    res.send('new address received for camera ' +id)
 })
 
 app.post('/germination/', (req, res) => {
