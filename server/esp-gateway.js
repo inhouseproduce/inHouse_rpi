@@ -17,6 +17,7 @@ app.post('/camera/', (req, res) => {
         console.log('fs data: ',data)
         let config = JSON.parse(data)
         let id = config.esp32[mac]
+        console.log(id)
         let stack_num = Math.floor((id - 1) / 6)
         let module_num = Math.floor(((id - 1) % 6) / 2)
         let camera_num = (id - 1) % 2
