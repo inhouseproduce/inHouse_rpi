@@ -12,7 +12,7 @@ import time
 
 def main():
     pi_cron = CronTab(user='pi')
-    pi_cron.env['MAILTO'] = 'andrin@inhouseproduce.com'
+    pi_cron.env['MAILTO'] = 'trevor@inhouseproduce.com'
 
     # Capture data and send to s3
     img_capture = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/img_capture.py')
@@ -40,10 +40,6 @@ def main():
 
     # Set Brightness
     brightness = pi_cron.new(command = 'sleep 1 && python3 /home/pi/inHouse_rpi/light_intensity.py')
-    brightness.every_reboot()
-
-    # Set Brightness
-    brightness = pi_cron.new(command = 'python3 /home/pi/inHouse_rpi/light_intensity.py')
     brightness.every_reboot()
 
     pi_cron.write()
