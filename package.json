@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "iot balena project",
   "engines": {
-    "node": "10.17.0",
+    "node": "8.16.2",
     "npm": "6.13.0"
   },
   "main": "index.js",

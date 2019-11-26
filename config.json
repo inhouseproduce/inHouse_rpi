@@ -3,8 +3,8 @@
     "schedule": {
         "mainPump": {
             "type": "interval",
-            "time_interval": 30,
-            "run_period": 1,
+            "time_interval": 10,
+            "run_period": 0.5,
             "pin": 17,
             "direction": "OUT",
             "errorCheck": true

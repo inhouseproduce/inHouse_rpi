@@ -1,5 +1,5 @@
 
-FROM balenalib/%%BALENA_MACHINE_NAME%%-node:10-stretch-run
+FROM node:8.16.2
 
 WORKDIR /app
 

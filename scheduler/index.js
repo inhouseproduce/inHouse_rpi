@@ -21,28 +21,35 @@ class Scheduler {
         };
 
         this.clock = (config, action) => {
+            // Initiallize gpio
             let gpio = GPIO.export(config.pin, {
                 direction: GPIO.DIRECTION[config.direction],
-                ready: () => {
-                    this.clockAction( config, action, gpio );
-                }
+            });
+            config.actions.map( job => {
+                let { hour, minute, second } = this.timeParser(job.time);
+
+                new CronJob(`${second} ${minute} ${hour} * * *`, () => {
+                    this.clockAction( action, job, gpio );
+                }).start();
             });
         };
     };
 
-    clockAction(config, action, gpio){
-        onoffSwitch(); // Initially on
+    timeParser( data ){
+        let time = data.split(':')
+        return {
+            hour: time[0],
+            minute: time[1] ? time[1] : '00',
+            second: time[2] ? time[2] : '00'
+        }
+    };
 
-        setInterval(() => // Swtich based on interval
-            onoffSwitch(), config.time_interval * 60000);
-        
-        function onoffSwitch(){
-            if( config.direction && config.pin ) 
-                gpio.set(gpio.value); // Light is switched 1=>0
-            
-            if( action && action.on )
-                action[!gpio.value ? 'on' : 'off']();
-        };
+    clockAction( action, job, gpio ){
+        let onoff = job.action === 'on' ? 1 : 0;
+        gpio.set( onoff );
+        if ( action.dim ){
+            // dimming
+        }
     };
 
     intervalAction( config, action, gpio ){
