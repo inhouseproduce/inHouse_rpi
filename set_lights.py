@@ -5,18 +5,18 @@ import time
 
 def run(now, pin):
     # Off between 10pm and 6am
-    if now.hour >= 6 and now.hour < 22:
+    if now.hour >= 6 and now.hour < 23:
         gp.output(pin, True)
-        # if now.hour >= 11:
-        #     set_brightness('15')
-        # else:
-        #     set_brightness('100')
+        if now.hour >= 6:
+            set_brightness('50')
+        else:
+            set_brightness('100')
     else:
         gp.output(pin, False)
 
 # every 4 hours for 5 minutes
 def main():
-    pin = 4
+    pin = 23
     gp.setmode(gp.BCM)
     gp.setup(pin, gp.OUT)
     while(True):
