@@ -24,14 +24,17 @@ class Scheduler {
             // Initiallize gpio
             let gpio = GPIO.export(config.pin, {
                 direction: GPIO.DIRECTION[config.direction],
+                ready: () => {
+                    config.actions.map( job => {
+                        let { hour, minute, second } = this.timeParser(job.time);
+        
+                        new CronJob(`${second} ${minute} ${hour} * * *`, () => {
+                            this.clockAction( action, job, gpio );
+                        }).start();
+                    });
+                }
             });
-            config.actions.map( job => {
-                let { hour, minute, second } = this.timeParser(job.time);
 
-                new CronJob(`${second} ${minute} ${hour} * * *`, () => {
-                    this.clockAction( action, job, gpio );
-                }).start();
-            });
         };
     };
 
