@@ -11,27 +11,57 @@
         },
     
         "secondPump": {
-            "type": "interval",
-            "time_interval": 240,
-            "run_period": 5,
+            "type": "clock",
+            "actions": [
+                {
+                    "action": "on",
+                    "time": "07:00"
+                },
+                {
+                    "action": "off",
+                    "time": "07:05"
+                },
+                {
+                    "action": "on",
+                    "time": "13:00"
+                },
+                {
+                    "action": "off",
+                    "time": "13:05"
+                },
+                {
+                    "action": "on",
+                    "time": "19:00"
+                },
+                {
+                    "action": "off",
+                    "time": "19:05"
+                },
+                {
+                    "action": "on",
+                    "time": "01:00"
+                },
+                {
+                    "action": "off",
+                    "time": "01:05"
+                }
+            ],  
             "pin": 27,
             "direction": "OUT"
         },
     
         "lighting": {
+            "type": "clock",
             "actions": [
                 {
                     "action": "on",
-                    "time": "12:00"
+                    "time": "06:00"
                 },
                 {
                     "action": "off",
-                    "time": "13:00"
+                    "time": "20:00"
                 }
             ],    
-            "type": "clock",
-            "time_interval": 5,
-            "run_period": 1,
             "pin": 4,
             "direction": "OUT",
             "init": true
