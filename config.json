@@ -22,11 +22,11 @@
             "actions": [
                 {
                     "action": "on",
-                    "time": "6am"
+                    "time": "12:00"
                 },
                 {
                     "action": "off",
-                    "time": "10pm"
+                    "time": "13:00"
                 }
             ],    
             "type": "clock",

@@ -45,11 +45,12 @@ class Scheduler {
     };
 
     clockAction( action, job, gpio ){
-        let onoff = job.action === 'on' ? 1 : 0;
-        gpio.set( onoff );
-        if ( action.dim ){
-            // dimming
-        }
+        gpio.set(0)
+        // let onoff = job.action === 'on' ? 1 : 0;
+        // gpio.set( onoff );
+        // if ( action.dim ){
+        //     // dimming
+        // }
     };
 
     intervalAction( config, action, gpio ){
