@@ -25,7 +25,10 @@ def cameraProcess(cameraIP, pathway):
     os.system('curl -o {} http://{}/capture'.format(filename, cameraIP))
     os.system('s3cmd put %s %s' %(filename, pathway + filename)) #push image to s3
     os.system('rm %s' %filename) #delete image locally
-    climate.main(pathway, date)
+    try:
+        climate.main(pathway, date)
+    except:
+        pass
 
 
 ######################################################
