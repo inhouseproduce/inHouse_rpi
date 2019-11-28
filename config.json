@@ -3,10 +3,10 @@
     "schedule": {
         "mainPump": {
             "type": "interval",
-            "time_interval": 10,
+            "time_interval": 2,
             "run_period": 0.5,
-            "pin": 17,
-            "direction": "OUT",
+            "pin": 11,
+            "direction": "OUTPUT",
             "errorCheck": true
         },
     
@@ -14,27 +14,24 @@
             "type": "interval",
             "time_interval": 240,
             "run_period": 5,
-            "pin": 27,
-            "direction": "OUT"
+            "pin": 13,
+            "direction": "OUTPUT"
         },
     
         "lighting": {
             "actions": [
                 {
-                    "action": "on",
-                    "time": "12:00"
-                },
-                {
-                    "action": "off",
-                    "time": "13:00"
+                    "action": "dim",
+                    "time": "2:43:30",
+                    "level": "10"
                 }
-            ],    
+            ],
             "type": "clock",
             "time_interval": 5,
             "run_period": 1,
-            "pin": 4,
-            "direction": "OUT",
-            "init": true
+            "pin": 8,
+            "pwm": 18,
+            "direction": "OUTPUT"
         }
     }
 }
