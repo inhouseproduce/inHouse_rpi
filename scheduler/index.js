@@ -6,19 +6,23 @@ class Scheduler {
     constructor(){
         this.interval = (config, action) => {
             // Initialize Gpio, Initially off by default
-            GPIO.open(pin, GPIO[direction], GPIO.LOW);
+            GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
 
             // Run cron based on time_interval
-            new CronJob(`0 */${time_interval} * * * *`, () => {
+            new CronJob(`0 */${config.time_interval} * * * *`, () => {
                 // Switch to on, on every run
-                action.on();
-                GPIO.write(pin, GPIO.HIGH);
+                if( action.on && action.off )
+                    action.on();
+                if( config.pin )
+                    GPIO.write(config.pin, GPIO.HIGH);
 
                 // Off based on Run_period
                 setTimeout(() => {
-                    action.on();
-                    GPIO.write(pin, GPIO.HIGH);
-                }, run_period * 60000);
+                    if( action.on && action.off )
+                        action.off();
+                    if( config.pin )
+                        GPIO.write(config.pin, GPIO.LOW);
+                }, config.run_period * 60000);
 			}).start();
         };
 
@@ -34,7 +38,7 @@ class Scheduler {
                 // Run cron based on schedule action 
                 new CronJob(`${second} ${minute} ${hour} * * *`, () => {
                     GPIO.open(12, GPIO.PWM)
-                    GPIO.pwmSetClockDivider(16);
+                    GPIO.pwmSetClockDivider(8);
                     GPIO.pwmSetRange(12, 100);// set the range
                     GPIO.pwmSetData(12, 50); // adjust the brightness
                 }).start();

@@ -3,7 +3,7 @@ const config = require('./config.json');
 
 let { mainPump, secondPump, lighting } = config.schedule;
 let date = new Date()
-console.log('starting :', date.getHours(),date.getMinutes())
+console.log('starting ---:', date.getHours(),date.getMinutes())
 
 scheduler[mainPump.type](mainPump, { 
     on: () => {
