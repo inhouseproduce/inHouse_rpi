@@ -27,16 +27,16 @@ scheduler[mainPump.type](mainPump, {
 // });
 
 
-scheduler[lighting.type](lighting, { 
-    on: () => {
-        console.log('Lighting is on :', new Date().getMinutes())
-    },
+// scheduler[lighting.type](lighting, { 
+//     on: () => {
+//         console.log('Lighting is on :', new Date().getMinutes())
+//     },
         
-    off: () => {
-        console.log('Lighting is off :', new Date().getMinutes())
-    },
+//     off: () => {
+//         console.log('Lighting is off :', new Date().getMinutes())
+//     },
 
-    dim: () => {
-        console.log('Light is dimming', new Date().getMinutes())
-    }
-});
+//     dim: () => {
+//         console.log('Light is dimming', new Date().getMinutes())
+//     }
+// });
