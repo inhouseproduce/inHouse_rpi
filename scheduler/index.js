@@ -1,6 +1,9 @@
 
 const CronJob = require('cron').CronJob;
 var GPIO = require('rpio');
+GPIO.init({
+    gpiomem: false,  
+});
 
 class Scheduler {
     constructor(){
@@ -27,15 +30,32 @@ class Scheduler {
         };
 
         this.clock = (config, action) => {
+            GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
+
             GPIO.open(config.pwm, GPIO.PWM)
-            GPIO.pwmSetClockDivider(128);
+            GPIO.pwmSetClockDivider(256);
             GPIO.pwmSetRange(config.pwm, 100);// set the range
 
             config.actions.map( job => {
+                // Parse Date times
                 let { hour, minute, second } = this.timeParser(job.time);
-
+                // Start the cron job
                 new CronJob(`${second} ${minute} ${hour} * * *`, () => {
-                    GPIO.pwmSetData(config.pwm, 50);
+                    // Action switcher
+                    if( action.on && action.off ){
+                        action[job.action]();
+                    }
+                // Gpio switcher 
+                if( job.action === 'on' || job.action === 'off' ){
+                    GPIO.write(config.pin, GPIO[(
+                        job.action === 'on' ? 'LOW' : 'HIGH'
+                    )]);
+                }
+
+                if( job.action === 'dim' ){
+                    console.log('pwm is runing')
+                    GPIO.pwmSetData(config.pwm, 50); // adjust the brightness
+                }
                 }).start();
             });
         };

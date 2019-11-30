@@ -22,15 +22,11 @@
             "actions": [
                 {
                     "action": "on",
-                    "time": "23:49"
-                },
-                {
-                    "action": "on",
-                    "time": "0:36"  
+                    "time": "1:23"  
                 },
                 {
                     "action": "dim",
-                    "time": "0:50:30",
+                    "time": "1:23:30",
                     "level": "10"
                 }
             ],
