@@ -11,25 +11,16 @@ class Scheduler {
             // Initialize Gpio, Initially off by default
             GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
 
+            // Run initially
+            this.switcher( config, action );
+
             // Run cron based on time_interval
             new CronJob(`0 */${config.time_interval} * * * *`, () => {
-                // Switch to on, on every run
-                if( action.on && action.off )
-                    action.on();
-                if( config.pin )
-                    GPIO.write(config.pin, GPIO.LOW);
+                this.switcher( config, action );
+            }).start();
+        }; 
 
-                // Off based on Run_period
-                setTimeout(() => {
-                    if( action.on && action.off )
-                        action.off();
-                    if( config.pin )
-                        GPIO.write(config.pin, GPIO.HIGH);
-                }, config.run_period * 60000);
-			}).start();
-        };
 
-        
         this.clock = (config, action) => {
             // Initilaize GPIO pin
             GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
@@ -44,29 +35,41 @@ class Scheduler {
             config.actions.map( job => {
                 // Parse Date times
                 let { hour, minute, second } = this.timeParser(job.time);
+
                 // Start the cron job
                 new CronJob(`${second} ${minute} ${hour} * * *`, () => {
                     // Action switcher
-                    if( action.on && action.off ){
+                    if( action.on && action.off )
                         action[job.action]();
-                    }
 
                     // Gpio switcher 
-                    if( job.action === 'on' || job.action === 'off' ){
+                    if( job.action === 'on' || job.action === 'off' )
                         GPIO.write(config.pin, GPIO[(
                             job.action === 'on' ? 'LOW' : 'HIGH'
                         )]);
-                    }
 
-                    if( job.action === 'dim' ){
-                        console.log('pwm is runing')
-                        GPIO.pwmSetData(config.pwm, 50); // adjust the brightness
-                    }
+                    if( job.action === 'dim' )
+                        GPIO.pwmSetData(config.pwm, Number(job.action.level)); 
                 }).start();
             });
         };
     };
 
+    switcher( config, action ){
+        if( action.on && action.off )
+            action.on();
+        if( config.pin )
+            GPIO.write(config.pin, GPIO.LOW);
+
+        // Off based on Run_period
+        setTimeout(() => {
+            if( action.on && action.off )
+                action.off();
+            if( config.pin )
+                GPIO.write(config.pin, GPIO.HIGH);
+        }, config.run_period * 60000);
+    };
+    
     timeParser( data ){
         let time = data.split(':');
         return {

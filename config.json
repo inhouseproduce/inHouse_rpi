@@ -26,16 +26,17 @@
                 },
                 {
                     "action": "off",
-                    "time": "1:35:30"  
-                },
-                {
-                    "action": "on",
-                    "time": "1:36"  
+                    "time": "6:00"  
                 },
                 {
                     "action": "dim",
-                    "time": "1:36:30",
+                    "time": "20:00",
                     "level": "10"
+                },
+                {
+                    "action": "dim",
+                    "time": "23:00",
+                    "level": "100"
                 }
             ],
             "type": "clock",
