@@ -4,7 +4,7 @@
         "mainPump": {
             "type": "interval",
             "time_interval": 2,
-            "run_period": 0.5,
+            "run_period": 0.8,
             "pin": 11,
             "direction": "OUTPUT",
             "errorCheck": true
@@ -12,8 +12,8 @@
     
         "secondPump": {
             "type": "interval",
-            "time_interval": 240,
-            "run_period": 5,
+            "time_interval": 2,
+            "run_period": 1,
             "pin": 13,
             "direction": "OUTPUT"
         },
@@ -21,16 +21,24 @@
         "lighting": {
             "actions": [
                 {
+                    "action": "on",
+                    "time": "23:49"
+                },
+                {
+                    "action": "on",
+                    "time": "0:36"  
+                },
+                {
                     "action": "dim",
-                    "time": "2:47:30",
+                    "time": "0:50:30",
                     "level": "10"
                 }
             ],
             "type": "clock",
             "time_interval": 5,
             "run_period": 1,
-            "pin": 8,
-            "pwm": 18,
+            "pin": 7,
+            "pwm": 12,
             "direction": "OUTPUT"
         }
     }

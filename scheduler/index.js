@@ -6,7 +6,7 @@ class Scheduler {
     constructor(){
         this.interval = (config, action) => {
             // Initialize Gpio, Initially off by default
-            GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+            GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
 
             // Run cron based on time_interval
             new CronJob(`0 */${config.time_interval} * * * *`, () => {
@@ -14,33 +14,28 @@ class Scheduler {
                 if( action.on && action.off )
                     action.on();
                 if( config.pin )
-                    GPIO.write(config.pin, GPIO.HIGH);
+                    GPIO.write(config.pin, GPIO.LOW);
 
                 // Off based on Run_period
                 setTimeout(() => {
                     if( action.on && action.off )
                         action.off();
                     if( config.pin )
-                        GPIO.write(config.pin, GPIO.LOW);
+                        GPIO.write(config.pin, GPIO.HIGH);
                 }, config.run_period * 60000);
 			}).start();
         };
 
         this.clock = (config, action) => {
-            // Extract data from config
-            let { pin, pwm, direction } = config;
-            // Initialize Gpio
-            // Map actions, create cron job for each schedule index
+            GPIO.open(config.pwm, GPIO.PWM)
+            GPIO.pwmSetClockDivider(128);
+            GPIO.pwmSetRange(config.pwm, 100);// set the range
 
             config.actions.map( job => {
-                // Parse Date times
                 let { hour, minute, second } = this.timeParser(job.time);
-                // Run cron based on schedule action 
+
                 new CronJob(`${second} ${minute} ${hour} * * *`, () => {
-                    GPIO.open(12, GPIO.PWM)
-                    GPIO.pwmSetClockDivider(8);
-                    GPIO.pwmSetRange(12, 100);// set the range
-                    GPIO.pwmSetData(12, 50); // adjust the brightness
+                    GPIO.pwmSetData(config.pwm, 50);
                 }).start();
             });
         };
