@@ -29,13 +29,18 @@ class Scheduler {
 			}).start();
         };
 
+        
         this.clock = (config, action) => {
+            // Initilaize GPIO pin
             GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
 
+            // Initilaize pwm
             GPIO.open(config.pwm, GPIO.PWM)
             GPIO.pwmSetClockDivider(256);
             GPIO.pwmSetRange(config.pwm, 100);// set the range
+            GPIO.pwmSetData(config.pwm, 100);
 
+            // Map all actions
             config.actions.map( job => {
                 // Parse Date times
                 let { hour, minute, second } = this.timeParser(job.time);
@@ -45,17 +50,18 @@ class Scheduler {
                     if( action.on && action.off ){
                         action[job.action]();
                     }
-                // Gpio switcher 
-                if( job.action === 'on' || job.action === 'off' ){
-                    GPIO.write(config.pin, GPIO[(
-                        job.action === 'on' ? 'LOW' : 'HIGH'
-                    )]);
-                }
 
-                if( job.action === 'dim' ){
-                    console.log('pwm is runing')
-                    GPIO.pwmSetData(config.pwm, 50); // adjust the brightness
-                }
+                    // Gpio switcher 
+                    if( job.action === 'on' || job.action === 'off' ){
+                        GPIO.write(config.pin, GPIO[(
+                            job.action === 'on' ? 'LOW' : 'HIGH'
+                        )]);
+                    }
+
+                    if( job.action === 'dim' ){
+                        console.log('pwm is runing')
+                        GPIO.pwmSetData(config.pwm, 50); // adjust the brightness
+                    }
                 }).start();
             });
         };
