@@ -14,10 +14,10 @@ app.post('/camera/', (req, res) => {
     console.log('MAC: ',mac)
     console.log('address: ',address)
     fs.readFile('/home/root/inHouse_rpi/config.json', 'utf8', (err, data) => {
-        console.log('fs data: ',data)
+        // console.log('fs data: ',data)
         let config = JSON.parse(data)
         let id = config.esp32[mac]
-        console.log(id)
+        console.log('Camera ID: ',id)
         let stack_num = Math.floor((id - 1) / 6)
         let module_num = Math.floor(((id - 1) % 6) / 2)
         let camera_num = (id - 1) % 2
