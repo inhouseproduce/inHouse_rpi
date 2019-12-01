@@ -13,7 +13,7 @@ app.post('/camera/', (req, res) => {
     let address = req.body['address']
     console.log('MAC: ',mac)
     console.log('address: ',address)
-    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
+    fs.readFile('/home/root/inHouse_rpi/config.json', 'utf8', (err, data) => {
         console.log('fs data: ',data)
         let config = JSON.parse(data)
         let id = config.esp32[mac]
@@ -22,11 +22,13 @@ app.post('/camera/', (req, res) => {
         let module_num = Math.floor(((id - 1) % 6) / 2)
         let camera_num = (id - 1) % 2
         config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
-        fs.writeFile('/home/pi/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
-        	console.log(err)
+        fs.writeFile('/home/root/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
+        	if (err) {
+                console.log(err)
+            }
         })
+        res.send('new address received for camera ' +id)
     })
-    res.send('new address received for camera ' +id)
 })
 
 app.post('/germination/', (req, res) => {
@@ -44,7 +46,7 @@ app.post('/germination/', (req, res) => {
             console.log(err)
         }
     })
-    fs.readFile('/home/pi/inHouse_rpi/config.json', 'utf8', (err, data) => {
+    fs.readFile('/home/root/inHouse_rpi/config.json', 'utf8', (err, data) => {
         let config = JSON.parse(data)
         let sitename = config.site
         let system = config.system
@@ -62,9 +64,9 @@ app.post('/germination/', (req, res) => {
                 })
             }
         })
+        res.send('New germination reading received and uploaded to S3.')
     })
     
-    res.send('New germination reading received and uploaded to S3.')
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
