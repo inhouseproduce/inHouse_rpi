@@ -1,20 +1,6 @@
 {
-  "name": "scheduler",
-  "version": "1.0.0",
-  "description": "iot balena project",
-  "engines": {
-    "node": "12.12.0",
-    "npm": "6.13.0"
-  },
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "inhouse-produce",
-  "license": "ISC",
-  "dependencies": {
-    "cron": "^1.7.2",
-    "moment": "^2.24.0",
-    "rpio": "^1.3.0"
-  }
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "setup": "cd esp-geteaway && npm install && cd .. && cd device && npm install"
+    }
 }

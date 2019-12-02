@@ -21,12 +21,18 @@
         "lighting": {
             "actions": [
                 {
-                    "action": "off",
-                    "time": "15:04"  
+                    "action": "on",
+                    "time": "21:00"  
                 },
                 {
-                    "action": "on",
-                    "time": "15:59"  
+                    "action": "dim",
+                    "time": "24:00",
+                    "level": "50"  
+                },
+                {
+                    "action": "dim",
+                    "time": "25:00",
+                    "level": "100"  
                 }
             ],
             "type": "clock",
