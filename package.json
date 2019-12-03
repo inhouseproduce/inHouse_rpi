@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "setup": "cd esp-geteaway && npm install && cd .. && cd device && npm install"
+    }
+}

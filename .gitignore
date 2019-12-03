@@ -1,5 +1,2 @@
-.DS_Store
-node_modules/
-config.json
-__pycache__/
-brightness.lvl
+package-lock.json
+node_modules

@@ -1,0 +1,12 @@
+
+FROM node:12.12.0
+
+WORKDIR /app
+
+COPY package.json package.json
+
+RUN npm setup
+COPY . ./
+
+
+CMD ["node", "server.js"]
