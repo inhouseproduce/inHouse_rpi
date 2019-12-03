@@ -4,6 +4,7 @@ const fs = require('fs')
 const app = express()
 const port = 3000
 const cmd = require('node-cmd');
+const AWS = require('aws-sdk');
 
 app.use(bodyParser.json())
 
@@ -14,7 +15,7 @@ app.post('/camera/', (req, res) => {
     console.log('MAC: ',mac)
     console.log('address: ',address)
     fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
-        // console.log('fs data: ',data)
+        console.log('fs data: ',data)
         let config = JSON.parse(data)
         let id = config.esp32[mac]
         console.log('Camera ID: ',id)
