@@ -27,7 +27,7 @@ app.post('/camera/', (req, res) => {
                 console.log(err)
             }
         })
-        res.send('new address received for camera ' +id)
+        res.send(id)
     })
 })
 
