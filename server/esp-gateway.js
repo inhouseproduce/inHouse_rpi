@@ -15,23 +15,20 @@ app.post('/camera/', (req, res) => {
     console.log('MAC: ',mac)
     console.log('address: ',address)
     fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
-        if (err) {
-            console.log(err)
-        }
         console.log('fs data: ',data)
-        let config = JSON.parse(data)
-        let id = config.esp32[mac]
-        console.log('Camera ID: ',id)
-        let stack_num = Math.floor((id - 1) / 6)
-        let module_num = Math.floor(((id - 1) % 6) / 2)
-        let camera_num = (id - 1) % 2
-        config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
-        fs.writeFile('/app/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
-        	if (err) {
-                console.log(err)
-            }
-        })
-        res.send("camera"+id)
+        // let config = JSON.parse(data)
+        // let id = config.esp32[mac]
+        // console.log('Camera ID: ',id)
+        // let stack_num = Math.floor((id - 1) / 6)
+        // let module_num = Math.floor(((id - 1) % 6) / 2)
+        // let camera_num = (id - 1) % 2
+        // config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
+        // fs.writeFile('/app/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
+        // 	if (err) {
+        //         console.log(err)
+        //     }
+        // })
+        // res.send(id)
     })
 })
 
