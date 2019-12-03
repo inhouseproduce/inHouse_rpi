@@ -28,7 +28,7 @@ app.post('/camera/', (req, res) => {
                 console.log(err)
             }
         })
-        res.send(id)
+        res.send(""+id)
     })
 })
 
