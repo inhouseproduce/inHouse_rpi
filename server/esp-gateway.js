@@ -15,7 +15,7 @@ app.post('/camera/', (req, res) => {
     console.log('address: ',address)
     fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
         console.log('fs data: ',data)
-        let config = JSON.parse(data)
+        let config = JSON.parse(JSON.stringify(data))
         let id = config.esp32[mac]
         console.log('Camera ID: ',id)
         let stack_num = Math.floor((id - 1) / 6)
