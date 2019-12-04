@@ -8,7 +8,7 @@ def run(now, pin):
     if now.hour >= 6 and now.hour < 22:
         gp.output(pin, True)
         if now.hour >= 17:
-            set_brightness('40')
+            set_brightness('30')
         else:
             set_brightness('100')
     else:
