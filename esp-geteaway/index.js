@@ -1,5 +1,6 @@
 const fs = require('fs');
 const cmd = require('node-cmd')
+const esp32 = require('../server/')
 const AWS = require('aws-sdk');
 // const s3 = new AWS.S3({
 //   accessKeyId: balena.models.application.envVar.get('inhouse-produce', 'AccessKey', function(error, value) {
@@ -14,9 +15,7 @@ module.exports = (app) => {
     app.post('/camera/:id', (req, res) => {
         console.log("New POST request detected")
         let mac = req.body['id']
-        let address = req.body['address']
         console.log('MAC: ',mac)
-        console.log('address: ',address)
         fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
             let config = JSON.parse(data)
             let id = config.esp32[mac]
@@ -24,13 +23,19 @@ module.exports = (app) => {
             let stack_num = Math.floor((id - 1) / 6)
             let module_num = Math.floor(((id - 1) % 6) / 2)
             let camera_num = (id - 1) % 2
-            config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
-            fs.writeFile('/app/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
-                if (err) {
-                    console.log(err)
-                }
-            })
-            res.send(""+id)
+            // config.stacks[stack_num].modules[module_num].cameras[camera_num].host = address;
+            // fs.writeFile('/app/inHouse_rpi/config.json', JSON.stringify(config, null, 5), (err) => {
+            //     if (err) {
+            //         console.log(err)
+            //     }
+            // })
+            let obj = {
+                stack: stack_num,
+                module: module_num,
+                camera: camera_num
+            }
+
+            res.send("Image received and uploaded to S3.")
         })
     })
 
