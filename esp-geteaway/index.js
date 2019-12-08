@@ -54,7 +54,6 @@ module.exports = (app) => {
             let sitename = config.site
             let system = config.system
             let pathway = "inhouseproduce-sites/" + sitename + "/system" + system + "/" + "germination/"
-            // let pathway = sitename + "/system" + system + "/" + "germination/" + filename
             const params = {
                 Bucket: pathway,
                 Key: filename,
