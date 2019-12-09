@@ -3,13 +3,13 @@ const moment = require('moment');
 class Catcher {
     constructor() {
         this.state = (nextDates, job) => {
-            let check = nextDates.map((action, i) => {
+            let states = nextDates.map((action, i) => {
                 // Initialize next job
-                let nextJob = nextDates[i+1];
+                let next = nextDates[i+1];
 
                 // If next in array ( stops at the last index )
-                if( nextJob ){
-                    nextJob = nextJob.job;
+                if( next ){
+                    let nextJob = next.job;
                     let currentJob = action.job;
 
                     // Check if current time is in between of two consecutive indexes of nextDates array
@@ -18,35 +18,38 @@ class Catcher {
                         // if is in between run current job return true for checker
                         job(currentJob);
                         return true;
-                    }
+                    };
                 };
                 return false;
             });
-
-            // if nothing was matched run last index of an array
+        
+            // if nothing was inBetween run last index of an array 
+                //(nextDates[lastIndex])
             let checker={};
 
-            for( let i in check ){
-                checker[check[i]] = check[i];
+            // Set states in checker object
+            for( let i in states ){
+                states[states[i]] = states[i];
             };
 
+            // Check if checker object has true state, else run last index
             if( !checker.true ) {
                 let lastIndex = nextDates.length -1;
                 job(nextDates[lastIndex].job);
-            }
+            };
 
       
 
             function isBetween(first, second) {
                 //compare current time, is between of first and second
                 let currentTime = moment();
-                let { one, two } = timeFormat(first, second);
+                let { one, two } = timeFormat();
                 return currentTime.isBetween(one, two);
 
                 // Format two time values with moment
-                function timeFormat(firstValue, secondValue){
-                    let one = moment(firstValue, dateFormat(firstValue));
-                    let two = moment(secondValue, dateFormat(secondValue));
+                function timeFormat(){
+                    let one = moment(first, dateFormat(first));
+                    let two = moment(second, dateFormat(second));
                     return { one, two };
                 };
                 
