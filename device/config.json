@@ -22,16 +22,16 @@
             "actions": [
                 {
                     "action": "on",
-                    "time": "21:00"  
+                    "time": "13:00"  
                 },
                 {
                     "action": "dim",
-                    "time": "24:00",
+                    "time": "20:40",
                     "level": "50"  
                 },
                 {
-                    "action": "dim",
-                    "time": "25:00",
+                    "action": "off",
+                    "time": "01:50",
                     "level": "100"  
                 }
             ],

@@ -1,43 +1,62 @@
 const moment = require('moment');
 
 class Catcher {
-    constructor(){
-        this.state = (nextDates , job) => {
-            nextDates.map((date, i) => {
-                // Get current time
-                const currentTime = moment();
+    constructor() {
+        this.state = (nextDates, job) => {
+            let check = nextDates.map((action, i) => {
+                // Initialize next job
+                let nextJob = nextDates[i+1];
 
-                let nextAction = nextDates[i+1];
-                if( nextAction )
-                    {
-                        // Current map object
-                        let time = date.job.time;
-                        // Next map object
-                        let nextTime = nextAction.job.time;
+                // If next in array ( stops at the last index )
+                if( nextJob ){
+                    nextJob = nextJob.job;
+                    let currentJob = action.job;
 
-                        // format next and current object 
-                        const first = moment(time, dateFormat(time));
-                        const second = moment(nextTime, dateFormat(nextTime));
-                        
-                        // Compare current and next action objects
-                        let isBetween = currentTime.isBetween(first, second);
-
-                        // If is between current and next object (times) run the job
-                        if( isBetween ) job(date.job);//passing current job as argument
+                    // Check if current time is in between of two consecutive indexes of nextDates array
+                    let isBtw = isBetween(currentJob.time, nextJob.time);
+                    if( isBtw ){
+                        // if is in between run current job return true for checker
+                        job(currentJob);
+                        return true;
                     }
+                };
+                return false;
             });
-            
-            function dateFormat(date){
-                let length = date.split(':').length;
-                if( length === 1 ){
-                    return 'HH a'
-                } 
-                else if( length === 2) {
-                    return 'HH:mm a'
-                } 
-                else if ( length === 3 ){
-                    return 'HH:mm:ss a'
-                }
+
+            // if nothing was matched run last index of an array
+            let checker={};
+
+            for( let i in check ){
+                checker[check[i]] = check[i];
+            };
+
+            if( !checker.true ) {
+                let lastIndex = nextDates.length -1;
+                job(nextDates[lastIndex].job);
+            }
+
+      
+
+            function isBetween(first, second) {
+                //compare current time, is between of first and second
+                let currentTime = moment();
+                let { one, two } = timeFormat(first, second);
+                return currentTime.isBetween(one, two);
+
+                // Format two time values with moment
+                function timeFormat(firstValue, secondValue){
+                    let one = moment(firstValue, dateFormat(firstValue));
+                    let two = moment(secondValue, dateFormat(secondValue));
+                    return { one, two };
+                };
+                
+                // Format datastapm
+                function dateFormat(date) {
+                    let length = date.split(':').length;
+                    if (length === 1) return 'HH';
+                    else if (length === 2) return 'HH:mm';
+                    else if (length === 3) return 'HH:mm:ss';
+                };
             };
         };
     };
