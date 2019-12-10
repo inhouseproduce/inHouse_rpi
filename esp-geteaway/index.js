@@ -12,24 +12,26 @@ const AWS = require('aws-sdk');
 // })
 
 module.exports = (app) => {
-    app.post('/camera/:id', (req, res) => {
+    app.post('/camera/', (req, res) => {
         console.log("New POST request detected")
-        let mac = req.params.id
-        console.log('MAC: ',mac)
+        // let mac = req.params.id
+        let buf = req.body
+        // console.log('MAC: ',mac)
+        console.log(buf)
         fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
             let config = JSON.parse(data)
-            let id = config.esp32[mac]
-            console.log('Camera ID: ',id)
-            let stack_num = Math.floor((id - 1) / 6);
-            let module_num = Math.floor(((id - 1) % 6) / 2);
-            let camera_num = (id - 1) % 2;
-            let obj = {
-                stack: stack_num,
-                module: module_num,
-                camera: camera_num
-            };
-            esp32(obj);
-            res.send("New image received for camera " + id + " and uploaded to S3.")
+            // let id = config.esp32[mac]
+            // console.log('Camera ID: ',id)
+            // let stack_num = Math.floor((id - 1) / 6);
+            // let module_num = Math.floor(((id - 1) % 6) / 2);
+            // let camera_num = (id - 1) % 2;
+            // let obj = {
+            //     stack: stack_num,
+            //     module: module_num,
+            //     camera: camera_num
+            // };
+            // esp32(obj);
+            // res.send("New image received for camera " + id + " and uploaded to S3.")
         })
     })
 
