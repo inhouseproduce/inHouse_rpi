@@ -18,7 +18,7 @@ module.exports = (app) => {
         let buf = req.body
         // console.log('MAC: ',mac)
         console.log(buf)
-        var b64encoded = btoa(String.fromCharCode.apply(null, getImageResult.imagebuffer));
+        var b64encoded = btoa(String.fromCharCode.apply(null, buf));
         var datajpg = "data:image/jpg;base64," + b64encoded;
         let base64Image = datajpg.split(';base64,').pop();
         // document.getElementById("myimage").src = datajpg;
