@@ -18,8 +18,15 @@ module.exports = (app) => {
         let buf = req.body
         // console.log('MAC: ',mac)
         console.log(buf)
-        fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
-            let config = JSON.parse(data)
+        var b64encoded = btoa(String.fromCharCode.apply(null, getImageResult.imagebuffer));
+        var datajpg = "data:image/jpg;base64," + b64encoded;
+        let base64Image = datajpg.split(';base64,').pop();
+        // document.getElementById("myimage").src = datajpg;
+        fs.writeFile('image.png', base64Image, {encoding: 'base64'}, function(err) {
+            console.log('File created');
+        });
+        // fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
+        //     let config = JSON.parse(data)
             // let id = config.esp32[mac]
             // console.log('Camera ID: ',id)
             // let stack_num = Math.floor((id - 1) / 6);
@@ -32,7 +39,7 @@ module.exports = (app) => {
             // };
             // esp32(obj);
             // res.send("New image received for camera " + id + " and uploaded to S3.")
-        })
+        // })
     })
 
     app.post('/germination/', (req, res) => {
