@@ -1,6 +1,5 @@
 const fs = require('fs');
-const cmd = require('node-cmd')
-const esp32 = require('../server.js')
+const esp32 = require('../es3')
 const AWS = require('aws-sdk');
 // const s3 = new AWS.S3({
 //   accessKeyId: balena.models.application.envVar.get('inhouse-produce', 'AccessKey', function(error, value) {
@@ -26,7 +25,7 @@ module.exports = (app) => {
         });
         // fs.readFile('/app/config.json', 'utf8', (err, data) => {
         //     let config = JSON.parse(data)
-            // let id = config.esp32[mac]
+            // let id = config.camera[mac]
             // console.log('Camera ID: ',id)
             // let stack_num = Math.floor((id - 1) / 6);
             // let module_num = Math.floor(((id - 1) % 6) / 2);
