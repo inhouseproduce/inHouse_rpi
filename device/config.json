@@ -6,8 +6,7 @@
             "time_interval": 10,
             "run_period": 0.8,
             "pin": 11,
-            "direction": "OUTPUT",
-            "errorCheck": true
+            "direction": "OUTPUT"
         },
     
         "secondPump": {
@@ -22,17 +21,16 @@
             "actions": [
                 {
                     "action": "on",
-                    "time": "13:00"  
+                    "time": "03:40"  
                 },
                 {
                     "action": "dim",
-                    "time": "20:40",
-                    "level": "50"  
+                    "time":"03:59",
+                    "level": "5"  
                 },
                 {
                     "action": "off",
-                    "time": "01:50",
-                    "level": "100"  
+                    "time": "24:00"
                 }
             ],
             "type": "clock",

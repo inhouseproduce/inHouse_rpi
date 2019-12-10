@@ -31,7 +31,7 @@ class Scheduler {
             GPIO.pwmSetClockDivider(256);
             // set total pwm range
             GPIO.pwmSetRange(config.pwm, 100);// set the range
-            // initially 100 (brigtness)
+            // initially 100% brigtness
             GPIO.pwmSetData(config.pwm, 100);
 
             // Map all actions
@@ -54,6 +54,7 @@ class Scheduler {
                 }
             });
 
+            // Catch the current state / catcher module
             catcher.state(nextDates, job => {
                 this.clockSwitcher(config, action, job);
             });
@@ -65,20 +66,20 @@ class Scheduler {
         // Action switcher
         if (action.on && action.off) {
             action[job.action]();
-        }
+        };
 
         // Gpio switcher 
         if (job.action === 'on' || job.action === 'off') {
             GPIO.write(config.pin, GPIO[(
                 job.action === 'on' ? 'LOW' : 'HIGH'
             )]);
-        }
+        };
 
         // Set pwm intensity (brigtness)
         if (job.action === 'dim') {
-            let brightness = Number(job.action.level)
+            let brightness = Number(job.level);
             GPIO.pwmSetData(config.pwm, brightness);
-        }
+        };
     };
 
     // Interval Action

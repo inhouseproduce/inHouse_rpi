@@ -11,7 +11,7 @@ const device = require('./device');
 app.use(bodyParser.json());
 
 // ESP Connection
-espConnection(app);
+//espConnection(app);
 
 // Run device after getting config json
 // configApi().then( async config => {

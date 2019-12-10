@@ -29,7 +29,7 @@ class Catcher {
 
             // Set states in checker object
             for( let i in states ){
-                states[states[i]] = states[i];
+                checker[states[i]] = states[i];
             };
 
             // Check if checker object has true state, else run last index
@@ -37,8 +37,6 @@ class Catcher {
                 let lastIndex = nextDates.length -1;
                 job(nextDates[lastIndex].job);
             };
-
-      
 
             function isBetween(first, second) {
                 //compare current time, is between of first and second
