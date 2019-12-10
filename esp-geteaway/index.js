@@ -1,6 +1,6 @@
 const fs = require('fs');
 const cmd = require('node-cmd')
-const esp32 = require('server.js')
+// const esp32 = require('../server.js')
 const AWS = require('aws-sdk');
 // const s3 = new AWS.S3({
 //   accessKeyId: balena.models.application.envVar.get('inhouse-produce', 'AccessKey', function(error, value) {
