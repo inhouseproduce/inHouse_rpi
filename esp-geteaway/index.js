@@ -14,18 +14,17 @@ const AWS = require('aws-sdk');
 module.exports = (app) => {
     app.post('/camera/', (req, res) => {
         console.log("New POST request detected")
-        // let mac = req.params.id
-        let buf = req.body
+        // let mac = req.body.id
+        let buf = req.body.image
         // console.log('MAC: ',mac)
         console.log(buf)
-        var b64encoded = btoa(String.fromCharCode.apply(null, buf));
+        var b64encoded = btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
         var datajpg = "data:image/jpg;base64," + b64encoded;
         let base64Image = datajpg.split(';base64,').pop();
-        // document.getElementById("myimage").src = datajpg;
         fs.writeFile('image.png', base64Image, {encoding: 'base64'}, function(err) {
             console.log('File created');
         });
-        // fs.readFile('/app/inHouse_rpi/config.json', 'utf8', (err, data) => {
+        // fs.readFile('/app/config.json', 'utf8', (err, data) => {
         //     let config = JSON.parse(data)
             // let id = config.esp32[mac]
             // console.log('Camera ID: ',id)
