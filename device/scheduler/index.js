@@ -78,6 +78,10 @@ class Scheduler {
         // Set pwm intensity (brigtness)
         if (job.action === 'dim') {
             let brightness = Number(job.level);
+            GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+            GPIO.open(config.pwm, GPIO.PWM)
+            GPIO.pwmSetClockDivider(256);
+            GPIO.pwmSetRange(config.pwm, 100);
             GPIO.pwmSetData(config.pwm, brightness);
         };
     };

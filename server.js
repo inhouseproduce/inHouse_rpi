@@ -14,13 +14,9 @@ app.use(bodyParser.json());
 //espConnection(app);
 
 // Run device after getting config json
-// configApi().then( async config => {
-//     device(await config);
-// });
-
-// Testing
-const config = require('./device/config.json')
-device(config);
+configApi().then( async config => {
+    device(await config);
+});
 
 
 app.listen(PORT, () => {

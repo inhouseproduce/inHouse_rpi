@@ -1,5 +1,9 @@
 {
     "system": "1",
+    "client": {
+        "client_name": "",
+        "client_location": ""
+    },
     "schedule": {
         "mainPump": {
             "type": "interval",
@@ -20,17 +24,17 @@
         "lighting": {
             "actions": [
                 {
-                    "action": "on",
-                    "time": "03:40"  
-                },
-                {
                     "action": "dim",
-                    "time":"03:59",
-                    "level": "5"  
+                    "time":"05:00",
+                    "level": "15"  
                 },
                 {
-                    "action": "off",
-                    "time": "24:00"
+                    "action": "on",
+                    "time": "12:00"
+                },
+                {
+                    "action": "on",
+                    "time": "21:30"  
                 }
             ],
             "type": "clock",
