@@ -75,11 +75,13 @@ module.exports = (app) => {
                 if (err) {
                     console.log(err)
                 }
-                fs.unlink(filename, (err) => {
-                    if (err) {
-                        console.log(err)
-                    }
-                })
+                if (data) {
+                    fs.unlink(filename, (err) => {
+                        if (err) {
+                            console.log(err)
+                        }
+                    })
+                }
                 console.log(`File uploaded successfully. ${data.Location}`)
             })
             res.send('New germination reading received and uploaded to S3.')
