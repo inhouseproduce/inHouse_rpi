@@ -71,19 +71,19 @@ module.exports = (app) => {
                 Key: filename,
                 Body: JSON.stringify(body, null, 2)
             }
-            s3.upload(params, (err, data) => {
-                if (err) {
-                    console.log(err)
-                }
-                if (data) {
-                    fs.unlink(filename, (err) => {
-                        if (err) {
-                            console.log(err)
-                        }
-                    })
-                }
-                console.log(`File uploaded successfully. ${data.Location}`)
-            })
+            // s3.upload(params, (err, data) => {
+            //     if (err) {
+            //         console.log(err)
+            //     }
+            //     if (data) {
+            //         fs.unlink(filename, (err) => {
+            //             if (err) {
+            //                 console.log(err)
+            //             }
+            //         })
+            //     }
+            //     console.log(`File uploaded successfully. ${data.Location}`)
+            // })
             res.send('New germination reading received and uploaded to S3.')
         })
     });
