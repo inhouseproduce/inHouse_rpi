@@ -5,11 +5,11 @@ import time
 
 def run(now, pin):
     # On between 9am and 1am - Normally open relay wiring
-    if now.hour >= 9 or now.hour < 1:
+    if now.hour >= 6 and now.hour < 22:
         gp.output(pin, False)
         
         if now.hour >= 17:
-            set_brightness('30')
+            set_brightness('40')
         else:
             set_brightness('100')
     else:

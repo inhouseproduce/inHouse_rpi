@@ -7,4 +7,4 @@ pip3 install python-crontab
 pip3 install smbus
 
 python3 ~/inHouse_rpi/init.py
-# nohup node ~/inHouse_rpi/server/esp-gateway.js &
+nohup node ~/inHouse_rpi/server/esp-gateway.js &
