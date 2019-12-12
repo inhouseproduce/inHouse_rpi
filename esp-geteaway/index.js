@@ -18,9 +18,8 @@ module.exports = (app) => {
         let buf = req.body.image
         console.log('MAC: ',mac)
         console.log('Buf: ',buf)
-        // converts buffer to base64 and then convert that into an image file
-        let b64encoded = btoa(String.fromCharCode.apply(null, new Uint8Array(buf)));
-        let datajpg = "data:image/jpg;base64," + b64encoded;
+        // converts base64 buffer to an image file
+        let datajpg = "data:image/jpg;base64," + buf;
         let base64Image = datajpg.split(';base64,').pop();
         fs.writeFile('image.png', base64Image, {encoding: 'base64'}, function(err) {
             console.log('File created');
