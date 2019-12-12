@@ -2,7 +2,7 @@ const request = require('axios');
 const fs = require('fs');
 
 module.exports = async () => {
-    const url = 'https://webapp-inhouse.herokuapp.com/get/son';
+    const url = 'https://webapp-inhouse.herokuapp.com/get/json';
 
     return await request.get(url).then(res => {
         // Save file than get the file and return

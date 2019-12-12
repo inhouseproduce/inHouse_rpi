@@ -2,121 +2,75 @@
 const CronJob = require('cron').CronJob;
 const GPIO = require('rpio');
 
+// Components 
+const swtichers = require('./switchers');
+const catcher = require('./stateCatcher');
+
+// Helpers
+const cronTimer = require('../helpers/cronTimer');
+
 // GPIO settings
 GPIO.init({ gpiomem: false });
-
-const catcher = require('../helpers/catcher');
 
 class Scheduler {
     constructor() {
         this.interval = (config, action) => {
             // Initialize Gpio, Initially off by default
-            GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
-
+            this.initializeGpio(config);
             // Run initially
-            this.intervalSwitcher(config, action);
-
+            swtichers.intervalSwitcher(config, action);
             // Run cron based on time_interval
-            new CronJob(`0 */${config.time_interval} * * * *`, () => {
-                this.intervalSwitcher(config, action);
+            new CronJob(cronTimer.interval(config), () => {
+                swtichers.intervalSwitcher(config, action);
             }).start();
         };
 
         this.clock = (config, action) => {
             // Initilaize GPIO pin
-            GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
-            // initialzie pwm
-            GPIO.open(config.pwm, GPIO.PWM)
-            // initialzie ~Hz
-            GPIO.pwmSetClockDivider(256);
-            // set total pwm range
-            GPIO.pwmSetRange(config.pwm, 100);// set the range
-            // initially 100% brigtness
-            GPIO.pwmSetData(config.pwm, 100);
+            this.initializeGpio(config);
+            // Initialize pwm
+            this.initializePwm(config);
 
             // Map all actions
             let nextDates = config.actions.map(job => {
-                // Parse Date times
-                let { hour, minute, second } = this.timeParser(job.time);
-
-                let cron = new CronJob(`${second} ${minute} ${hour} * * *`, () => {
-                    // On and off based on job ( job is object of action )
-                    this.clockSwitcher(config, action, job);
+                // Create cron job for each action
+                let cron = new CronJob(cronTimer.clock(job), () => {
+                    swtichers.clockSwitcher(config, action, job);
                 });
 
                 // Start the cron 
                 cron.start();
-
                 // Return next dates in map functon
                 return {
                     date: cron.nextDates(),
                     job: job
                 }
             });
-
             // Catch the current state / catcher module
             catcher.state(nextDates, job => {
-                this.clockSwitcher(config, action, job);
+                swtichers.clockSwitcher(config, action, job);
             });
         };
     };
 
-    // Clock Action
-    clockSwitcher(config, action, job) {
-        // Action switcher
-        if (action.on && action.off) {
-            action[job.action]();
-        };
-
-        // Gpio switcher 
-        if (job.action === 'on' || job.action === 'off') {
-            GPIO.write(config.pin, GPIO[(
-                job.action === 'on' ? 'LOW' : 'HIGH'
-            )]);
-        };
-
-        // Set pwm intensity (brigtness)
-        if (job.action === 'dim') {
-            let brightness = Number(job.level);
-            GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
-            GPIO.open(config.pwm, GPIO.PWM)
-            GPIO.pwmSetClockDivider(256);
-            GPIO.pwmSetRange(config.pwm, 100);
-            GPIO.pwmSetData(config.pwm, brightness);
-        };
+    // initialize gpio
+    initializeGpio(config, init) {
+        let intState = GPIO[init ? 'LOW' : 'HIGH'];
+        let direction = GPIO[config.direction];
+        let pin = config.pin;
+        GPIO.open(pin, direction, intState);
     };
 
-    // Interval Action
-    intervalSwitcher(config, action) {
-        if (action.on && action.off) {
-            action.on();
-        }
-
-        if (config.pin) {
-            GPIO.write(config.pin, GPIO.LOW);
-        }
-
-        // Off based on Run_period
-        setTimeout(() => {
-            if (action.on && action.off) {
-                action.off();
-            }
-
-            if (config.pin) {
-                GPIO.write(config.pin, GPIO.HIGH);
-            }
-        }, config.run_period * 60000);
-    };
-
-
-    //* ------------ Helpers --------------- *//
-    timeParser(data) {
-        let time = data.split(':');
-        return {
-            hour: time[0],
-            minute: time[1] ? time[1] : '00',
-            second: time[2] ? time[2] : '00'
-        };
+    // initialize pwm
+    initializePwm(config) {
+        // initialzie pwm
+        GPIO.open(config.pwm, GPIO.PWM);
+        // initialzie ~Hz
+        GPIO.pwmSetClockDivider(256);
+        // set total pwm range
+        GPIO.pwmSetRange(config.pwm, 100);// set the range
+        // initially 100% brigtness
+        GPIO.pwmSetData(config.pwm, 100);
     };
 };
 
