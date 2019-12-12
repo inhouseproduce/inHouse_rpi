@@ -10,9 +10,7 @@ module.exports = async () => {
         return getDefaultConfig();
     })
         .catch(error => {
-            if (error) {
-                return getDefaultConfig();
-            }
+            if (error) return getDefaultConfig();
         });
 
     // Save json file to current direcotry
@@ -24,7 +22,8 @@ module.exports = async () => {
             // Convert to json and save
             let config = JSON.stringify(data);
             fs.writeFileSync('./config.api/saved.json', config);
-        } else {
+        } 
+        else {
             console.log('Config file is not valid');
         };
     };
@@ -51,9 +50,6 @@ module.exports = async () => {
         return false
     };
 };
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 
 const CronJob = require('cron').CronJob;
-
 const GPIO = require('rpio');
+
 // GPIO settings
 GPIO.init({ gpiomem: false });
 
