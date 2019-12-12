@@ -5,7 +5,7 @@ const GPIO = require('rpio');
 // GPIO settings
 GPIO.init({ gpiomem: false });
 
-const catcher = require('./catcher');
+const catcher = require('../helpers/catcher');
 
 class Scheduler {
     constructor() {
