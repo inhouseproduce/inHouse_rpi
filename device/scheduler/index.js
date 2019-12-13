@@ -1,6 +1,5 @@
 
 const CronJob = require('cron').CronJob;
-const GPIO = require('rpio');
 
 // Components 
 const swtichers = require('./switchers');
@@ -8,15 +7,13 @@ const catcher = require('./stateCatcher');
 
 // Helpers
 const cronTimer = require('../helpers/cronTimer');
-
-// GPIO settings
-GPIO.init({ gpiomem: false });
+const gpio = require('../helpers/gpio');
 
 class Scheduler {
     constructor() {
         this.interval = (config, action) => {
             // Initialize Gpio, Initially off by default
-            this.initializeGpio(config);
+            gpio.initializeGpio(config, true);
             // Run initially
             swtichers.intervalSwitcher(config, action);
             // Run cron based on time_interval
@@ -24,12 +21,12 @@ class Scheduler {
                 swtichers.intervalSwitcher(config, action);
             }).start();
         };
-
+ 
         this.clock = (config, action) => {
             // Initilaize GPIO pin
-            this.initializeGpio(config);
+            gpio.initializeGpio(config, true);
             // Initialize pwm
-            this.initializePwm(config);
+            gpio.initializePwm(config, 100);
 
             // Map all actions
             let nextDates = config.actions.map(job => {
@@ -51,26 +48,6 @@ class Scheduler {
                 swtichers.clockSwitcher(config, action, job);
             });
         };
-    };
-
-    // initialize gpio
-    initializeGpio(config, init) {
-        let intState = GPIO[init ? 'LOW' : 'HIGH'];
-        let direction = GPIO[config.direction];
-        let pin = config.pin;
-        GPIO.open(pin, direction, intState);
-    };
-
-    // initialize pwm
-    initializePwm(config) {
-        // initialzie pwm
-        GPIO.open(config.pwm, GPIO.PWM);
-        // initialzie ~Hz
-        GPIO.pwmSetClockDivider(256);
-        // set total pwm range
-        GPIO.pwmSetRange(config.pwm, 100);// set the range
-        // initially 100% brigtness
-        GPIO.pwmSetData(config.pwm, 100);
     };
 };
 

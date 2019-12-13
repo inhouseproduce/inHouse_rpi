@@ -1,4 +1,4 @@
-const GPIO = require('rpio');
+const gpio = require('../helpers/gpio');
 
 class Switchers {
     constructor() {
@@ -9,7 +9,7 @@ class Switchers {
             }
 
             if (config.pin) {
-                GPIO.write(config.pin, GPIO.LOW);
+                gpio.writeGpio(config, true);
             }
 
             // Off based on Run_period
@@ -19,7 +19,7 @@ class Switchers {
                 }
 
                 if (config.pin) {
-                    GPIO.write(config.pin, GPIO.HIGH);
+                    gpio.writeGpio(config, false);
                 }
             }, config.run_period * 60000);
         };
@@ -33,39 +33,17 @@ class Switchers {
 
             // Gpio switcher 
             if (job.action === 'on' || job.action === 'off') {
-                GPIO.write(config.pin, GPIO[(
-                    job.action === 'on' ? 'LOW' : 'HIGH'
-                )]);
+                let switcher = job.action === 'on' ? true : false;
+                gpio.writeGpio(config, switcher);
             };
 
             // Set pwm intensity (brigtness)
             if (job.action === 'dim') {
-                this.initializeGpio(config, job);
+                gpio.initializeGpio(config, true);
+                gpio.initializePwm(config);
+                gpio.writePwm(config, job.level);
             };
         };
-    };
-
-    initializeGpio = (config, job) => {
-        // Open PWM
-        GPIO.open(config.pwm, GPIO.PWM)
-        // Set ~Hz
-        GPIO.pwmSetClockDivider(256);
-        // Set range 100%
-        GPIO.pwmSetRange(config.pwm, 100);
-        // Set PWM/brightness
-        let brightness = Number(job.level) || 100;
-        GPIO.pwmSetData(config.pwm, brightness);
-    };
-
-    initializeGpio = (config, int) => {
-        let initialState = GPIO[int ? 'HIGH' : 'LOW'];
-        let direction = GPIO[config.direction];
-        let pin = config.pin;
-        GPIO.open(pin, direction, initialState);
-    };
-
-    writeGpio = () => {
-
     };
 };
 

@@ -9,5 +9,4 @@ RUN npm install
 
 COPY . ./
 
-CMD ["bash", "start.sh"]
 CMD ["node", "server.js"]

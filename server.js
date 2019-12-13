@@ -3,9 +3,9 @@ const bodyParser = require("body-parser");
 const app = express();
 const PORT = 3000;
 
-const espConnection = require('./esp-geteaway');
+const api = require('./config.api');
 
-const configApi = require('./config.api');
+const espConnection = require('./esp-geteaway');
 const device = require('./device');
 
 app.use(bodyParser.json());
@@ -13,11 +13,14 @@ app.use(bodyParser.json());
 // ESP Connection
 //espConnection(app);
 
-// Run device after getting config json
-configApi().then( async config => {
+// ---- Testing enviroment
+// const defaultconfig = require('./config.api/configs/default.json')
+// device(defaultconfig);
+
+//Run device after getting config json
+api.getConfig().then( async config => {
     device(await config);
 });
-
 
 app.listen(PORT, () => {
     console.log(`🌎 ==> Server now on port ${PORT}!`);
