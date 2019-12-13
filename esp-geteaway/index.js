@@ -11,9 +11,9 @@ const AWS = require('aws-sdk');
 // })
 
 module.exports = (app) => {
+	// POST of camera image
     app.post('/camera/', (req, res) => {
         console.log("New POST request detected")
-        // console.log(req.body)
         let mac = req.body.id
         let buf = req.body.image
         console.log('MAC: ',mac)
@@ -21,13 +21,16 @@ module.exports = (app) => {
         // converts base64 buffer to an image file
         let datajpg = "data:image/jpg;base64," + buf;
         let base64Image = datajpg.split(';base64,').pop();
+        // creates the image from the base64 buffer data
         fs.writeFile('image.png', base64Image, {encoding: 'base64'}, function(err) {
             console.log('File created');
         });
+        // Opens the config file to get the camera ID from MAC address
         fs.readFile('/app/device/config.json', 'utf8', (err, data) => {
             let config = JSON.parse(data)
             let id = config.camera[mac]
             console.log('Camera ID: ',id)
+            // Calculate the stack number, module number, and camera number for pathway based on the camera ID
             let stack_num = Math.floor((id - 1) / 6);
             let module_num = Math.floor(((id - 1) % 6) / 2);
             let camera_num = (id - 1) % 2;
@@ -39,27 +42,32 @@ module.exports = (app) => {
                 name: 'image.jpg',
                 data: content
             };
+            // S3 upload
             esp32(obj);
             res.send("New image received for camera " + id + " and uploaded to S3.")
         })
     })
 
+    // POST of germination readings
     app.post('/germination/', (req, res) => {
         console.log("New POST request detected")
         let body = req.body
         console.log(body)
+        // creates the filename based on the current date and time
         let today = new Date()
         let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
         let datetime = date + '_' + time
         let filename = 'germination_readings_' + datetime + '.txt'
 
+        // creates the txt file of the germination readings
         fs.writeFile(filename, JSON.stringify(body), (err) => {
             if (err) {
                 console.log(err)
             }
         })
 
+        // opens the config file to get the pathway
         fs.readFile('/app/device/config.json', 'utf8', (err, data) => {
             let config = JSON.parse(data)
             let sitename = config.site
