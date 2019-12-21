@@ -23,9 +23,8 @@ class Scheduler {
         };
  
         this.clock = (config, action) => {
-            // Initilaize GPIO pin
+            // Initilaize GPIO pin && pwm
             gpio.initializeGpio(config, true);
-            // Initialize pwm
             gpio.initializePwm(config, 100);
 
             // Map all actions
@@ -34,7 +33,6 @@ class Scheduler {
                 let cron = new CronJob(cronTimer.clock(job), () => {
                     swtichers.clockSwitcher(config, action, job);
                 });
-
                 // Start the cron 
                 cron.start();
                 // Return next dates in map functon
@@ -43,7 +41,7 @@ class Scheduler {
                     job: job
                 }
             });
-            // Catch the current state / catcher module
+            // Catch current state / catcher module
             catcher.state(nextDates, job => {
                 swtichers.clockSwitcher(config, action, job);
             });
