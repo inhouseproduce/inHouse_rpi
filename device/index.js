@@ -3,7 +3,7 @@ const scheduler = require('./scheduler');
 console.log('hour', new Date().getHours(), 'minue', new Date().getMinutes());
 
 module.exports = (config) => {
-    let { mainPump, secondPump, lighting } = config.schedule;
+    let { mainPump, secondPump, lighting, camera } = config.schedule;
 
     scheduler[mainPump.type](mainPump, {
         on: () => {
@@ -40,4 +40,10 @@ module.exports = (config) => {
             console.log('Light is dimming', new Date().getMinutes())
         }
     });
+
+    scheduler[camera.type](camera, {
+        capture:()=>{
+            console.log('caputring image')
+        }
+    })
 }

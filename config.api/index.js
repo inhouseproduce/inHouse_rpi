@@ -26,7 +26,8 @@ class Api {
             // Convert to json and save
             let config = JSON.stringify(data);
             // Save to saved.json file
-            fs.writeFileSync('./config.api/configs/saved.json', config);
+            let saveTo = './config.api/configs/saved.json';
+            fs.writeFileSync(saveTo, config);
         }
         else {
             console.log('Config file is not valid');

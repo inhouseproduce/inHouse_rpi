@@ -25,7 +25,6 @@ class GpioActions {
             GPIO.pwmSetRange(config.pwm, 100);
             // Set PWM/brightness initially 100%
             GPIO.pwmSetData(config.pwm, 100);
-
         };
 
         // Write gpio

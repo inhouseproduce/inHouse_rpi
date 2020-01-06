@@ -1,13 +1,18 @@
 
 const CronJob = require('cron').CronJob;
+const axios = require('axios');
+const scanNetwork = require('local-devices');
+
+// Helpers
+const cronTimer = require('../helpers/cronTimer');
+const gpio = require('../helpers/gpio');
 
 // Components 
 const swtichers = require('./switchers');
 const catcher = require('./stateCatcher');
 
-// Helpers
-const cronTimer = require('../helpers/cronTimer');
-const gpio = require('../helpers/gpio');
+// Storage
+const s3Storage = require('../../es3');
 
 class Scheduler {
     constructor() {
@@ -21,7 +26,7 @@ class Scheduler {
                 swtichers.intervalSwitcher(config, action);
             }).start();
         };
- 
+
         this.clock = (config, action) => {
             // Initilaize GPIO pin && pwm
             gpio.initializeGpio(config, true);
@@ -44,6 +49,36 @@ class Scheduler {
             // Catch current state / catcher module
             catcher.state(nextDates, job => {
                 swtichers.clockSwitcher(config, action, job);
+            });
+        };
+
+        this.request = async (config, action) => {
+            const scaned = await scanNetwork();
+            let netList = {};
+
+            scaned.map(net => {
+                netList[net.mac] = net
+            });
+
+            let esps = config.esp;
+            esps.map(espMac => {
+                let esp = netList[espMac];
+                if (esp){
+                    axios.get(`http://${esp.ip}`)
+                        .then(res => {
+                            let image = res.data;
+                            //s3Storage.saveFile('/test', image);
+                            
+                            require("fs").writeFile("out.png", res.data, 'base64', function (err) {
+                                console.log(err);
+                            });
+                        })
+                        .catch(error => {
+                            console.log('Error: ');
+                        });
+                } else {
+                    console.log(`esp ${espMac} is not available`)
+                }
             });
         };
     };
