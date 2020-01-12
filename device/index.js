@@ -2,7 +2,7 @@ const scheduler = require('./scheduler');
 
 console.log('hour', new Date().getHours(), 'minue', new Date().getMinutes());
 
-module.exports = (config) => {
+module.exports = config => {
     let { mainPump, secondPump, lighting, camera } = config.schedule;
 
     scheduler[mainPump.type](mainPump, {
@@ -42,8 +42,8 @@ module.exports = (config) => {
     });
 
     scheduler[camera.type](camera, {
-        capture:()=>{
+        capture: () => {
             console.log('caputring image')
         }
-    })
-}
+    });
+};

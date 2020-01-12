@@ -43,9 +43,12 @@
 
         "camera": {
             "type": "request",
-            "interval": 10,
+            "time_interval": 1,
             "esp": [
-                "4c:11:ae:75:c2:1c"
+                {
+                    "position": 2,
+                    "ip": "192.168.1.217"
+                }
             ]
         }
     }

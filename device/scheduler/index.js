@@ -1,11 +1,10 @@
-
 const CronJob = require('cron').CronJob;
 const axios = require('axios');
-const scanNetwork = require('local-devices');
-
+const fs = require('fs');
 // Helpers
 const cronTimer = require('../helpers/cronTimer');
 const gpio = require('../helpers/gpio');
+const network = require('../helpers/network');
 
 // Components 
 const swtichers = require('./switchers');
@@ -53,33 +52,21 @@ class Scheduler {
         };
 
         this.request = async (config, action) => {
-            const scaned = await scanNetwork();
-            let netList = {};
-
-            scaned.map(net => {
-                netList[net.mac] = net
-            });
-
-            let esps = config.esp;
-            esps.map(espMac => {
-                let esp = netList[espMac];
-                if (esp){
-                    axios.get(`http://${esp.ip}`)
-                        .then(res => {
-                            let image = res.data;
-                            //s3Storage.saveFile('/test', image);
-                            
-                            require("fs").writeFile("out.png", res.data, 'base64', function (err) {
-                                console.log(err);
-                            });
-                        })
-                        .catch(error => {
-                            console.log('Error: ');
+            //let devices = await network.devices();
+            setInterval(() => {
+                config.esp.map(async esp => {
+                    try {
+                        let sleepTime = `time-${config.time_interval}`;
+                        let resp = await axios.post(`http://${esp.ip}`, sleepTime);
+                        require("fs").writeFile(`${esp.position}.png`, resp.data, 'base64', function (err) {
+                            console.log(err);
                         });
-                } else {
-                    console.log(`esp ${espMac} is not available`)
-                }
-            });
+                    }
+                    catch( error ){
+                        throw error;
+                    }
+                });
+            }, 60000);
         };
     };
 };
