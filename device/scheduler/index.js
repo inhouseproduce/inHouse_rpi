@@ -1,17 +1,15 @@
 const CronJob = require('cron').CronJob;
-const axios = require('axios');
-const fs = require('fs');
+
 // Helpers
 const cronTimer = require('../helpers/cronTimer');
 const gpio = require('../helpers/gpio');
-const network = require('../helpers/network');
 
 // Components 
 const swtichers = require('./switchers');
 const catcher = require('./stateCatcher');
 
-// Storage
-const s3Storage = require('../../es3');
+// Esp actions
+const esp = require('./esp');
 
 class Scheduler {
     constructor() {
@@ -37,13 +35,9 @@ class Scheduler {
                 let cron = new CronJob(cronTimer.clock(job), () => {
                     swtichers.clockSwitcher(config, action, job);
                 });
-                // Start the cron 
                 cron.start();
                 // Return next dates in map functon
-                return {
-                    date: cron.nextDates(),
-                    job: job
-                }
+                return { date: cron.nextDates(), job: job }
             });
             // Catch current state / catcher module
             catcher.state(nextDates, job => {
@@ -53,20 +47,16 @@ class Scheduler {
 
         this.request = async (config, action) => {
             //let devices = await network.devices();
+            esp.initializeEsps(config, { scan: true });
+
+            // Start cron schedule
             setInterval(() => {
-                config.esp.map(async esp => {
-                    try {
-                        let sleepTime = `time-${config.time_interval}`;
-                        let resp = await axios.post(`http://${esp.ip}`, sleepTime);
-                        require("fs").writeFile(`${esp.position}.png`, resp.data, 'base64', function (err) {
-                            console.log(err);
-                        });
-                    }
-                    catch( error ){
-                        throw error;
-                    }
+                console.log('caputre image')
+                esp.captureImage(config, {
+                    capture: true,
+                    sleep: config.time_interval
                 });
-            }, 60000);
+            }, 60000 * config.time_interval);
         };
     };
 };

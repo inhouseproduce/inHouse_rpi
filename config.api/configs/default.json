@@ -6,8 +6,7 @@
             "time_interval": 10,
             "run_period": 0.8,
             "pin": 11,
-            "direction": "OUTPUT",
-            "errorCheck": true
+            "direction": "OUTPUT"
         },
 
         "secondPump": {
@@ -19,6 +18,10 @@
         },
 
         "lighting": {
+            "type": "clock",
+            "pin": 7,
+            "pwm": 12,
+            "direction": "OUTPUT",
             "actions": [
                 {
                     "action": "on",
@@ -34,20 +37,20 @@
                     "time": "25:00",
                     "level": "100"
                 }
-            ],
-            "type": "clock",
-            "pin": 7,
-            "pwm": 12,
-            "direction": "OUTPUT"
+            ]
         },
 
         "camera": {
             "type": "request",
-            "time_interval": 1,
+            "time_interval": 2,
             "esp": [
                 {
-                    "position": 2,
+                    "position": 1,
                     "ip": "192.168.1.217"
+                },
+                {
+                    "position": 2,
+                    "ip": "193.168.1.217"
                 }
             ]
         }
