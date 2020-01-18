@@ -7,8 +7,6 @@ const gpio = require('../helpers/gpio');
 // Components 
 const swtichers = require('./switchers');
 const catcher = require('./stateCatcher');
-
-// Esp actions
 const esp = require('./esp');
 
 class Scheduler {
@@ -36,7 +34,7 @@ class Scheduler {
                     swtichers.clockSwitcher(config, action, job);
                 });
                 cron.start();
-                // Return next dates in map functon
+                // Return next dates from map functon
                 return { date: cron.nextDates(), job: job }
             });
             // Catch current state / catcher module
@@ -46,12 +44,10 @@ class Scheduler {
         };
 
         this.request = async (config, action) => {
-            //let devices = await network.devices();
             esp.initializeEsps(config, { scan: true });
 
             // Start cron schedule
             setInterval(() => {
-                console.log('caputre image')
                 esp.captureImage(config, {
                     capture: true,
                     sleep: config.time_interval

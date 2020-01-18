@@ -1,79 +1,73 @@
-const fs = require('fs');
+// Libs
 const axios = require('axios');
-const moment = require('moment');
-const scanNetwork = require('local-devices');
+const networkScan = require('local-devices');
 
+// Storage api
 const s3Storage = require('../../s3.storage');
 
 class Esp {
     constructor() {
         this.initializeEsps = (config, options) => {
-            this.scanEspList(config.esp, options, data => {
-                this.getListInfo(config.esp, data);
+            this.registerEsp(config.esp, list => {
+                this.requestAll(list, options, data => {
+                    console.log('data', data)
+                    //this.getListInfo(list, data);
+                });
             });
         };
 
         this.captureImage = (config, options) => {
-            this.scanEspList(config.esp, options, data => {
-                this.getListInfo(config.esp, data);
-                config.esp.map(item => {
-                    s3Storage.saveImage(data[item.ip]);
+            this.scanEspList(config.esp, options, list => {
+                config.esp.map(esp => {
+                    s3Storage.saveImage(list[esp.ip]);
                 });
             });
         };
     };
 
-    matchIp = () => {
-        let scaned = await scanNetwork();
-        let netList = {};
+    registerEsp = async (espList, register) => {
+        let list = await this.scanNetwork();
 
-        scaned.map(net => {
-            netList[net.mac] = net
-        });
+        register(espList.map(esp => {
+            return match(esp, list[esp.mac]);
+        }));
+
+        function match(esp, activeEsp) {
+            esp.ip = activeEsp && activeEsp.ip;
+            esp.active = activeEsp ? true : false;
+            return esp;
+        };
     };
 
-    scanEspList = (espList, options, cb) => {
+    requestAll = (espList, options, cb) => {
         let list = espList.map(async esp => {
-            let resp = await this.request(esp, options);
-            return { [esp.ip]: resp };
+            if(esp.active){
+                try {
+                    let resp = await axios.post(`http://${esp.ip}`, options);
+                    esp.response = resp.data;
+                    return esp;
+                } catch (error) {
+                    esp.response = false;
+                    return esp;
+                };
+            } else { return esp };
         });
         Promise.all(list).then(resp => {
-            cb(Object.assign({}, ...resp));
+            console.log('response', resp)
+            cb(resp);
         });
     };
 
-    request = async (esp, options) => {
+    scanNetwork = async count => {
         try {
-            let resp = await axios.post(`http://${esp.ip}`, options);
-            return (resp || resp.data) ? resp.data : false;
-        } catch (error) { return false };
-    };
-
-    getListInfo = (espList, resp) => {
-        let data = { ok: 0, reject: 0, length: espList.length };
-        espList.map(item => {
-            data[resp[item.ip] ? 'ok' : 'reject']++;
-        });
-        this.errorLogger(data);
-        return data;
-    };
-
-    errorLogger = (info) => {
-        let date = `${moment().hour()} : ${moment().minute()}`
-        let data = { [date]: info };
-        fs.appendFile("./object.json", JSON.stringify(data), (err) => {
-            if (err) {
-                console.error(err);
-                return;
-            };
-            console.log("File has been created");
-        });
-    };
-
-    saveFile = img => {
-        require("fs").writeFile(`1.png`, img, 'base64', function (err) {
-            console.log(err);
-        });
+            let scaned = await networkScan();
+            return Object.assign({}, ...scaned.map(net => {
+                return { [net.mac]: net };
+            }));
+        } catch {
+            if (count <= 2) this.scanNetwork(count++);
+            console.log('network scan failed')
+        };
     };
 };
 
