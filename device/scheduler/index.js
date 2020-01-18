@@ -47,12 +47,12 @@ class Scheduler {
             esp.initializeEsps(config, { scan: true });
 
             // Start cron schedule
-            setInterval(() => {
+            new CronJob(cronTimer.interval(config), () => {
                 esp.captureImage(config, {
                     capture: true,
                     sleep: config.time_interval
                 });
-            }, 60000 * config.time_interval);
+            }).start();
         };
     };
 };

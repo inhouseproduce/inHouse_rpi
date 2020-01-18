@@ -8,24 +8,23 @@ const s3Storage = require('../../s3.storage');
 class Esp {
     constructor() {
         this.initializeEsps = (config, options) => {
-            this.registerEsp(config.esp, list => {
+            this.scanEsp(config.esp, list => {
                 this.requestAll(list, options, data => {
-                    console.log('data', data)
-                    //this.getListInfo(list, data);
+                    this.initialize(data);
                 });
             });
         };
 
         this.captureImage = (config, options) => {
-            this.scanEspList(config.esp, options, list => {
-                config.esp.map(esp => {
-                    s3Storage.saveImage(list[esp.ip]);
+            this.scanEsp(config.esp, list => {
+                this.requestAll(list, options, data => {
+                    this.saveImages(data);
                 });
             });
         };
     };
 
-    registerEsp = async (espList, register) => {
+    scanEsp = async (espList, register) => {
         let list = await this.scanNetwork();
 
         register(espList.map(esp => {
@@ -39,23 +38,30 @@ class Esp {
         };
     };
 
-    requestAll = (espList, options, cb) => {
+    requestAll = async (espList, options, cb) => {
         let list = espList.map(async esp => {
-            if(esp.active){
-                try {
-                    let resp = await axios.post(`http://${esp.ip}`, options);
-                    esp.response = resp.data;
-                    return esp;
-                } catch (error) {
-                    esp.response = false;
-                    return esp;
-                };
-            } else { return esp };
+            return await this.request(esp, options);
         });
         Promise.all(list).then(resp => {
-            console.log('response', resp)
             cb(resp);
         });
+    };
+
+    request = async (esp, options) => {
+        if (esp.active) {
+            try {
+                let url = `http://${esp.ip}`;
+                let resp = await axios.post(url, options);
+                return constract(resp.data);
+            } 
+            catch (error) {
+                return constract(false);
+            };
+            function constract(data) {
+                esp.response = data;
+                return esp;
+            };
+        } else { return esp };
     };
 
     scanNetwork = async count => {
@@ -68,6 +74,14 @@ class Esp {
             if (count <= 2) this.scanNetwork(count++);
             console.log('network scan failed')
         };
+    };
+
+    saveImages = data => {
+        console.log('checking', data );
+    };
+
+    initialize = data => {
+        console.log('data--', data.length);
     };
 };
 
