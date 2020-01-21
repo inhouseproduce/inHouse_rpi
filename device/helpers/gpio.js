@@ -7,11 +7,13 @@ class GpioActions {
     constructor() {
         // Initializeation
         this.initializeGpio = (config, init) => {
-            // LOW is on High is off
-            let initialState = GPIO[init ? 'LOW' : 'LOW'];
-            let direction = GPIO[config.direction];
-            let pin = config.pin;
-            GPIO.open(pin, direction, initialState);
+            if (config.pin && config.direction) {
+                // LOW is on High is off
+                let initialState = GPIO[init ? 'LOW' : 'LOW'];
+                let direction = GPIO[config.direction];
+                let pin = config.pin;
+                GPIO.open(pin, direction, initialState);
+            };
         };
 
         // Initializeation
