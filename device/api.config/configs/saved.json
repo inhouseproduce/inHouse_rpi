@@ -6,10 +6,8 @@
             "time_interval": 10,
             "run_period": 0.8,
             "pin": 11,
-            "direction": "OUTPUT",
-            "errorCheck": true
+            "direction": "OUTPUT"
         },
-
         "secondPump": {
             "type": "interval",
             "time_interval": 240,
@@ -17,8 +15,11 @@
             "pin": 13,
             "direction": "OUTPUT"
         },
-
         "lighting": {
+            "type": "clock",
+            "pin": 7,
+            "pwm": 12,
+            "direction": "OUTPUT",
             "actions": [
                 {
                     "action": "on",
@@ -34,18 +35,24 @@
                     "time": "25:00",
                     "level": "100"
                 }
-            ],
-            "type": "clock",
-            "pin": 7,
-            "pwm": 12,
-            "direction": "OUTPUT"
-        },
-
+            ]
+        }
+    },
+    "modules": {
         "camera": {
             "type": "request",
-            "interval": 10,
+            "time_interval": 2,
             "esp": [
-                "4c:11:ae:75:c2:1c"
+                {
+                    "position": 1,
+                    "mac": "4c:11:ae:75:c2:48",
+                    "ip": ""
+                },
+                {
+                    "position": 2,
+                    "mac": "4c:12:ae:33:c2:32",
+                    "ip": ""
+                }
             ]
         }
     }

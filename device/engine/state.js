@@ -1,8 +1,8 @@
 const moment = require('moment');
 
-class Catcher {
+class State {
     constructor() {
-        this.state = (nextDates, job) => {
+        this.catch = (nextDates, job) => {
             let states = nextDates.map((action, i) => {
                 // Initialize next job
                 let next = nextDates[i + 1];
@@ -66,4 +66,4 @@ class Catcher {
     };
 };
 
-module.exports = new Catcher;
+module.exports = new State;

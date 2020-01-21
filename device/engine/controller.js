@@ -1,34 +1,30 @@
-const gpio = require('../helpers/gpio');
+const gpio = require('./gpio');
 
-class Switchers {
+class Controller {
     constructor() {
         // Interval Action
-        this.intervalSwitcher = (config, action) => {
-            if (action.on && action.off) {
-                action.on();
-            }
+        this.interval = (config, action) => {
+            action('on');
 
             if (config.pin) {
                 gpio.writeGpio(config, true);
-            }
+            };
 
             // Off based on Run_period
             setTimeout(() => {
-                if (action.on && action.off) {
-                    action.off();
-                }
+                action('off');
 
                 if (config.pin) {
                     gpio.writeGpio(config, false);
-                }
+                };
             }, config.run_period * 60000);
         };
 
         // Clock Action
-        this.clockSwitcher = (config, action, job) => {
+        this.clock = (config, action, job) => {
             // Action switcher
-            if (action.on && action.off) {
-                action[job.action]();
+            if (action) {
+                action(job.action);
             };
 
             // Gpio switcher 
@@ -47,4 +43,4 @@ class Switchers {
     };
 };
 
-module.exports = new Switchers;
+module.exports = new Controller;

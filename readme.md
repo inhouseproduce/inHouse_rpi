@@ -1,7 +1,7 @@
-<h1>Documentation</h1>
+## Documentation
 
-<h3>Start</h3>
-<p>npm install</p>
-<p>node server.js</p>
+# Start
+    npm install
 
-<h3>File description</h3>
+# Run 
+    node start.js

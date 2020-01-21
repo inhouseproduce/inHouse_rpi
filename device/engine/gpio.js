@@ -5,7 +5,7 @@ GPIO.init({ gpiomem: false });
 
 class GpioActions {
     constructor() {
-        // Initializeation
+        // Gpio Initializeation
         this.initializeGpio = (config, init) => {
             if (config.pin && config.direction) {
                 // LOW is on High is off
@@ -16,24 +16,26 @@ class GpioActions {
             };
         };
 
-        // Initializeation
+        // Pwm Initializeation
         this.initializePwm = (config) => {
-            GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
-            // Open PWM
-            GPIO.open(config.pwm, GPIO.PWM)
-            // Set ~Hz
-            GPIO.pwmSetClockDivider(256);
-            // Set range 100%
-            GPIO.pwmSetRange(config.pwm, 100);
-            // Set PWM/brightness initially 100%
-            GPIO.pwmSetData(config.pwm, 100);
+            if (config.pin && config.pwm) {
+                GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+                // Open PWM
+                GPIO.open(config.pwm, GPIO.PWM)
+                // Set ~Hz
+                GPIO.pwmSetClockDivider(256);
+                // Set range 100%
+                GPIO.pwmSetRange(config.pwm, 100);
+                // Set PWM/brightness initially 100%
+                GPIO.pwmSetData(config.pwm, 100);
+            };
         };
 
         // Write gpio
         this.writeGpio = (config, init) => {
             if (config.pin) {
                 GPIO.write(config.pin, GPIO[init ? 'LOW' : 'HIGH']);
-                // If config has pwm than initialize 100;
+                // initialize at 100% - if pwm;
                 if (config.pwm) {
                     GPIO.pwmSetData(config.pwm, 100);
                 };
