@@ -21,9 +21,10 @@ class Scheduler {
         this.clock = (job, action) => {
             // Extract time values
             let { hour, minute, second } = this.timeFormat(job.time);
-
+            
             // Run cron schedule based on job argument
-            let cron = new CronJob(`${second} ${minute} ${hour} * * *`, () => {
+            let clock_timer = `${second} ${minute} ${hour} * * *`;
+            let cron = new CronJob(clock_timer, () => {
                 action();
             });
 

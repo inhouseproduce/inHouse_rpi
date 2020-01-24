@@ -10,10 +10,6 @@ class Engine {
                 let config = schedule[key];
                 let actionType = this[config.type];
 
-                // Initialize gpios
-                gpio.initializeGpio(config, true);
-                gpio.initializePwm(config, 100);
-
                 actionType(config, action => {
                     logger({ action, key });
                 });
@@ -22,6 +18,8 @@ class Engine {
     };
 
     interval = (config, action) => {
+        gpio.initializeGpio(config, true);
+
         scheduler.interval(config, { int: true }, () => {
             let controll = controller[config.type];
             controll(config, action);
@@ -29,6 +27,9 @@ class Engine {
     };
 
     clock = (config, action) => {
+        gpio.initializeGpio(config, true);
+        gpio.initializePwm(config, 100);
+
         // Map clock action list, create schedule for each job
         let nextDates = config.actions.map(job => {
             let cronDates = scheduler.clock(job, () => {

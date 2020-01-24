@@ -12,7 +12,10 @@ class Request {
         };
 
         this.request = async (esp, options) => {
-            if (esp.active) {
+            if (!esp.active) {
+                return esp;
+            }
+            else {
                 try {
                     let url = `http://${esp.ip}`;
                     let resp = await axios.post(url, options);
@@ -21,11 +24,12 @@ class Request {
                 catch (error) {
                     return constract(false);
                 };
+
                 function constract(data) {
                     esp.response = data;
                     return esp;
                 };
-            } else { return esp };
+            };
         };
     };
 };

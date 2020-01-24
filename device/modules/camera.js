@@ -1,45 +1,71 @@
+const moment = require('moment');
+
 const request = require('../../request');
 const network = require('../../network');
+const storage = require('../../storage');
+
+const arp = require('arp-a');
+const fs = require('fs');
 
 class Camera {
     constructor() {
         this.initializeEsps = (config, action) => {
-            this.scanEsp(config.esp, list => {
-                request.requestAll(list, { scan: true }, data => {
-                    action(data);
-                });
-            });
+            // this.scanEsp(config.esp, list => {
+            //     let options = {
+            //         scan: true
+            //     };
+            //     console.log('list', list)
+
+            //     request.requestAll(list, options, data => {
+            //         console.log('response', data)
+            //         action(data);
+            //     });
+            // });
         };
 
-        this.captureImage = (config, options) => {
+        this.captureImage = (config, action) => {
             this.scanEsp(config.esp, list => {
-                request.requestAll(list, otpions, data => {
-                    this.saveImages(data);
+                let options = {
+                    capture: true,
+                    sleep: config.time_interval
+                };
+                console.log('list', list )
+                request.requestAll(list, options, data => {
+                    console.log('image captured', data)
+                    action(data);
+                    data.map(item => {
+                        let time = `${moment().hour()}:${moment().minute()}`
+                        let name = `${time}__${item.position}`;
+                        storage.saveImage(item.response, name);
+                        console.log('image has been saved')
+                        console.log('alive', item.response)
+                    });
                 });
             });
         };
     };
 
     scanEsp = async (espList, register) => {
-        let list = await network.scanNetwork();
+        network.setNetworkList();
 
-        register(espList.map(esp => {
-            return match(esp, list[esp.mac]);
-        }));
+        network.readFile((data) => {
+            data = data.substring(0, data.length - 1);
+            let list = JSON.parse(`{${data}}`);
 
-        function match(esp, activeEsp) {
-            esp.ip = activeEsp && activeEsp.ip;
-            esp.active = activeEsp ? true : false;
-            return esp;
-        };
-    };
+            if (list) {
+                let camera_esp = espList.map(esp => {
+                    return match(esp, list[esp.mac]);
+                });
 
-    saveImages = data => {
-        //console.log('request' );
-    };
+                register(camera_esp);
 
-    initialize = data => {
-        //console.log('chekcingin')
+                function match(esp, activeEsp) {
+                    esp.ip = activeEsp && activeEsp.ip;
+                    esp.active = activeEsp ? true : false;
+                    return esp;
+                };
+            };
+        });
     };
 };
 

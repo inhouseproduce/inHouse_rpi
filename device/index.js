@@ -11,6 +11,7 @@ class Device {
                 engine.start(config.schedule, data => {
                     logger.action(data);
                 });
+                
                 modules.start(config.modules, data => {
                     logger.action(data);
                 });

@@ -8,7 +8,6 @@
             "pin": 11,
             "direction": "OUTPUT"
         },
-
         "secondPump": {
             "type": "interval",
             "time_interval": 240,
@@ -16,7 +15,6 @@
             "pin": 13,
             "direction": "OUTPUT"
         },
-
         "lighting": {
             "type": "clock",
             "pin": 7,
@@ -29,31 +27,47 @@
                 },
                 {
                     "action": "dim",
-                    "time": "24:00",
+                    "time": "23:00",
                     "level": "50"
                 },
                 {
                     "action": "dim",
-                    "time": "25:00",
+                    "time": "23:30",
                     "level": "100"
                 }
             ]
-        },
-
+        }
+    },
+    "modules": {
         "camera": {
             "type": "request",
             "time_interval": 2,
             "esp": [
                 {
                     "position": 1,
-                    "mac": "4c:11:ae:75:c2:48",
-                    "ip": ""
+                    "mac": "4c:11:ae:75:c2:1c"
                 },
                 {
                     "position": 2,
-                    "mac": "4c:12:ae:33:c2:32",
-                    "ip": ""
+                    "mac": "24:6f:28:b1:58:1c"
+                },
+                {
+                    "position": 3,
+                    "mac": "b4:e6:2d:f9:9a:81"
+                },
+                {
+                    "position": 4,
+                    "mac": "24:6f:28:af:d0:7c"
+                },
+                {
+                    "position": 5,
+                    "mac": "24:6f:28:b1:69:e8"
+                },
+                {
+                    "position": 6,
+                    "mac": "4c:11:ae:75:a4:e4"
                 }
+
             ]
         }
     }
