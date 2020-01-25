@@ -1,8 +1,6 @@
 const arp = require('arp-a');
 const fs = require('fs');
 
-const pathname = './network/logs.txt';
-
 class Network {
     constructor() {
         this.setNetworkList = () => {
@@ -10,10 +8,9 @@ class Network {
                 if (err) {
                     console.log('Clear file failed')
                 }
-                console.log('File has been cleared')
             });
 
-            arp.table(function (err, entry) {
+            arp.table((err, entry) => {
                 if (!!err) return console.log('arp: ' + err.message);
                 if (!entry) return;
 
@@ -21,7 +18,8 @@ class Network {
                     "${entry.mac}":{
                         "ip": "${entry.ip}",
                         "mac": "${entry.mac}"
-                    },`
+                    },`;
+
                 fs.appendFile('./esps.txt', data, (err) => {
                     if (err) { console.log('appending failed') }
                 });
@@ -30,13 +28,15 @@ class Network {
 
         this.readFile = (cb) => {
             setTimeout(() => {
-                fs.readFile('./esps.txt', 'utf8', (err, data) => {
-                    if (err) { console.log('reading file failed') }
-                    let info = data.trim();
-                    cb(info);
+                fs.readFile('./esps.txt', 'utf8', (err, netList) => {
+                    if (err) { console.log('reading file failed') };
+
+                    netList = netList.trim();
+                    netList = netList.substring(0, netList.length - 1);
+
+                    cb(JSON.parse(`{${netList}}`));
                 });
             }, 3000);
-
         };
     };
 };

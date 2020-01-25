@@ -1,60 +1,28 @@
-
-                    "98:da:c4:2f:33:c4":{
-                        "ip": "192.168.0.1",
-                        "mac": "98:da:c4:2f:33:c4"
-                    },
-                    "28:cf:e9:1e:50:2d":{
-                        "ip": "192.168.0.100",
-                        "mac": "28:cf:e9:1e:50:2d"
-                    },
-                    "24:6f:28:b1:58:1c":{
-                        "ip": "192.168.0.106",
-                        "mac": "24:6f:28:b1:58:1c"
-                    },
-                    "4c:11:ae:75:a4:e4":{
-                        "ip": "192.168.0.102",
-                        "mac": "4c:11:ae:75:a4:e4"
-                    },
-                    "b4:e6:2d:f9:9a:81":{
-                        "ip": "192.168.0.104",
-                        "mac": "b4:e6:2d:f9:9a:81"
-                    },
-                    "24:6f:28:af:d0:7c":{
-                        "ip": "192.168.0.107",
-                        "mac": "24:6f:28:af:d0:7c"
-                    },
-                    "24:6f:28:b1:69:e8":{
-                        "ip": "192.168.0.108",
-                        "mac": "24:6f:28:b1:69:e8"
-                    },
-                    "01:00:5e:00:00:fb":{
-                        "ip": "224.0.0.251",
-                        "mac": "01:00:5e:00:00:fb"
-                    },
-                    "01:00:5e:7f:ff:fa":{
-                        "ip": "239.255.255.250",
-                        "mac": "01:00:5e:7f:ff:fa"
-                    },
-                    "4c:11:ae:75:c2:1c":{
-                        "ip": "192.168.0.101",
-                        "mac": "4c:11:ae:75:c2:1c"
-                    },13:20 
-   Camera: 6 / 6 
-   Request:0 -- Reject:6 
+15:21 
+   Camera: 2 / 1 
+   Request:0 -- Reject:1 
  
-13:21 
-   Camera: 6 / 6 
-   Request:0 -- Reject:6 
+15:23 
+   Camera: 2 / 1 
+   Request:0 -- Reject:1 
  
-13:23 
-   Camera: 6 / 6 
-   Request:6 -- Reject:0 
+15:36 
+   Camera: 2 / 1 
+   Request:1 -- Reject:0 
  
-13:27 
-   Camera: 6 / 6 
-   Request:0 -- Reject:6 
+15:46 
+   Camera: 2 / 1 
+   Request:1 -- Reject:0 
  
-13:42 
-   Camera: 6 / 5 
-   Request:5 -- Reject:0 
+15:48 
+   Camera: 2 / 1 
+   Request:1 -- Reject:0 
+ 
+16:4 
+   Camera: 2 / 1 
+   Request:1 -- Reject:0 
+ 
+16:6 
+   Camera: 2 / 1 
+   Request:1 -- Reject:0 
  

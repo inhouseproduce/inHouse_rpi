@@ -4,23 +4,17 @@ const request = require('../../request');
 const network = require('../../network');
 const storage = require('../../storage');
 
-const arp = require('arp-a');
-const fs = require('fs');
-
 class Camera {
     constructor() {
         this.initializeEsps = (config, action) => {
-            // this.scanEsp(config.esp, list => {
-            //     let options = {
-            //         scan: true
-            //     };
-            //     console.log('list', list)
-
-            //     request.requestAll(list, options, data => {
-            //         console.log('response', data)
-            //         action(data);
-            //     });
-            // });
+            this.scanEsp(config.esp, list => {
+                let options = {
+                    scan: true
+                };
+                request.requestAll(list, options, data => {
+                    action(data);
+                });
+            });
         };
 
         this.captureImage = (config, action) => {
@@ -29,16 +23,15 @@ class Camera {
                     capture: true,
                     sleep: config.time_interval
                 };
-                console.log('list', list )
                 request.requestAll(list, options, data => {
-                    console.log('image captured', data)
                     action(data);
                     data.map(item => {
-                        let time = `${moment().hour()}:${moment().minute()}`
+                        let time = `${moment().hour()}:${moment().minute()}`;
                         let name = `${time}__${item.position}`;
                         storage.saveImage(item.response, name);
-                        console.log('image has been saved')
-                        console.log('alive', item.response)
+                        if (item.response) {
+                            console.log('----- Image caputred -----')
+                        }
                     });
                 });
             });
@@ -46,12 +39,7 @@ class Camera {
     };
 
     scanEsp = async (espList, register) => {
-        network.setNetworkList();
-
-        network.readFile((data) => {
-            data = data.substring(0, data.length - 1);
-            let list = JSON.parse(`{${data}}`);
-
+        network.readFile((list) => {
             if (list) {
                 let camera_esp = espList.map(esp => {
                     return match(esp, list[esp.mac]);

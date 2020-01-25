@@ -1,22 +1,19 @@
 const scheduler = require('../../scheduler')
 const camera = require('./camera');
-const network = require('../../network');
 
 class Modules {
     constructor() {
         this.start = (config, logger) => {
             this.initialize(config, key => {
-                let actionType = this[key];
-                actionType(config[key], action => {
+                this[key](config[key], action => {
                     logger({ action, key });
                 });
             });
         };
 
         this.initialize = (config, ready) => {
-            network.setNetworkList();
             Object.keys(config).map(key => {
-                console.log('modules has been initialized')
+                console.log(`${key} Module has been initialized`);
                 ready(key);
             });
         };
