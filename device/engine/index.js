@@ -1,4 +1,5 @@
-const scheduler = require('../../scheduler');
+const scheduler = require('../../utility/scheduler');
+
 const controller = require('./controller');
 const state = require('./state');
 const gpio = require('./gpio');

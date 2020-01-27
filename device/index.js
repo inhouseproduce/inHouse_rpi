@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../utility/logger');
 
 const api = require('./api.config');
 const engine = require('./engine');

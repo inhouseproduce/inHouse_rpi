@@ -1,28 +1,20 @@
-15:21 
-   Camera: 2 / 1 
-   Request:0 -- Reject:1 
+4:53 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
  
-15:23 
-   Camera: 2 / 1 
-   Request:0 -- Reject:1 
+4:54 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
  
-15:36 
-   Camera: 2 / 1 
-   Request:1 -- Reject:0 
+4:56 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
  
-15:46 
-   Camera: 2 / 1 
-   Request:1 -- Reject:0 
+4:56 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
  
-15:48 
-   Camera: 2 / 1 
-   Request:1 -- Reject:0 
- 
-16:4 
-   Camera: 2 / 1 
-   Request:1 -- Reject:0 
- 
-16:6 
-   Camera: 2 / 1 
-   Request:1 -- Reject:0 
+4:58 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
  

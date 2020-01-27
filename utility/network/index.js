@@ -1,10 +1,12 @@
 const arp = require('arp-a');
 const fs = require('fs');
 
+const filepath = 'utility/network/netlist.txt';
+
 class Network {
     constructor() {
         this.setNetworkList = () => {
-            fs.writeFile('./esps.txt', '', err => {
+            fs.writeFile(filepath, '', err => {
                 if (err) {
                     console.log('Clear file failed')
                 }
@@ -20,7 +22,7 @@ class Network {
                         "mac": "${entry.mac}"
                     },`;
 
-                fs.appendFile('./esps.txt', data, (err) => {
+                fs.appendFile(filepath, data, (err) => {
                     if (err) { console.log('appending failed') }
                 });
             });
@@ -28,8 +30,10 @@ class Network {
 
         this.readFile = (cb) => {
             setTimeout(() => {
-                fs.readFile('./esps.txt', 'utf8', (err, netList) => {
-                    if (err) { console.log('reading file failed') };
+                fs.readFile(filepath, 'utf8', (err, netList) => {
+                    if (err) { 
+                        return console.log('reading file failed');
+                    };
 
                     netList = netList.trim();
                     netList = netList.substring(0, netList.length - 1);

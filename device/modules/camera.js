@@ -1,8 +1,8 @@
 const moment = require('moment');
 
-const request = require('../../request');
-const network = require('../../network');
-const storage = require('../../storage');
+const request = require('../../utility/request');
+const network = require('../../utility/network');
+const storage = require('../../utility/storage');
 
 class Camera {
     constructor() {
@@ -31,7 +31,7 @@ class Camera {
                         storage.saveImage(item.response, name);
                         if (item.response) {
                             console.log('----- Image caputred -----')
-                        }
+                        };
                     });
                 });
             });
