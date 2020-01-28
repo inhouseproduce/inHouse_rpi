@@ -1,5 +1,5 @@
-const api = require('./api/config');
 const store = require('./store/create')();
+const api = require('./api/config');
 
 const Device = require('./device');
 const Server = require('./server');

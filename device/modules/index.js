@@ -1,4 +1,4 @@
-const scheduler = require('../../utility/scheduler')
+const scheduler = require('../../utility/scheduler');
 const camera = require('./camera');
 
 class Modules {
