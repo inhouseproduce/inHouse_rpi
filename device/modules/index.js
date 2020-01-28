@@ -4,26 +4,22 @@ const camera = require('./camera');
 class Modules {
     constructor() {
         this.start = (config, logger) => {
-            this.initialize(config, key => {
-                this[key](config[key], action => {
-                    logger({ action, key });
-                });
-            });
-        };
+            Object.keys(config).map(opp => {
+                let action = this[opp];
 
-        this.initialize = (config, ready) => {
-            Object.keys(config).map(key => {
-                console.log(`${key} Module has been initialized`);
-                ready(key);
+                action(config[opp], action => {
+                    logger({ action, opp });
+                });
             });
         };
     };
 
     camera = (config, action) => {
-        camera.initializeEsps(config, action);
-        // Start cron pass arg - config, option, action
-        scheduler.interval(config, { int: false }, () => {
-            camera.captureImage(config, action);
+        // Initialize cameras
+        camera.start(config, job => {
+            scheduler.interval(config, { int: false }, () => {
+                job(config);
+            });
         });
     };
 };

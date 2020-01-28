@@ -7,13 +7,15 @@ const gpio = require('./gpio');
 class Engine {
     constructor() {
         this.start = (schedule, logger) => {
-            Object.keys(schedule).map(key => {
+            return Object.keys(schedule).map(key => {
                 let config = schedule[key];
                 let actionType = this[config.type];
 
-                actionType(config, action => {
-                    logger({ action, key });
-                });
+                return {
+                    [key]: actionType(config, action => {
+                        logger({ action, key });
+                    })
+                };
             });
         };
     };
@@ -21,7 +23,7 @@ class Engine {
     interval = (config, action) => {
         gpio.initializeGpio(config, true);
 
-        scheduler.interval(config, { int: true }, () => {
+        return scheduler.interval(config, { int: true }, () => {
             let controll = controller[config.type];
             controll(config, action);
         });

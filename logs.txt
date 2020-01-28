@@ -1,20 +1,160 @@
-4:53 
+15:9 
    Camera: 2 / 0 
    Request:0 -- Reject:0 
  
-4:54 
+15:37 
    Camera: 2 / 0 
    Request:0 -- Reject:0 
  
-4:56 
+15:38 
    Camera: 2 / 0 
    Request:0 -- Reject:0 
  
-4:56 
+15:38 
    Camera: 2 / 0 
    Request:0 -- Reject:0 
  
-4:58 
+15:39 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+15:40 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:51 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:52 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:54 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:55 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:56 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:57 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:58 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:58 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+16:58 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:0 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:1 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:2 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:4 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:6 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:7 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:7 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:8 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:8 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:9 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:10 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:10 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:10 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:10 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:11 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:11 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:12 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:12 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:13 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:13 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:14 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:14 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:15 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:16 
+   Camera: 2 / 0 
+   Request:0 -- Reject:0 
+ 
+17:18 
    Camera: 2 / 0 
    Request:0 -- Reject:0 
  

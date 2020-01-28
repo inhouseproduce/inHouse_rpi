@@ -1,20 +1,13 @@
+const api = require('./api/config');
+const store = require('./store/create')();
 
-const express = require('express');
-const bodyParser = require('body-parser');
+const Device = require('./device');
+const Server = require('./server');
 
-const device = require('./device');
+api.getConfig().then(sysOp => {
+    const server = new Server({ store, sysOp });
+    server.start();
 
-const PORT = 3000
-const app = express();
-
-app.use(bodyParser.json());
-
-device.start();
-
-app.post('/', (req, res) => {
-    console.log('req', res)
-});
-
-app.listen(PORT, () => {
-    console.log(`🌎 ==> Server now on port ${PORT}!`);
+    const device = new Device({ store, sysOp });
+    device.start();
 });

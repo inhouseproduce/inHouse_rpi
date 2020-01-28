@@ -6,25 +6,28 @@ const storage = require('../../utility/storage');
 
 class Camera {
     constructor() {
-        this.initializeEsps = (config, action) => {
+        this.start = (config, scheduleJob) => {
             this.scanEsp(config.esp, list => {
+
                 let options = {
                     scan: true
                 };
+                
                 request.requestAll(list, options, data => {
-                    action(data);
+                   /// action(data);
                 });
+
+                scheduleJob(this.captureImage);
             });
         };
 
-        this.captureImage = (config, action) => {
+        this.captureImage = config => {
             this.scanEsp(config.esp, list => {
                 let options = {
                     capture: true,
                     sleep: config.time_interval
                 };
                 request.requestAll(list, options, data => {
-                    action(data);
                     data.map(item => {
                         let time = `${moment().hour()}:${moment().minute()}`;
                         let name = `${time}__${item.position}`;

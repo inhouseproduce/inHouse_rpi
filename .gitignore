@@ -6,3 +6,5 @@ test.js
 #testEnv
 esps.txt
 logs.txt
+bin
+.bin
