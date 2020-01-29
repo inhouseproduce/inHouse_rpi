@@ -41,7 +41,7 @@
         },
         "modules": {
             "camera": {
-                "type": "request",
+                "type": "interval",
                 "time_interval": 2,
                 "esp": [
                     {

@@ -4,33 +4,34 @@ class Scheduler {
     constructor() {
         this.interval = (config, option, action) => {
             // option.int if to run initially
-            if(option && option.int)
+            if (option && option.int)
                 action();
 
-            // Cron function to schedule action (passed as arg)
+            // Time interval Cron in format
             let interval_timer = `0 */${config.time_interval} * * * *`;
+
+            // Create cron job
             let cron = new CronJob(interval_timer, () => {
                 action();
             });
 
-            // Run cron and return schedule
+            // Start cron job and return 
             cron.start();
             return cron;
         };
 
-        this.clock = (job, action) => {
-            // Extract time values
-            let { hour, minute, second } = this.timeFormat(job.time);
-            
-            // Run cron schedule based on job argument
-            let clock_timer = `${second} ${minute} ${hour} * * *`;
-            let cron = new CronJob(clock_timer, () => {
-                action();
+        this.clock = (config, option, action) => {
+            let nextDates = config.actions.map(job => {
+                let { hour, minute, second } = this.timeFormat(job.time);
+                let clock_timer = `${second} ${minute} ${hour} * * *`;
+
+                let cronDates = new CronJob(clock_timer, () => {
+                    action();
+                });
+                return { date: cronDates.nextDates(), job: job };
             });
-
-            cron.start();
-            return cron;
-        };
+            return nextDates;
+        }; 
     };
 
     timeFormat(data) {

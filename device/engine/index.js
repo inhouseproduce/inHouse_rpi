@@ -2,50 +2,43 @@ const scheduler = require('../../utility/scheduler');
 
 const controller = require('./controller');
 const state = require('./state');
-const gpio = require('./gpio');
+const gpio = require('../../utility/gpio/gpio');
 
 class Engine {
     constructor() {
         this.start = (schedule, logger) => {
-            return Object.keys(schedule).map(key => {
-                let config = schedule[key];
-                let actionType = this[config.type];
-
-                return {
-                    [key]: actionType(config, action => {
-                        logger({ action, key });
-                    })
-                };
+            Object.keys(schedule).map(key => {
+                this.engine(schedule[key], action => {
+                    logger({ action, key });
+                });
             });
         };
     };
 
-    interval = (config, action) => {
-        gpio.initializeGpio(config, true);
+    engine = (config, action) => {
+        // Initialize Gpio pins based on config
+        if (config.pin)
+            gpio.initializeGpio(config, true);
 
-        return scheduler.interval(config, { int: true }, () => {
-            let controll = controller[config.type];
+        if (config.pwd && config.pin)
+            gpio.initializePwm(config, 100);
+
+        // Get scheduler type based on config
+        let schedule = scheduler[config.type];
+        let controll = controller[config.type];
+
+        // Create cron job, runing schedule function
+        let cronDates = schedule(config, { int: true }, () => {
             controll(config, action);
         });
-    };
 
-    clock = (config, action) => {
-        gpio.initializeGpio(config, true);
-        gpio.initializePwm(config, 100);
-
-        // Map clock action list, create schedule for each job
-        let nextDates = config.actions.map(job => {
-            let cronDates = scheduler.clock(job, () => {
-                let controll = controller[config.type];
-                controll(config, action, job);
+        // If type is clock catch the current state
+        // ** Might need better logic (no if statement)
+        if (config.type === 'clock') {
+            state.catch(cronDates, job => {
+                controller[config.type](config, action, job);
             });
-            return { date: cronDates.nextDates(), job: job };
-        });
-
-        // Catch current state / catcher module
-        state.catch(nextDates, job => {
-            controller[config.type](config, action, job);
-        });
+        };
     };
 };
 

@@ -1,4 +1,4 @@
-const gpio = require('./gpio');
+const gpio = require('../../utility/gpio/gpio');
 
 class Controller {
     constructor() {
