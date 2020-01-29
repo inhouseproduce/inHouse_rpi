@@ -6,6 +6,8 @@ const controller = require('./controller');
 class Engine {
     constructor() {
         this.start = (data, logger) => {
+            let jobList = {};
+
             Object.keys(data).map(key => {
                 let config = data[key];
 
@@ -20,13 +22,18 @@ class Engine {
                 let schedule = scheduler[config.type];
                 let controll = controller[config.type];
 
-                // Create cron job, runing schedule function
+                // Schedule a job based on config type
                 let cronJobs = schedule(config, { int: true }, (action, job) => {
                     controll(config, action, job);
                 });
 
-                return cronJobs;
+                // Jet jobs to jobList object
+                cronJobs.map(job => {
+                    jobList[key] = job;
+                });
             });
+            // Return created cron jobs
+            return jobList;
         };
     };
 };

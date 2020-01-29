@@ -3,9 +3,11 @@ const logger = require('../utility/logger');
 const engine = require('./engine');
 const modules = require('./modules');
 
+const store = require('../store/create');
+
 class Device {
     constructor(dev) {
-        let { store, sysOp } = dev;
+        let { sysOp } = dev;
 
         this.start = () => {
             Object.keys(sysOp.config).map(opp => {
@@ -13,24 +15,26 @@ class Device {
                 let action = this[opp];
                 let config = sysOp.config[opp];
 
+                let task = action(config, store);
+                console.log('task', task)
                 // Store jobs in redux
-                store.dispatch({
+                store().dispatch({
                     type: 'CURRENT_JOB',
                     schedule: {
-                        [opp]: action(config, store)
+                        [opp]: task
                     }
                 });
-            });
+            })
         };
     };
 
-    engine = (config, store) => {
+    engine = config => {
         return engine.start(config, data => {
             logger.action(data);
         });
     };
 
-    modules = (config, store) => {
+    modules = config => {
         return modules.start(config, data => {
             logger.action(data);
         });

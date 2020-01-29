@@ -19,7 +19,7 @@ class Scheduler {
 
             // Start cron job and return 
             cron.start();
-            return cron;
+            return [cron];
         };
 
         this.clock = (config, option, action) => {
@@ -37,11 +37,15 @@ class Scheduler {
                 return { date: cron.nextDates(), job: job };
             });
 
+            // Run current state, action passed as arg
             state.catch(nextDates, job => {
                 action(action, job);
             });
 
-            return nextDates;
+            // Return array of next dates
+            return nextDates.map(data => {
+                return data.date;
+            });
         };
     };
 

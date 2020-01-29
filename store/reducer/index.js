@@ -10,7 +10,7 @@ const user = (state = initialState, action) => {
                 ...state
             } 
 
-        case 'CURRENT_JOB':
+        case 'CURRENT_JOB': 
             return {
                 ...state,
                 jobs: {
