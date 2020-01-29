@@ -16,19 +16,21 @@ class Device {
                 // Store jobs in redux
                 store.dispatch({
                     type: 'CURRENT_JOB',
-                    schedule: { [opp]: action(config) }
+                    schedule: {
+                        [opp]: action(config, store)
+                    }
                 });
             });
         };
     };
 
-    engine = config => {
+    engine = (config, store) => {
         return engine.start(config, data => {
             logger.action(data);
         });
     };
 
-    modules = config => {
+    modules = (config, store) => {
         return modules.start(config, data => {
             logger.action(data);
         });

@@ -3,29 +3,22 @@ const gpio = require('../../utility/gpio/gpio');
 class Controller {
     constructor() {
         // Interval Action
-        this.interval = (config, action) => {
-            action('on');
-
-            if (config.pin) {
+        this.interval = (config) => {
+            if (config.pin)
                 gpio.writeGpio(config, true);
-            };
 
             // Off based on Run_period
             setTimeout(() => {
-                action('off');
-
-                if (config.pin) {
+                if (config.pin)
                     gpio.writeGpio(config, false);
-                };
-            }, config.run_period * 60000);
+            },
+                config.run_period * 60000);
         };
+
 
         // Clock Action
         this.clock = (config, action, job) => {
-            // Action switcher
-            if (action) {
-                action(job.action);
-            };
+            console.log(job.action);
 
             // Gpio switcher 
             if (job.action === 'on' || job.action === 'off') {

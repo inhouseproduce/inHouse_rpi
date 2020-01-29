@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const routes = require('./routes');
 
 class Server {
     constructor() {
@@ -9,9 +10,7 @@ class Server {
 
             app.use(bodyParser.json());
 
-            app.post('/', (req, res) => {
-                console.log('req', res)
-            });
+            routes(app);
 
             app.listen(PORT, () => {
                 console.log(`🌎 ==> Server now on port ${PORT}!`);
