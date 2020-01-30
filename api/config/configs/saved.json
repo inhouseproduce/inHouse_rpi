@@ -4,15 +4,15 @@
         "engine": {
             "pump": {
                 "type": "interval",
-                "time_interval": 1,
-                "run_period": 0.8,
+                "time_interval": 15,
+                "run_period": 0.4,
                 "pin": 11,
                 "direction": "OUTPUT"
             },
             "irrigation": {
                 "type": "interval",
-                "time_interval": 1,
-                "run_period": 5,
+                "time_interval": 240,
+                "run_period": 1,
                 "pin": 13,
                 "direction": "OUTPUT"
             },

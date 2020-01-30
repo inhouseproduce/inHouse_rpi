@@ -41,9 +41,11 @@ class Api {
         let isValid = this.validateConfig(savedConfig);
 
         if (isValid) {
+            console.log('Saved file')
             return savedConfig;
         };
         // Return Default.json file
+        console.log('config file')
         return require('./configs/default.json');
     };
 

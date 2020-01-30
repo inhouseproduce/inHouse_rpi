@@ -39,9 +39,10 @@ class Modules {
 
     // Module Action
     camera = (config, job) => {
-        return camera.start(config, action => {
-            job(action);
-        });
+        // return camera.start(config, action => {
+        //     job(action);
+        // });
+        return {}
     };
 };
 

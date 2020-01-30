@@ -3,8 +3,6 @@ const logger = require('../utility/logger');
 const engine = require('./engine');
 const modules = require('./modules');
 
-const xstore = require('../store/create');
-
 class Device {
     constructor(dev) {
         let { store, sysOp } = dev;

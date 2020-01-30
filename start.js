@@ -6,7 +6,7 @@ const Server = require('./server');
 
 const ip = require('ip');
 
-console.log('ip', ip.address())
+console.log('----ip', ip.address())
 
 api.getConfig().then(sysOp => {
     const server = new Server({ store, sysOp });
