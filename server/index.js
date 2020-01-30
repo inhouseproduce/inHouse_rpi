@@ -4,15 +4,13 @@ const routes = require('./routes');
 
 class Server {
     constructor(dev) {
-        let { store } = dev;
-
         this.start = () => {
             const PORT = 3000;
             const app = express();
 
             app.use(bodyParser.json());
 
-            routes(app, store);
+            routes(app, dev);
 
             app.listen(PORT, () => {
                 console.log(`🌎 ==> Server now on port ${PORT}!`);

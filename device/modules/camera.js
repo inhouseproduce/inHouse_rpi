@@ -21,6 +21,7 @@ class Camera {
         };
 
         this.captureImage = config => {
+            console.log('------')
             this.scanEsp(config.esp, list => {
                 let options = {
                     capture: true,

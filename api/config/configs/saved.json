@@ -2,21 +2,21 @@
     "system": "1",
     "config": {
         "engine": {
-            "mainPump": {
+            "pump": {
                 "type": "interval",
                 "time_interval": 1,
                 "run_period": 0.8,
                 "pin": 11,
                 "direction": "OUTPUT"
             },
-            "secondPump": {
+            "irrigation": {
                 "type": "interval",
                 "time_interval": 1,
                 "run_period": 5,
                 "pin": 13,
                 "direction": "OUTPUT"
             },
-            "lighting": {
+            "lights": {
                 "type": "clock",
                 "pin": 7,
                 "pwm": 12,
