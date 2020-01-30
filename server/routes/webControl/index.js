@@ -4,7 +4,6 @@ module.exports = (app, dev) => {
     app.post('/', (req, res) => {
         let { store, sysOp } = dev;
         let { status, action, level } = req.body;
-        console.log('recive request')
 
         store.getState().jobs[action].stop();
 
