@@ -1,3 +1,3 @@
-module.exports = (app) => {
-    require('./webControl')(app)
+module.exports = (app, store) => {
+    require('./webControl')(app,store)
 };

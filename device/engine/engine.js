@@ -2,17 +2,27 @@ const gpio = require('../../utility/gpio/gpio');
 
 class Controller {
     constructor() {
+        this.initialize = config => {
+            if (config.pin)
+                gpio.initializeGpio(config, true);
+
+            if (config.pwd && config.pin)
+                gpio.initializePwm(config, 100);
+        };
+
         // Interval Action
         this.interval = (config) => {
             if (config.pin)
                 gpio.writeGpio(config, true);
 
             // Off based on Run_period
-            setTimeout(() => {
-                if (config.pin)
-                    gpio.writeGpio(config, false);
-            },
-                config.run_period * 60000);
+            if (config.run_period) {
+                setTimeout(() => {
+                    if (config.pin) {
+                        gpio.writeGpio(config, false);
+                    };
+                }, config.run_period * 60000);
+            };
         };
 
 

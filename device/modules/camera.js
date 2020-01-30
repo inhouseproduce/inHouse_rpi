@@ -8,15 +8,14 @@ class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
             this.scanEsp(config.esp, list => {
-
                 let options = {
                     scan: true
                 };
-                
-                request.requestAll(list, options, data => {
-                   /// action(data);
-                });
 
+                request.requestAll(list, options, data => {
+                    //
+                });
+                
                 scheduleJob(this.captureImage);
             });
         };

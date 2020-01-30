@@ -1,39 +1,33 @@
 const scheduler = require('../../utility/scheduler');
-const gpio = require('../../utility/gpio/gpio');
 
-const controller = require('./controller');
+const controller = require('./engine');
 
 class Engine {
     constructor() {
-        this.start = (data, logger) => {
+        this.start = (data, action) => {
             let jobList = {};
 
-            Object.keys(data).map(key => {
-                let config = data[key];
+            Object.keys(data).map(opp => {
+                let config = data[opp];
 
                 // Initialize Gpio pins based on config
-                if (config.pin)
-                    gpio.initializeGpio(config, true);
-
-                if (config.pwd && config.pin)
-                    gpio.initializePwm(config, 100);
+                controller.initialize(config);
 
                 // Get scheduler type based on config
                 let schedule = scheduler[config.type];
-                let controll = controller[config.type];
+                let engineAction = controller[config.type];
 
                 // Schedule a job based on config type
                 let cronJobs = schedule(config, { int: true }, (action, job) => {
-                    controll(config, action, job);
+                    engineAction(config, action, job);
                 });
 
                 // Jet jobs to jobList object
-                cronJobs.map(job => {
-                    jobList[key] = job;
-                });
+                cronJobs.map(job => { jobList[opp] = job });
             });
+            
             // Return created cron jobs
-            return jobList;
+            action(jobList);
         };
     };
 };

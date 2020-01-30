@@ -15,7 +15,7 @@ const user = (state = initialState, action) => {
                 ...state,
                 jobs: {
                     ...state.jobs,
-                    ...action.jobs
+                    ...action.schedule
                 }
             }
 

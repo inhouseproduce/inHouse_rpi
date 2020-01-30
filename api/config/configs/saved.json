@@ -42,7 +42,7 @@
         "modules": {
             "camera": {
                 "type": "interval",
-                "time_interval": 2,
+                "time_interval": 1,
                 "esp": [
                     {
                         "position": 1,

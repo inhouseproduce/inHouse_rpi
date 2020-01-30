@@ -3,23 +3,44 @@ const camera = require('./camera');
 
 class Modules {
     constructor() {
-        this.start = (config, logger) => {
-            Object.keys(config).map(opp => {
-                let action = this[opp];
+        this.start = (config, action) => {
+            Object.keys(config).map(async opp => {
+                // this.moduleAction
+                let moduleAction = this[opp];
 
-                action(config[opp], action => {
-                    logger({ action, opp });
+                moduleAction(config[opp], job => {
+                    // Config type
+                    let type = config[opp].type;
+
+                    // Run Scheduler based on config type
+                    let schedule = scheduler[type];
+
+                    // Scheduler options
+                    let option = { int: false };
+
+                    // Schedule job based on callback from moduleAction
+                    let cronJobs = schedule(config[opp], option,
+                        () => {
+                            return job(config[opp]);
+                        });
+
+                    // Callback cronJobs to module.start
+                    let cronObj = {};
+
+                    cronJobs.map(item => {
+                        cronObj[opp] = item;
+                    });
+
+                    action(cronObj);
                 });
             });
         };
     };
 
-    camera = (config, action) => {
-        // Initialize cameras
-        camera.start(config, job => {
-            scheduler.interval(config, { int: false }, () => {
-                job(config);
-            });
+    // Module Action
+    camera = (config, job) => {
+        return camera.start(config, action => {
+            job(action);
         });
     };
 };
