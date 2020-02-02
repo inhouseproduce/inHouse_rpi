@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const routes = require('./routes');
 
 class Server {
-    constructor(dev) {
-        this.start = () => {
+    constructor() {
+        this.start = (dev) => {
             const PORT = 3000;
             const app = express();
 
@@ -19,4 +19,4 @@ class Server {
     };
 };
 
-module.exports = Server;
+module.exports = new Server;

@@ -1,15 +1,13 @@
 const logger = require('../utility/logger');
+const store = require('../store');
 
 const engine = require('./engine');
 const modules = require('./modules');
 
 class Device {
-    constructor(dev) {
-        let { store, sysOp } = dev;
-
-        this.start = () => {
+    constructor() {
+        this.start = sysOp => {
             Object.keys(sysOp.config).map(opp => {
-                // Select action from this (current class)
                 let action = this[opp];
                 let config = sysOp.config[opp];
 
@@ -36,4 +34,4 @@ class Device {
     };
 };
 
-module.exports = Device;
+module.exports = new Device;
