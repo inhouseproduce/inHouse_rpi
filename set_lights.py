@@ -6,13 +6,13 @@ import time
 def run(now, pin):
     # Off between 10pm and 6am
     if now.hour >= 6 and now.hour < 22:
-        gp.output(pin, True)
+        gp.output(pin, False)
         if now.hour >= 18:
             set_brightness('25')
         else:
             set_brightness('100')
     else:
-        gp.output(pin, False)
+        gp.output(pin, True)
 
 # every 4 hours for 5 minutes
 def main():
