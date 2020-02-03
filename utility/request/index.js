@@ -31,6 +31,10 @@ class Request {
                 };
             };
         };
+
+        this.postRequest = async (url, options ) => {
+            return await axios.post(url, options);
+        };
     };
 };
 

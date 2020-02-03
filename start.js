@@ -1,4 +1,4 @@
-const api = require('./api/config');
+const api = require('./api');
 
 const device = require('./device');
 const server = require('./server');
@@ -6,13 +6,9 @@ const server = require('./server');
 const ip = require('ip');
 console.log('----ip', ip.address())
 
-api.getConfig().then(sysOp => {
-    server.start(sysOp, (mess) => {
-        console.log('server is runing')
-    });
+server.registerServer()
+   // let sysOp = require('./api/config/configs/saved.json')
 
-    device.start(sysOp, (mess) => {
-        console.log('Device started')
-    });
-});
-
+    // device.start(sysOp, (mess) => {
+    //     console.log('Device started')
+    // });

@@ -12,4 +12,4 @@ class Store {
     };
 };
 
-module.exports = new Store(createStore)
+module.exports = new Store(createStore);

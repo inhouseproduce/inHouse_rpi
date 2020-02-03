@@ -1,5 +1,8 @@
+let { CURRENT_JOB } = require('../actionTypes');
+
 const initialState = {
     isAuth: false,
+    auth: {},
     jobs: {}
 };
 
@@ -8,14 +11,22 @@ const user = (state = initialState, action) => {
         case 'SET_USER':
             return {
                 ...state
-            } 
+            }
 
-        case 'CURRENT_JOB': 
+        case CURRENT_JOB:
             return {
                 ...state,
                 jobs: {
                     ...state.jobs,
                     ...action.schedule
+                }
+            }
+
+        case 'REGISTER_TOKEN':
+            return {
+                ...state,
+                auth: {
+                    token: action.token
                 }
             }
 

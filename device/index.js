@@ -4,16 +4,17 @@ const store = require('../store');
 const engine = require('./engine');
 const modules = require('./modules');
 
+let { CURRENT_JOB } = require('../store/actionTypes');
+
 class Device {
     constructor() {
         this.start = sysOp => {
             Object.keys(sysOp.config).map(opp => {
-                let action = this[opp];
                 let config = sysOp.config[opp];
 
-                action(config, data => {
+                this[opp](config, data => {
                     store.dispatch({
-                        type: 'CURRENT_JOB',
+                        type: CURRENT_JOB,
                         schedule: data
                     });
                 });

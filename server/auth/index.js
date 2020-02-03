@@ -1,4 +1,9 @@
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
+const ip = require('ip');
+
+const store = require('../../store');
+const { REGISTER_TOKEN } = require('../../store/actionTypes');
 
 class Authenticate {
     constructor() {
@@ -6,14 +11,8 @@ class Authenticate {
             return await jwt.verify(token, 'shhhhh');
         };
 
-        this.registerServer = async () => {
-            return await jwt.sign(
-                {
-                    exp: Math.floor(Date.now() / 1000) + (60 * 60),
-                    data: 'foobar'
-                },
-                'secret'
-            );
+        this.registerServer = async client => {
+
         };
     };
 };
