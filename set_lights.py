@@ -31,10 +31,10 @@ def set_brightness(value):
         brightness_file.write(value)
 
 def trigger():
-    gp.output(pin, True)
+    gp.output(pin, False)
 
 def kill():
-    gp.output(pin, False)
+    gp.output(pin, True)
 
 if __name__ == "__main__":
     main()
