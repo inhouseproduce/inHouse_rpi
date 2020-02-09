@@ -1,59 +1,49 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const axios = require('axios');
-
-const jwt = require('express-jwt');
-const jwksRsa = require('jwks-rsa');
-const jwtToken = require('jsonwebtoken');
 
 const routes = require('./routes');
+const api = require('./utility/api');
 
 class Server {
     constructor() {
-        this.registerServer = sysOp => {
-            this.identifyToServer(() => {
-                this.startServer(app => {
-
-                });
+        this.registerServer = cb => {
+            api.register(config => {
+                this.server();
+                cb(config);
             });
         };
     };
 
-    startServer = (cb) => {
+    server = () => {
         const PORT = process.env.PORT || 3000;
         const app = express();
 
-        app.use(bodyParser.json());
-        app.use(logger('dev'));
-        app.use(bodyParser.urlencoded({ extended: true }));
-        app.use(bodyParser.json({ limit: '2mb' }));
+        (function serverHeaders() {
+            app.use(logger('dev'));
+            app.use(bodyParser.urlencoded({ extended: true }));
+            app.use(bodyParser.json({ limit: '1mb' }));
+
+            app.use((req, res, next) => {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header(
+                    'Access-Control-Allow-Headers',
+                    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+                );
+
+                if (req.method === 'OPTIONS') {
+                    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+                    return res.status(200).json({});
+                };
+                next();
+            });
+        });
 
         routes(app);
 
         app.listen(PORT, () => {
             console.log(`🌎 ==> Server now on port ${PORT}!`);
         });
-        cb();
-    };
-
-    identifyToServer = async (cb) => {
-        let token = await jwtToken.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            data: { client: 'hugos' }
-        }, 'secret');
-
-        let request = await axios.get('http://localhost:3000/client/identify/', {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        });
-
-        let sesstionToken = request.data.session;
-        jwtToken.verify(sesstionToken, 'secret', async (err, decoded) => {
-            console.log('decde', decoded)
-        });
-        cb();
     };
 };
 
