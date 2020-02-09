@@ -3,13 +3,21 @@ const axios = require('axios');
 class Api {
     constructor() {
         this.register = async cb => {
-            let url = 'https://webapp-inhouse.herokuapp.com/get/json';
-            let request = await axios.get(url);
-
-            this.saveJsonFile(request.data);
-
-            cb(this.getConfigFile());
+            this.registerRequest(config => {
+                this.saveJsonFile(config);
+                cb(this.getConfigFile());
+            });
         };
+    };
+
+    registerRequest = callback => {
+        let url = 'https://webapp-inhouse.herokuapp.com/get/json';
+        let request = await axios.get(url, {
+            headers: {
+                Authorization: 'Bearer ' + 'token'
+            }
+        });
+        callback(request.data);
     };
 
     saveJsonFile = (data) => {
@@ -35,6 +43,7 @@ class Api {
             console.log('Saved file')
             return savedConfig;
         };
+
         return require('./configs/default.json');
     };
 
@@ -44,6 +53,7 @@ class Api {
         if (config && typeof config === 'object') {
             return true;
         };
+
         return false
     };
 };

@@ -7,42 +7,39 @@ const api = require('./utility/api');
 
 class Server {
     constructor() {
-        this.registerServer = cb => {
+        this.registerServer = callback => {
             api.register(config => {
-                this.server();
-                cb(config);
+                const PORT = process.env.PORT || 3000;
+                const app = express();
+        
+                this.headers(app);
+                
+                routes(app);
+        
+                app.listen(PORT, () => {
+                    callback(config);
+                });
             });
         };
     };
 
-    server = () => {
-        const PORT = process.env.PORT || 3000;
-        const app = express();
+    headers = (app) => {
+        app.use(logger('dev'));
+        app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(bodyParser.json({ limit: '1mb' }));
 
-        (function serverHeaders() {
-            app.use(logger('dev'));
-            app.use(bodyParser.urlencoded({ extended: true }));
-            app.use(bodyParser.json({ limit: '1mb' }));
+        app.use((req, res, next) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+            );
 
-            app.use((req, res, next) => {
-                res.header('Access-Control-Allow-Origin', '*');
-                res.header(
-                    'Access-Control-Allow-Headers',
-                    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-                );
-
-                if (req.method === 'OPTIONS') {
-                    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
-                    return res.status(200).json({});
-                };
-                next();
-            });
-        });
-
-        routes(app);
-
-        app.listen(PORT, () => {
-            console.log(`🌎 ==> Server now on port ${PORT}!`);
+            if (req.method === 'OPTIONS') {
+                res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+                return res.status(200).json({});
+            };
+            next();
         });
     };
 };
