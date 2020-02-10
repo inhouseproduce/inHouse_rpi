@@ -5,7 +5,7 @@ const getIp = require('ip');
 
 const handleJson = require('./handleJson');
 
-let endpoint = 'https://webapp-inhouse.herokuapp.com/get/json';
+let endpoint = 'http://localhost:3000/client/identify/';
 
 class Api {
     constructor() {
