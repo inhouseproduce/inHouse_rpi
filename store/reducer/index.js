@@ -13,7 +13,7 @@ const user = (state = initialState, action) => {
                 ...state,
                 client: {
                     ...state.client,
-                    ...action.data
+                    ...action.client
                 }
             }
 

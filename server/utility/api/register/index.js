@@ -25,9 +25,9 @@ class Api {
                 store.dispatch({ type: 'REGISTER_TOKEN', token: sessionToken });
 
                 // Store client data in store
-                store.dispatch({ type: 'SET_CLIENT', data });
 
                 let decoded = await jwt.verify(sessionToken, 'secret');
+                store.dispatch({ type: 'SET_CLIENT', client: decoded });
 
                 // Handle saveing config json
                 //handleJson.saveJsonFile(config.config);
