@@ -11,11 +11,11 @@ class Server {
             api.register(config => {
                 const PORT = process.env.PORT || 3000;
                 const app = express();
-        
+
                 this.headers(app);
-                
+
                 routes(app);
-        
+
                 app.listen(PORT, () => {
                     callback(config);
                 });

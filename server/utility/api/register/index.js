@@ -1,60 +1,56 @@
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const getIp = require('ip');
+
+const handleJson = require('./handleJson');
+
+let endpoint = 'https://webapp-inhouse.herokuapp.com/get/json';
 
 class Api {
     constructor() {
-        this.register = async cb => {
-            this.registerRequest(config => {
-                this.saveJsonFile(config);
-                cb(this.getConfigFile());
+        this.register = async callback => {
+            // Make get request to register and get config
+            this.request(endpoint, config => {
+                // Handle saveing config json
+                handleJson.saveJsonFile(config);
+                // Callback Config json file
+                callback(handleJson.getJsonFile());
             });
         };
     };
 
-    registerRequest = callback => {
-        let url = 'https://webapp-inhouse.herokuapp.com/get/json';
-        let request = await axios.get(url, {
+    request = async (endpoint, callback) => {
+        let info = await this.collectData();
+        let token = await this.generateToken(info);
+
+        // Make request
+        let request = await axios.get(endpoint, {
             headers: {
-                Authorization: 'Bearer ' + 'token'
+                Authorization: 'Bearer ' + token,
             }
         });
         callback(request.data);
     };
 
-    saveJsonFile = (data) => {
-        if (this.validateConfig(data)) {
-            // Convert to json and save
-            let config = JSON.stringify(data);
-            // Save to saved.json file
-            let saveTo = './configs/saved.json';
-            fs.writeFileSync(saveTo, config);
-        }
-        else {
-            console.log('Config file is not valid');
-        };
+    // Collect data
+    collectData = async () => {
+        // Get client config data
+        let { client } = await handleJson.getJsonFile();
+        // Generate rendome key
+        let key = await crypto.randomBytes(48).toString('hex');
+        // Get Ip address
+        let ip = await getIp.address();
+
+        // Return object data
+        return { client, key, ip };
     };
 
-    // Return valid config.json/ lastest or default
-    getConfigFile = (data) => {
-        // Get saved.json config file and validate
-        let savedConfig = require('./configs/saved.json');
-        let isValid = this.validateConfig(savedConfig);
-
-        if (isValid) {
-            console.log('Saved file')
-            return savedConfig;
-        };
-
-        return require('./configs/default.json');
-    };
-
-    // Validates config type
-    validateConfig = config => {
-        // Validate if type is object
-        if (config && typeof config === 'object') {
-            return true;
-        };
-
-        return false
+    // Generate token
+    generateToken = async data => {
+        // generate token & return
+        return await jwt.sign(data,
+            'secret', { algorithm: 'HS256' });
     };
 };
 
