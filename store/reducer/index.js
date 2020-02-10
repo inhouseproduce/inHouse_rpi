@@ -1,4 +1,4 @@
-let { CURRENT_JOB } = require('../actionTypes');
+let { CURRENT_JOB, SET_CLIENT, REGISTER_TOKEN } = require('../actionTypes');
 
 const initialState = {
     isAuth: false,
@@ -8,9 +8,13 @@ const initialState = {
 
 const user = (state = initialState, action) => {
     switch (action.type) {
-        case 'SET_USER':
+        case SET_CLIENT:
             return {
-                ...state
+                ...state,
+                client: {
+                    ...state.client,
+                    ...action.data
+                }
             }
 
         case CURRENT_JOB:
@@ -22,7 +26,7 @@ const user = (state = initialState, action) => {
                 }
             }
 
-        case 'REGISTER_TOKEN':
+        case REGISTER_TOKEN:
             return {
                 ...state,
                 auth: {

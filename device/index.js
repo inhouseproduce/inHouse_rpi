@@ -11,8 +11,9 @@ class Device {
         this.start = sysOp => {
             Object.keys(sysOp.config).map(opp => {
                 let config = sysOp.config[opp];
+                let runAction = this[opp];
 
-                this[opp](config, data => {
+                runAction(config, data => {
                     store.dispatch({
                         type: CURRENT_JOB,
                         schedule: data

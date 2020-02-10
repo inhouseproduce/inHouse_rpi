@@ -1,8 +1,8 @@
 const device = require('./device');
 const server = require('./server');
 
-server.registerServer(config => {
-   // device.start(sysOp, (mess) => {
-   //     console.log('Device started')
-   // });
+server.registerServer(client => {
+   device.start(client, data => {
+       console.log('Device started')
+   });
 });

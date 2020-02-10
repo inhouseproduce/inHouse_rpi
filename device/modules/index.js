@@ -11,10 +11,8 @@ class Modules {
                 moduleAction(config[opp], job => {
                     // Config type
                     let type = config[opp].type;
-
                     // Run Scheduler based on config type
                     let schedule = scheduler[type];
-
                     // Scheduler options
                     let option = { int: false };
 
@@ -39,10 +37,9 @@ class Modules {
 
     // Module Action
     camera = (config, job) => {
-        // return camera.start(config, action => {
-        //     job(action);
-        // });
-        return {}
+        return camera.start(config, action => {
+            job(action);
+        });
     };
 };
 

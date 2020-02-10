@@ -1,6 +1,6 @@
 {
     "system": "1",
-    "client": "Hugos",
+    "client": "hugos",
     "config": {
         "engine": {
             "pump": {
