@@ -6,7 +6,7 @@ const getIp = require('ip');
 const store = require('../../../../store');
 const handleJson = require('./handleJson');
 
-let endpoint = 'http://localhost:3000/client/identify/';
+let endpoint = 'https://inhouse-app-test.herokuapp.com/client/identify/';
 
 class Api {
     constructor() {
@@ -19,7 +19,7 @@ class Api {
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
-                let { sessionToken } = data;
+                let { sessionToken, client } = data;
 
                 // Save session token in store
                 store.dispatch({ type: 'REGISTER_TOKEN', token: sessionToken });

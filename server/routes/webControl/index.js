@@ -1,8 +1,8 @@
 const gpio = require('../../../utility/gpio');
 
 module.exports = (app, dev) => {
-    app.post('/', (req, res) => {
-        console.log('req.headers', req.headers)
+    app.post('/control/', (req, res) => {
+        console.log('body---', req.body)
         // let { store, sysOp } = dev;
         // let { status, action, level } = req.body;
 

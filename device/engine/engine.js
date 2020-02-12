@@ -14,16 +14,12 @@ class Controller {
         this.interval = (config) => {
             if (config.pin)
                 gpio.writeGpio(config, true);
-                console.log('On')
 
             // Off based on Run_period
             if (config.run_period) {
-                console.log("RUN PERIOD", config.run_period)
                 setTimeout(() => {
                     if (config.pin) {
                         gpio.writeGpio(config, false);
-                        console.log('Off')
-
                     };
                 }, config.run_period * 60000);
             };

@@ -9,7 +9,9 @@ class Camera {
         this.start = (config, scheduleJob) => {
             this.scanEsp(config.esp, list => {
                 // Send request to all esps with scan options
-                request.requestAll(list, { scan: true });
+                request.requestAll(list, { scan: true }, () => {
+                    //
+                });
 
                 // Schedule job function
                 scheduleJob(this.captureImage);
