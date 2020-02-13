@@ -1,28 +1,26 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const getIp = require('ip');
 
-const store = require('../../../../store');
+const store = require('../../../store');
 const handleJson = require('./handleJson');
 
 let endpoint = 'https://inhouse-app-test.herokuapp.com/client/identify/';
 
+
 class Api {
     constructor() {
         this.register = async callback => {
-            // Get Client server data
-            let info = await this.collectData();
-
             // Create Token with server data
-            let token = await this.generateToken(info);
+            let token = await this.generateToken({
+                client: process.env.RESIN_DEVICE_NAME_AT_INIT,
+                uuid: process.env.BALENA_DEVICE_UUID,
+                appId: process.env.BALENA_APP_ID
+            });
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
-                let { sessionToken, client } = data;
-
                 // Save session token in store
-                store.dispatch({ type: 'REGISTER_TOKEN', token: sessionToken });
+                store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
 
                 // Store client data in store
 
@@ -48,22 +46,7 @@ class Api {
             });
             callback(request.data);
         }
-        catch(error){ throw error};
-    };
-
-    // Collect data
-    collectData = async () => {
-        // Get client config data
-        let { client } = await handleJson.getJsonFile();
-
-        // Generate rendome key
-        let key = await crypto.randomBytes(48).toString('hex');
-
-        // Get Ip address
-        let ip = await getIp.address();
-
-        // Return object data
-        return { client, key, ip };
+        catch (error) { throw error };
     };
 
     // Generate token

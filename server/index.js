@@ -3,15 +3,14 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 
 const routes = require('./routes');
-const api = require('./utility/api');
+const api = require('./api');
 
 class Server {
     constructor() {
         this.registerServer = callback => {
-            api.register(config => {
-                const PORT = process.env.PORT || 3000;
+            api.register(async config => {
+                const PORT = process.env.PORT || 80;
                 const app = express();
-
                 this.headers(app);
 
                 routes(app);
