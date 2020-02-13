@@ -1,6 +1,6 @@
 const device = require('./device');
 const server = require('./server');
-const writeToMongo = require('./logger.js').writeToMongo;
+const writeToMongo = require('./logging/logger.js').writeToMongo;
 // const mongoConnection = require('.logging/mongo.js')
 // mongoConnection()
 
