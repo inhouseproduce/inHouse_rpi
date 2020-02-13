@@ -1,8 +1,7 @@
-const logger = require('../utility/logger');
-const store = require('../store');
-
 const engine = require('./engine');
 const modules = require('./modules');
+
+const store = require('../store');
 
 let { CURRENT_JOB } = require('../store/actionTypes');
 
@@ -13,10 +12,10 @@ class Device {
                 let config = sysOp.config[opp];
                 let runAction = this[opp];
 
-                runAction(config, data => {
+                runAction(config, job => {
                     store.dispatch({
                         type: CURRENT_JOB,
-                        schedule: data
+                        schedule: job
                     });
                 });
             });

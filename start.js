@@ -3,6 +3,6 @@ const server = require('./server');
 
 server.registerServer(client => {
     device.start(client, data => {
-        console.log('Device started')
+        console.log('callback', data)
     });
 });

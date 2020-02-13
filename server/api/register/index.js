@@ -44,7 +44,6 @@ class Api {
                 }
             });
             callback(request.data);
-            console.log('request', request.data)
         }
         catch (error) { throw error };
     };

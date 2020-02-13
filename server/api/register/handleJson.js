@@ -22,10 +22,11 @@ class HandleConfigFile {
             };
         };
 
-        this.saveJsonFile = (data) => {
+        this.saveJsonFile = data => {
             if (this.validateConfig(data)) {
                 // Convert to json and save
                 let config = JSON.stringify(data);
+
                 // Save to saved.json file
                 let saveTo = './configs/saved.json';
                 fs.writeFileSync(saveTo, config);
