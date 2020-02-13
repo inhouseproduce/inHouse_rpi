@@ -1,2 +1,13 @@
 package-lock.json
 node_modules
+test.js
+
+
+#testEnv
+esps.txt
+/logs.txt
+logs.txt
+
+bin
+.bin
+.vscode
