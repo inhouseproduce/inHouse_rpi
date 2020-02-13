@@ -8,6 +8,8 @@ const api = require('./api');
 class Server {
     constructor() {
         this.registerServer = callback => {
+            console.log('chekcing', process.env.BALENA_APP_ID)
+
             api.register(async config => {
                 const PORT = process.env.PORT || 80;
                 const app = express();

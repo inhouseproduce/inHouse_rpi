@@ -23,8 +23,7 @@ class Api {
                 store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
 
                 // Store client data in store
-
-                let decoded = await jwt.verify(sessionToken, 'secret');
+                let decoded = await jwt.verify(data.sessionToken, 'secret');
                 store.dispatch({ type: 'SET_CLIENT', client: decoded });
 
                 // Handle saveing config json
@@ -45,6 +44,7 @@ class Api {
                 }
             });
             callback(request.data);
+            console.log('request', request.data)
         }
         catch (error) { throw error };
     };
