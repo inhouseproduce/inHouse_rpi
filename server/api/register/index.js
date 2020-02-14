@@ -1,20 +1,26 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const store = require('../../../store');
 const handleJson = require('./handleJson');
 
 let endpoint = 'https://inhouse-app-test.herokuapp.com/client/identify/';
 
-
 class Api {
     constructor() {
         this.register = async callback => {
-            // Create Token with server data
+            // Gether process.env data
+            const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
+            const clientUuid = process.env.BALENA_DEVICE_UUID;
+
+            // Hash uuid
+            let hashedUuid = bcrypt.hashSync(clientUuid, 10);
+
+            // Generate token 
             let token = await this.generateToken({
-                client: process.env.RESIN_DEVICE_NAME_AT_INIT,
-                uuid: process.env.BALENA_DEVICE_UUID,
-                appId: process.env.BALENA_APP_ID
+                client: clientName,
+                uuid: hashedUuid
             });
 
             // Make get request to register and get config
@@ -45,7 +51,7 @@ class Api {
             });
             callback(request.data);
         }
-        catch (error) { throw error };
+        catch (error) { console.log('error', error); throw error };
     };
 
     // Generate token
