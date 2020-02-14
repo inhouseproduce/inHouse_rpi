@@ -19,7 +19,7 @@ class Server {
     server = (callback) => {
         const PORT = process.env.PORT || 80;
         const app = express();
-        
+
         this.headers(app);
 
         routes(app);
