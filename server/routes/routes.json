@@ -1,9 +1,0 @@
-{
-    "routes": [
-        {
-            "requrest": "post",
-            "url": "/client/identify/",
-            "action": "register"
-        }
-    ]
-}

@@ -24,6 +24,7 @@ class Camera {
                     capture: true,
                     sleep: config.time_interval
                 };
+                
                 request.requestAll(list, options, data => {
                     data.map(esp => {
                         this.saveImage(esp);

@@ -1,4 +1,6 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 
@@ -16,10 +18,11 @@ class Server {
         };
     };
 
-    server = (callback) => {
+    server = callback => {
         const PORT = process.env.PORT || 80;
         const app = express();
-        
+
+        this.mongoDB();
         this.headers(app);
 
         routes(app);
@@ -29,7 +32,7 @@ class Server {
         });
     };
 
-    headers = (app) => {
+    headers = app => {
         app.use(logger('dev'));
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json({ limit: '1mb' }));
@@ -46,6 +49,23 @@ class Server {
                 return res.status(200).json({});
             };
             next();
+        });
+    };
+
+    mongoDB = () => {
+        const MONGODB_URI = 'mongodb://inhouse_produce:edo883562616@ds139951.mlab.com:39951/heroku_6nb1v7c3';
+        mongoose.set('useCreateIndex', true);
+
+        const mdbConfig = {
+            useNewUrlParser: true,
+            useFindAndModify: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true
+        };
+
+        mongoose.connect(MONGODB_URI, mdbConfig);
+        mongoose.connection.once('open', () => {
+            console.log('mongoose connection successful');
         });
     };
 };
