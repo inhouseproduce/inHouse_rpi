@@ -53,7 +53,7 @@ class Server {
     };
 
     mongoDB = () => {
-        const MONGODB_URI = 'mongodb://inhouse_produce:edo883562616@ds139951.mlab.com:39951/heroku_6nb1v7c3';
+        const MONGODB_URI = process.env.MONGODB_URI;
         mongoose.set('useCreateIndex', true);
 
         const mdbConfig = {

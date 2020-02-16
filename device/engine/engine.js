@@ -16,9 +16,9 @@ class Controller {
 
         // Interval Action
         this.interval = (config, job, action) => {
-            action('imp action')
             if (config.pin) {
                 gpio.writeGpio(config, true);
+                action('On');
             };
 
             // Off based on Run_period
@@ -26,6 +26,7 @@ class Controller {
                 setTimeout(() => {
                     if (config.pin) {
                         gpio.writeGpio(config, false);
+                        action('Off');
                     };
                 }, config.run_period * 60000);
             };
@@ -34,7 +35,7 @@ class Controller {
 
         // Clock Action
         this.clock = (config, job, action) => {
-            action('imp action')
+            action(job.action);
             // Gpio switcher 
             if (job.action === 'on' || job.action === 'off') {
                 let switcher = job.action === 'on' ? true : false;

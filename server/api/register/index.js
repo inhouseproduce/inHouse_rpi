@@ -5,28 +5,34 @@ const bcrypt = require('bcrypt');
 const store = require('../../../store');
 const handleJson = require('./handleJson');
 
-let endpoint = 'https://inhouse-app-test.herokuapp.com/client/identify/';
-
 class Api {
     constructor() {
         this.register = async callback => {
             // Gether process.env data
+            const ALGORITHM = process.env.ALGORITHM;
+            const JWT_SECRET = process.env.JWT_SECRET;
             const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
             const clientUuid = process.env.BALENA_DEVICE_UUID;
-
+            
             // Hash uuid
             let hashedUuid = bcrypt.hashSync(clientUuid, 10);
 
             // Generate token 
-            let token = await this.generateToken({
+            let token = await jwt.sign({
                 client: clientName,
                 uuid: hashedUuid
+            },
+                JWT_SECRET, {
+                algorithm: ALGORITHM
             });
+
+            // Server endpoint
+            let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
                 // Store client data in store
-                let decoded = await jwt.verify(data.sessionToken, 'secret');
+                let decoded = await jwt.verify(data.sessionToken, JWT_SECRET);
 
                 // Save decoded data
                 if (decoded) {
@@ -54,13 +60,6 @@ class Api {
             callback(request.data);
         }
         catch (error) { throw error };
-    };
-
-    // Generate token
-    generateToken = async data => {
-        return await jwt.sign(data, 'secret', {
-            algorithm: 'HS256'
-        });
     };
 };
 
