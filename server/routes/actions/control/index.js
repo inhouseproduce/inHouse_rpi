@@ -1,5 +1,5 @@
 module.exports = (req, res) => {
-    console.log('body---', req.body)
+    console.log('body', req.body)
     // let { store, sysOp } = dev;
     // let { status, action, level } = req.body;
 

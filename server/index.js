@@ -18,7 +18,7 @@ class Server {
         };
     };
 
-    server = (callback) => {
+    server = callback => {
         const PORT = process.env.PORT || 80;
         const app = express();
 
@@ -32,7 +32,7 @@ class Server {
         });
     };
 
-    headers = (app) => {
+    headers = app => {
         app.use(logger('dev'));
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json({ limit: '1mb' }));

@@ -1,11 +1,8 @@
-const routes = require('./routes.json');
 const actions = require('./actions');
+const headerAuth = require('../auth');
 
 module.exports = app => {
-    routes.routes.map(route => {
-        let { method, action, url } = route;
-        app[method](url, (req, res) => {
-            actions[action](req, res);
-        });
+    app.post('/control/', headerAuth, (req, res) => {
+        actions.control(req, res);
     });
 };

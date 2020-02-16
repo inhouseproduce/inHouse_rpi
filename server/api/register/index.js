@@ -25,18 +25,20 @@ class Api {
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
-                // Save session token in store
-                store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
-
                 // Store client data in store
                 let decoded = await jwt.verify(data.sessionToken, 'secret');
-                store.dispatch({ type: 'SET_CLIENT', client: decoded });
 
-                // Handle saveing config json
-                //handleJson.saveJsonFile(config.config);
+                // Save decoded data
+                if (decoded) {
+                    // Save session token in store
+                    store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
 
-                // Callback Config json file
-                callback(handleJson.getJsonFile());
+                    // Handle saveing config json
+                    //handleJson.saveJsonFile(config.config);
+
+                    // Callback Config json file
+                    callback(handleJson.getJsonFile());
+                };
             });
         };
     };
@@ -51,12 +53,14 @@ class Api {
             });
             callback(request.data);
         }
-        catch (error) { console.log('error', error); throw error };
+        catch (error) { throw error };
     };
 
     // Generate token
     generateToken = async data => {
-        return await jwt.sign(data, 'secret', { algorithm: 'HS256' });
+        return await jwt.sign(data, 'secret', {
+            algorithm: 'HS256'
+        });
     };
 };
 

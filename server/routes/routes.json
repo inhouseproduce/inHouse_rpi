@@ -1,9 +1,0 @@
-{
-    "routes": [
-        {
-            "method": "post",
-            "url": "/control/",
-            "action": "control"
-        }
-    ]
-}
