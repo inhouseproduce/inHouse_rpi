@@ -5,7 +5,7 @@ class Controller {
         this.initialize = (config, action) => {
             if (config.pin) {
                 gpio.initializeGpio(config, true);
-                action('Gpio has been initialzied')
+                action(`Gpio (${config.pin}) has been initialzied`)
             };
 
             if (config.pwd && config.pin) {

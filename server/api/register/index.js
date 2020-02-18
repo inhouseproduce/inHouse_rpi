@@ -13,7 +13,7 @@ class Api {
             const JWT_SECRET = process.env.JWT_SECRET;
             const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
             const clientUuid = process.env.BALENA_DEVICE_UUID;
-            
+
             // Hash uuid
             let hashedUuid = bcrypt.hashSync(clientUuid, 10);
 
@@ -31,20 +31,21 @@ class Api {
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
-                // Store client data in store
-                let decoded = await jwt.verify(data.sessionToken, JWT_SECRET);
+                if (data) {
+                    // Store client data in store
+                    let decoded = await jwt.verify(data.sessionToken, JWT_SECRET);
 
-                // Save decoded data
-                if (decoded) {
-                    // Save session token in store
-                    store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
+                    // Save decoded data
+                    if (decoded) {
+                        // Save session token in store
+                        store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
 
-                    // Handle saveing config json
-                    //handleJson.saveJsonFile(config.config);
-
-                    // Callback Config json file
-                    callback(handleJson.getJsonFile());
+                        // Handle saveing config json
+                        //handleJson.saveJsonFile(config.config);
+                    };
                 };
+                // Callback Config json file
+                callback(handleJson.getJsonFile());
             });
         };
     };
@@ -58,8 +59,9 @@ class Api {
                 }
             });
             callback(request.data);
-        }
-        catch (error) { throw error };
+        } catch (error) {
+            callback(false);
+        };
     };
 };
 

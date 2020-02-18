@@ -1,13 +1,20 @@
 // Development environmental variables
-if (!process.env.DEV_MODE) {
+if (!process.env.ENV_MODE) {
     require('dotenv').config()
 };
 
+// Libs
 const device = require('./device');
 const server = require('./server');
+const mongodb = require('./utility/mongodb');
 
+// Register Server api
 server.registerServer(client => {
-    device.start(client, data => {
-        console.log('callback', data)
+    // Initialize mongodb
+    mongodb.connect(() => {
+        // Start Device
+        device.start(client, data => {
+            // console.log('callback', data)
+        });
     });
 });
