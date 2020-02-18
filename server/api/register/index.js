@@ -5,12 +5,13 @@ const bcrypt = require('bcrypt');
 const store = require('../../../store');
 const handleJson = require('./handleJson');
 
-let endpoint = 'https://inhouse-app-test.herokuapp.com/client/identify/';
-
 class Api {
     constructor() {
         this.register = async callback => {
             // Gether process.env data
+            const ALGORITHM = process.env.ALGORITHM;
+            const JWT_SECRET = process.env.JWT_SECRET;
+
             const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
             const clientUuid = process.env.BALENA_DEVICE_UUID;
 
@@ -18,29 +19,46 @@ class Api {
             let hashedUuid = bcrypt.hashSync(clientUuid, 10);
 
             // Generate token 
-            let token = await this.generateToken({
+            let token = await jwt.sign({
                 client: clientName,
                 uuid: hashedUuid
+            },
+                JWT_SECRET, {
+                algorithm: ALGORITHM
             });
+
+            // Server endpoint
+            let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
-                // Store client data in store
-                let decoded = await jwt.verify(data.sessionToken, 'secret');
+                if (data) {
+                    // Store client data in store
+                    let decoded = await jwt.verify(data.sessionToken, JWT_SECRET);
 
-                // Save decoded data
-                if (decoded) {
-                    // Save session token in store
-                    store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
+                    // Save decoded data
+                    if (decoded) {
+                        // Save session token in store
+                        store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
 
-                    // Handle saveing config json
-                    //handleJson.saveJsonFile(config.config);
-
-                    // Callback Config json file
-                    callback(handleJson.getJsonFile());
+                        // Handle saveing config json
+                        //handleJson.saveJsonFile(config.config);
+                    };
                 };
+
+                let clientDoc = handleJson.getJsonFile();
+
+                // Callback Config json file
+                callback(clientDoc);
+
+                // Save to state
+                this.saveInStore(clientDoc);
             });
         };
+    };
+
+    saveInStore = clientDoc => {
+        store.dispatch({ type: 'CONFIG', config: clientDoc.config });
     };
 
     request = async (endpoint, token, callback) => {
@@ -52,15 +70,9 @@ class Api {
                 }
             });
             callback(request.data);
-        }
-        catch (error) { throw error };
-    };
-
-    // Generate token
-    generateToken = async data => {
-        return await jwt.sign(data, 'secret', {
-            algorithm: 'HS256'
-        });
+        } catch (error) {
+            callback(false);
+        };
     };
 };
 

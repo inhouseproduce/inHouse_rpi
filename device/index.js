@@ -8,9 +8,9 @@ let { CURRENT_JOB } = require('../store/actionTypes');
 class Device {
     constructor() {
         this.start = sysOp => {
-            Object.keys(sysOp.config).map(opp => {
-                let config = sysOp.config[opp];
-                let runAction = this[opp];
+            Object.keys(sysOp.config).map(key => {
+                let config = sysOp.config[key];
+                let runAction = this[key];
 
                 runAction(config, job => {
                     store.dispatch({

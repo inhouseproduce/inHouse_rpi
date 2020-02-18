@@ -5,6 +5,9 @@
         "setup": "npm install && cd client && npm install",
         "dev": "node start.js"
     },
+    "devDependencies": {
+        "dotenv": "^8.2.0"
+    },
     "dependencies": {
         "arp-a": "^0.5.2",
         "aws-sdk": "^2.583.0",
