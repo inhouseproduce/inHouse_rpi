@@ -46,6 +46,15 @@ const user = (state = initialState, action) => {
                 }
             };
 
+        case 'CONFIG': {
+            return {
+                ...state,
+                config: {
+                    ...action.config
+                }
+            }
+        };
+
         default: return state;
     };
 };

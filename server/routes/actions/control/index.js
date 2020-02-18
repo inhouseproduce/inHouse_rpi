@@ -1,14 +1,29 @@
+const store = require('../../../../store');
+
 module.exports = (req, res) => {
-    console.log('body', req.body)
-    // let { store, sysOp } = dev;
-    // let { status, action, level } = req.body;
+    let { action } = req.body;
+    let { jobs, config } = store.getState();
+    let currConfig = config.engine[action];
 
-    // let config = sysOp.config.engine[action];
+    if (req.body.hasOwnProperty('lock')) {
+        // Get jobs list from store
+        let job = jobs[action];
 
-    // gpio.writeGpio(config, status);
+        if (req.body.lock) {
+            job.start();
+        }
+        else job.stop();
+    };
 
-    // if (level)
-    //     gpio.writePwm(config, level);
+    if (req.body.hasOwnProperty('status')) {
+        let { status } = req.body;
+        gpio.writeGpio(currConfig, status);
+    };
+
+    if (req.body.hasOwnProperty('level')) {
+        let { level } = req.body;
+        gpio.writePwm(currConfig, level);
+    };
 
     res.status(200).json('Response');
 };

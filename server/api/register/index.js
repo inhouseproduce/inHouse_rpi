@@ -11,6 +11,7 @@ class Api {
             // Gether process.env data
             const ALGORITHM = process.env.ALGORITHM;
             const JWT_SECRET = process.env.JWT_SECRET;
+
             const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
             const clientUuid = process.env.BALENA_DEVICE_UUID;
 
@@ -44,10 +45,20 @@ class Api {
                         //handleJson.saveJsonFile(config.config);
                     };
                 };
+
+                let clientDoc = handleJson.getJsonFile();
+
                 // Callback Config json file
-                callback(handleJson.getJsonFile());
+                callback(clientDoc);
+
+                // Save to state
+                this.saveInStore(clientDoc);
             });
         };
+    };
+
+    saveInStore = clientDoc => {
+        store.dispatch({ type: 'CONFIG', config: clientDoc.config });
     };
 
     request = async (endpoint, token, callback) => {
