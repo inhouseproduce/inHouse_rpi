@@ -12,9 +12,7 @@ const mongodb = require('./utility/mongodb');
 server.registerServer(client => {
     // Initialize mongodb
     mongodb.connect(() => {
-        // Start Device
-        device.start(client, data => {
-            // console.log('callback', data)
-        });
+        // Start device
+        device.start(client);
     });
 });

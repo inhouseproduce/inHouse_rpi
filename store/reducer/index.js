@@ -1,9 +1,9 @@
-let { CURRENT_JOB, SET_CLIENT, REGISTER_TOKEN } = require('../actionTypes');
+let { CURRENT_JOB, SET_CLIENT, REGISTER_TOKEN, STATE } = require('../actionTypes');
 
 const initialState = {
-    isAuth: false,
     auth: {},
-    jobs: {}
+    jobs: {},
+    state: {},
 };
 
 const user = (state = initialState, action) => {
@@ -33,6 +33,18 @@ const user = (state = initialState, action) => {
                     token: action.token
                 }
             }
+
+        case STATE:
+            return {
+                ...state,
+                state: {
+                    ...state.state,
+                    [action.key]: {
+                        ...state.state[action.key],
+                        ...action.res
+                    }
+                }
+            };
 
         default: return state;
     };
