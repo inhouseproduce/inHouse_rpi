@@ -1,9 +1,9 @@
 const store = require('../../../../store');
 
 module.exports = (req, res) => {
-    let { action } = req.body;
-    let { jobs, config } = store.getState();
-    let currConfig = config.engine[action];
+    let { action } = req.body; // Body
+    let { jobs, config } = store.getState(); // State
+    let currConfig = config.engine[action]; // Job
 
     if (req.body.hasOwnProperty('lock')) {
         // Get jobs list from store
@@ -11,8 +11,16 @@ module.exports = (req, res) => {
 
         if (req.body.lock) {
             job.start();
+            setTimeout(() => {
+                job.stop();
+            }, 10 * 60 * 60000);// 10 mintues lock period
         }
-        else job.stop();
+        else {
+            job.stop();
+            setTimeout(() => {
+                job.start();
+            }, 10 * 60 * 60000);// 10 mintues lock period
+        };
     };
 
     if (req.body.hasOwnProperty('status')) {

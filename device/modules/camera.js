@@ -9,32 +9,30 @@ class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
             network.setNetworkList(() => {
+                // Scan network list and match ip addresses
                 this.scanEsp(config.esp, list => {
                     // Send request to all esps with scan options
-                    request.requestAll(list, { scan: true });
-
-                    // Schedule job function
-                    scheduleJob(this.captureImage);
+                    request.requestAll(list, { scan: true }, () => {
+                        // Schedule job function
+                        scheduleJob(this.captureImage, list);
+                    });
                 });
             });
         };
 
-        this.captureImage = config => {
+        this.captureImage = (config, callback) => {
             this.scanEsp(config.esp, list => {
                 // Specify options for 
-                let commands = {
-                    capture: true,
-                    sleep: config.time_interval
-                };
-
+                let commands = { capture: true, sleep: config.time_interval };
+                callback(list);
                 // Send response to all esps on the network
                 request.requestAll(list, commands, response => {
                     // Map response to image data
                     response.map(async esp => {
                         // Save images in S3
                         this.saveImage(esp, info => {
-                            // Save image url in mongodb
-                            mongodb.actions.saveImages(info);
+                            mongodb.actions.saveImages(info); // Save image url
+                            callback(info); // Callback for logger
                         });
                     });
                 });

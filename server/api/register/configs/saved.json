@@ -48,6 +48,10 @@
                     {
                         "position": 1,
                         "mac": "4c:11:ae:75:c2:48"
+                    },
+                    {
+                        "position": 1,
+                        "mac": "xx:11:zz:75:c2:xx"
                     }
                 ]
             }
