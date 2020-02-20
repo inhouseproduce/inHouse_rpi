@@ -1,9 +1,6 @@
 const engine = require('./engine');
 const modules = require('./modules');
-
 const store = require('../store');
-
-let { CURRENT_JOB } = require('../store/actionTypes');
 
 class Device {
     constructor() {
@@ -14,7 +11,7 @@ class Device {
 
                 runAction(config, job => {
                     store.dispatch({
-                        type: CURRENT_JOB,
+                        type: 'CURRENT_JOB',
                         schedule: job
                     });
                 });

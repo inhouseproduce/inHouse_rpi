@@ -24,11 +24,11 @@ class Camera {
             this.scanEsp(config.esp, list => {
                 // Specify options for 
                 let commands = { capture: true, sleep: config.time_interval };
-                callback(list);
+
                 // Send response to all esps on the network
                 request.requestAll(list, commands, response => {
                     // Map response to image data
-                    response.map(async esp => {
+                    response.map(esp => {
                         // Save images in S3
                         this.saveImage(esp, info => {
                             mongodb.actions.saveImages(info); // Save image url
