@@ -1,3 +1,7 @@
+const https = require('https');
+const http = require('http');
+const pem = require('pem');
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const logger = require('morgan');
@@ -21,12 +25,32 @@ class Server {
                 // Headers
                 this.headers(app);
 
-                // Initialize Routes
-                routes.initializeRoutes(app);
+                // Create server
+                http.createServer((req, res) => {
+                    res.writeHead(301, { 'Location': 'https://' + req.headers['host'] + req.url });
+                    res.end();
+                }).listen(80);
 
-                // Server Listen
-                app.listen(PORT, () => {
-                    callback(config);
+                // Make sure request comes from https origin
+                app.get('*', (request, response, next) => {
+                    if (!request.secure) {
+                        response.redirect('https://localhost:443');
+                    } else {
+                        next();
+                    }
+                });
+
+                // Generate certificates
+                pem.createCertificate({ days: 1, selfSigned: true }, (err, keys) => {
+                    if (err) { throw err };
+
+                    // Initialize Routes
+                    routes.initializeRoutes(app);
+
+                    // Https server with certificate
+                    https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app).listen(443, () => {
+                        callback(config);
+                    });
                 });
             });
         };
