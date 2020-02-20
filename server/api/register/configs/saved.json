@@ -55,6 +55,12 @@
                     }
                 ]
             }
+        },
+        "sensors": {
+            "type": "interval",
+            "time_interval": 1,
+            "pin": 19,
+            "direction": "OUTPUT"
         }
     }
 }

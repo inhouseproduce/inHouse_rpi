@@ -1,5 +1,6 @@
 const engine = require('./engine');
 const modules = require('./modules');
+const sensors = require('./sensors');
 const store = require('../store');
 
 class Device {
@@ -19,15 +20,21 @@ class Device {
         };
     };
 
-    engine = async (config, cronJobs) => {
-        engine.start(config, jobs => {
-            cronJobs(jobs);
+    sensors = async (config, cb) => {
+        sensors.start(config, jobs => {
+            cb(jobs);
         });
     };
 
-    modules = async (config, cronJobs) => {
+    engine = async (config, cb) => {
+        engine.start(config, jobs => {
+            cb(jobs);
+        });
+    };
+
+    modules = async (config, cb) => {
         modules.start(config, jobs => {
-            cronJobs(jobs);
+            cb(jobs);
         });
     };
 };

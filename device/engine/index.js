@@ -28,7 +28,6 @@ class Engine {
                         logger.engine(key, res);
                     });
                 });
-
                 // --> Jet jobs to jobList object
                 cronJobs.map(job => { jobList[key] = job });
             });

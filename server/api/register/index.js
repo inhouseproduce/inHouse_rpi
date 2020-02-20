@@ -70,9 +70,8 @@ class Api {
                 }
             });
             callback(request.data);
-        } catch (error) {
-            callback(false);
-        };
+        } 
+        catch (error) { callback(false) };
     };
 };
 
