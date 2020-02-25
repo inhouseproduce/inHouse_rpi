@@ -5,7 +5,8 @@ const initialState = {
     jobs: {},
     state: {
         engine: {},
-        module: {}
+        module: {},
+        system: {}
     },
 };
 
@@ -33,7 +34,8 @@ const user = (state = initialState, action) => {
             return {
                 ...state,
                 auth: {
-                    token: action.token
+                    token: action.token,
+                    client: action.client
                 }
             }
 

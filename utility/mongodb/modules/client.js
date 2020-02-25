@@ -1,20 +1,12 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
 var ClientSchema = new Schema({
-    images: [{
-        name: {
-            type: String
-        },
-        image: {
-            type: String,
-        },
-        createdAt: {
-            type: Date
-        }
-    }]
+    client: {
+        type: String
+    }
 });
 
-var Client = mongoose.model('Client', ClientSchema)
+var Client = mongoose.model("Client", ClientSchema)
 module.exports = Client;

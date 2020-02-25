@@ -3,41 +3,49 @@ const db = require('../modules');
 class ActionsDB {
     constructor() {
         this.saveImages = async info => {
-            try {
-                const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
+            let client = await findClient();
+            let record = await findRecord();
 
+            // Delete oldest image
+            removeLatest();
+
+            // Update image list
+            updateImage();
+
+            async function findClient() {
+                const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
                 // Find Client
-                let client = await db.Client.findOne(
+                return await db.Client.findOne(
                     { name: clientName },
                 );
+            };
 
-                // Image arr length
-                let imageSize = client.images.length;
+            async function findRecord() {
+                return await db.Record.findOne({
+                    id: client._id
+                });
+            };
 
-                // Delete old image when img arr size is 4
-                if (imageSize >= 6) {
-                    // Find Oldest image
-                    let oldest = await db.Client.aggregate([
-                        { $match: { name: clientName } },
-                        { $unwind: '$images' },
-                        { $sort: { 'images.createdAt': 1 } },
-                        { $limit: 1 },
-                    ]);
-
-                    // Select oldest image _id
-                    let old_id = oldest[0].images._id;
-
-                    // Delete oldest image
-                    await db.Client.updateOne(
-                        { name: clientName },
-                        { $pull: { images: { _id: old_id } } },
+            async function removeLatest() {
+                if (record.images.length >= 6) {
+                    await db.Record.updateOne(
+                        { id: client._id },
+                        {
+                            $pull: {
+                                images: {
+                                    _id: record.images[0]._id
+                                }
+                            }
+                        },
                     );
-                };
+                }
+            };
 
+            async function updateImage() {
                 // Add new image
-                await db.Client.updateOne(
+                await db.Record.updateOne(
                     {
-                        name: process.env.RESIN_DEVICE_NAME_AT_INIT
+                        id: client._id
                     },
                     {
                         $push: {
@@ -49,9 +57,8 @@ class ActionsDB {
                         }
                     }
                 );
-            }
-            catch (error) { throw error };
-        };
+            };
+        }
     };
 };
 

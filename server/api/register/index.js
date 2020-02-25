@@ -4,13 +4,13 @@ const bcrypt = require('bcrypt');
 
 const store = require('../../../store');
 const handleJson = require('./handleJson');
+const db = require('../../../utility/mongodb/modules');
 
 class Api {
     constructor() {
         this.register = async callback => {
             // Gether process.env data
-            const ALGORITHM = process.env.ALGORITHM;
-            const JWT_SECRET = process.env.JWT_SECRET;
+            let { ALGORITHM, JWT_SECRET } = process.env;
 
             const clientName = process.env.RESIN_DEVICE_NAME_AT_INIT;
             const clientUuid = process.env.BALENA_DEVICE_UUID;
@@ -39,7 +39,7 @@ class Api {
                     // Save decoded data
                     if (decoded) {
                         // Save session token in store
-                        store.dispatch({ type: 'REGISTER_TOKEN', token: data.sessionToken });
+                        store.dispatch({ type: 'REGISTER_TOKEN', client: clientName, token: data.sessionToken });
 
                         // Handle saveing config json
                         //handleJson.saveJsonFile(config.config);
@@ -70,7 +70,7 @@ class Api {
                 }
             });
             callback(request.data);
-        } 
+        }
         catch (error) { callback(false) };
     };
 };
