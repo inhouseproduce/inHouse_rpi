@@ -8,14 +8,12 @@ const mongodb = require('../../utility/mongodb');
 class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
-            network.setNetworkList(() => {
-                // Scan network list and match ip addresses
-                this.scanEsp(config.esp, list => {
-                    // Send request to all esps with scan options
-                    request.requestAll(list, { scan: true }, () => {
-                        // Schedule job function
-                        scheduleJob(this.captureImage, list);
-                    });
+            // Scan network list and match ip addresses
+            this.scanEsp(config.esp, list => {
+                // Send request to all esps with scan options
+                request.requestAll(list, { scan: true }, () => {
+                    // Schedule job function
+                    scheduleJob(this.captureImage, list);
                 });
             });
         };
@@ -53,7 +51,7 @@ class Camera {
     };
 
     scanEsp = async (espList, register) => {
-        network.readFile((list) => {
+        network.networkList(list => {
             if (list) {
                 // Map esp list, match with ip on the network
                 let camera_esp = espList.map(esp => {
