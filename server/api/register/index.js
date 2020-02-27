@@ -28,7 +28,8 @@ class Api {
             });
 
             // Server endpoint
-            let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
+            let endpoint = `http://localhost:3000/client/identify/`;
+            // let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {
@@ -41,8 +42,8 @@ class Api {
                         // Save session token in store
                         store.dispatch({ type: 'REGISTER_TOKEN', client: clientName, token: data.sessionToken });
 
-                        // Handle saveing config json
-                        //handleJson.saveJsonFile(config.config);
+                        let config = decoded.config.config;
+                        handleJson.saveJsonFile(config, clientName);
                     };
                 };
 
