@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 
 const store = require('../../../store');
 const handleJson = require('./handleJson');
-const db = require('../../../utility/mongodb/modules');
 
 class Api {
     constructor() {
@@ -28,8 +27,7 @@ class Api {
             });
 
             // Server endpoint
-            let endpoint = `http://localhost:3000/client/identify/`;
-            // let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
+            let endpoint = `${process.env.ENDPOINT_URL}/client/identify/`;
 
             // Make get request to register and get config
             this.request(endpoint, token, async data => {

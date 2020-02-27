@@ -3,7 +3,6 @@ const moment = require('moment');
 const request = require('../../utility/request');
 const network = require('../../utility/network');
 const storage = require('../../utility/storage');
-const mongodb = require('../../utility/mongodb');
 
 class Camera {
     constructor() {
@@ -27,9 +26,8 @@ class Camera {
                     // Map response to image data
                     response.map(esp => {
                         // Save images in S3
-                        this.saveImage(esp, info => {
-                            mongodb.actions.saveImages(info); // Save image url
-                            callback(list); // Callback for logger
+                        this.saveImage(esp, imgs => {
+                            callback(list, imgs); // Callback for logger
                         });
                     });
                 });

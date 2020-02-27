@@ -1,57 +1,75 @@
 const store = require('../../store');
 const db = require('../mongodb/modules');
 const os = require('os');
-var osUtil = require('os-utils');
+const osUtil = require('os-utils');
+const actionDB = require('../mongodb/actions');
 
 class Logger {
     constructor() {
         this.engine = (key, data) => {
             this.saveToStore('engine', key, data);
-            this.systemCPU();
-            this.systemMemory();
+
+            osUtil.cpuUsage(cpu => {
+                this.saveToStore('system', 'cpu', {
+                    used: Math.round((cpu * 100))
+                });
+            });
+
+            this.saveToStore('system', 'memory', {
+                used: Math.round((os.totalmem() - os.freemem()) / os.totalmem())
+            });
         };
 
-        this.modules = (key, list) => {
-            let active = 0, inactive = 0;
+        this.modules = (key, modules, result) => {
+            if (modules) {
+                let res = this.moduleList(modules);
+                this.saveToStore('module', key, res);
+            };
+            if (result) {
+                console.log('saving imags -->')
+                this.saveImages(result);
+            };
+        };
+    };
 
-            let listObj = {
-                espLength: list.length,
-                active, inactive
+    saveImages = async data => {
+        try {
+            // Client info
+            let client = await actionDB.findClient();
+
+            // Client logs
+            let logs = await actionDB.clientLogs(client._id);
+
+            // Delete images if over 6
+            if (logs.images.length >= 6) {
+                await actionDB.removeImages(client.id)
             };
 
-            list.map(esp => {
-                if (esp.active) {
-                    active++;
-                    listObj.active = { [esp.mac]: { position: esp.position }, length: active };
-                }
-                else {
-                    inactive++;
-                    listObj.inactive = { [esp.mac]: { position: esp.position }, length: inactive };
-                };
-            });
-            this.saveToStore('module', key, listObj);
+            // Save images in mongodb /records
+            await actionDB.saveImages(client.id, data);
+
+        } catch (error) { throw error; return false };
+    };
+
+    moduleList = list => {
+        let active = 0, inactive = 0;
+
+        let listObj = {
+            espLength: list.length,
+            active, inactive
         };
-    };
 
-    systemCPU = () => {
-        osUtil.cpuUsage(cpu => {
-            this.saveToStore('system', 'cpu', {
-                used: cpu
-            });
+        list.map(esp => {
+            if (esp.active) {
+                active++;
+                listObj.active = active;
+            }
+            else {
+                inactive++;
+                listObj.inactive = inactive;
+            };
         });
-        osUtil.cpuFree(cpu => {
-            this.saveToStore('system', 'cpu', {
-                free: cpu
-            });
-        });
-    };
-
-    systemMemory = () => {
-        this.saveToStore('system', 'memory', {
-            total: os.totalmem(),
-            free: os.freemem(),
-            used: os.totalmem() - os.freemem()
-        });
+        return listObj;
     };
 
     saveToStore = async (to, key, res) => {
