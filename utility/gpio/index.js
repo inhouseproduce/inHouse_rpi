@@ -9,7 +9,7 @@ class GpioActions {
         this.initializeGpio = (config, init) => {
             if (config.pin && config.direction) {
                 // LOW is on High is off
-                let initialState = GPIO[init ? 'LOW' : 'LOW'];
+                let initialState = GPIO[init ? 'HIGH' : 'HIGH'];
                 let direction = GPIO[config.direction];
                 let pin = config.pin;
                 GPIO.open(pin, direction, initialState);
@@ -19,7 +19,7 @@ class GpioActions {
         // Pwm Initializeation
         this.initializePwm = (config) => {
             if (config.pin && config.pwm) {
-                GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+                GPIO.open(config.pin, GPIO[config.direction], GPIO.HIGH);
                 // Open PWM
                 GPIO.open(config.pwm, GPIO.PWM)
                 // Set ~Hz
@@ -34,7 +34,7 @@ class GpioActions {
         // Write gpio
         this.writeGpio = (config, init) => {
             if (config.pin) {
-                GPIO.write(config.pin, GPIO[init ? 'LOW' : 'HIGH']);
+                GPIO.write(config.pin, GPIO[init ? 'HIGH' : 'LOW']);
                 // initialize at 100% - if pwm;
                 if (config.pwm) {
                     GPIO.pwmSetData(config.pwm, 100);
