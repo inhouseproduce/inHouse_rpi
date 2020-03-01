@@ -2,9 +2,10 @@ const s3Storage = require('./config');
 
 class Storage {
     constructor() {
-        this.saveImage = (image, name, callback) => {
+        this.saveImage = async (image, name, callback) => {
             if (image) {
-                let buffer = Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64')
+                let buffer = Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+
                 const params = {
                     Bucket: 'unit-images',
                     ACL: 'public-read',
@@ -14,11 +15,19 @@ class Storage {
                     Body: buffer
                 };
 
-                s3Storage.upload(params, (err, data) => {
-                    if (err) return err;
-                    callback(data);
-                    console.log('image has been saved', data)
-                });
+                // If callback function
+                if (typeof callback === 'function') {
+                    s3Storage.upload(params, (err, data) => {
+                        if (err) return err;
+                        callback(data);
+                    });
+                };
+
+                // return result async 
+                try {
+                    return await s3Storage.upload(params).promise();
+
+                } catch (err) { return err };
             };
         };
     };

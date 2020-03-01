@@ -11,21 +11,9 @@ class ActionsDB {
             return await db.Record.findOne({ id });
         };
 
-        this.removeImages = async id => {
-            return await db.Record.updateOne({ id },
-                { $set: { images: [] } },
-            );
-        };
-
         this.saveImages = async (id, data) => {
             return await db.Record.updateOne({ id }, {
-                $push: {
-                    images: [{
-                        name: data.Key,
-                        image: data.Location,
-                        createdAt: Date.now()
-                    }]
-                }
+                $set: { images: data }
             }, { new: true });
         };
     };

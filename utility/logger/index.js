@@ -11,7 +11,7 @@ class Logger {
 
             osUtil.cpuUsage(cpu => {
                 this.saveToStore('system', 'cpu', {
-                    used: Math.round((cpu * 100))
+                    used: Math.round(cpu) * 100
                 });
             });
 
@@ -26,7 +26,8 @@ class Logger {
                 this.saveToStore('module', key, res);
             };
             if (result) {
-                this.saveImages(result);
+                let res = this.resultList(result);
+                this.saveImages(res);
             };
         };
     };
@@ -36,18 +37,24 @@ class Logger {
             // Client info
             let client = await actionDB.findClient();
 
-            // Client logs
-            let logs = await actionDB.clientLogs(client._id);
-
-            // Delete images if over 6
-            if (logs.images.length >= 6) {
-                await actionDB.removeImages(client.id)
-            };
-
             // Save images in mongodb /records
             await actionDB.saveImages(client.id, data);
 
         } catch (error) { throw error; return false };
+    };
+
+    resultList = list => {
+        let resList = [];
+        list.map(item => {
+            if (item) {
+                let setList = {};
+                setList.name = item.Key;
+                setList.image = item.Location;
+                setList.createdAt = Date.now();
+                resList.push(setList);
+            };
+        });
+        return resList;
     };
 
     moduleList = list => {
@@ -55,7 +62,7 @@ class Logger {
 
         let listObj = {
             espLength: list.length,
-            active, inactive
+            active, inactive,
         };
 
         list.map(esp => {

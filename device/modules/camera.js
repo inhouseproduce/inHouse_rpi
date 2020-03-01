@@ -8,38 +8,40 @@ const gpio = require('../../utility/gpio');
 class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
+            console.log('gpio initialize --->')
             // Scan network list and match ip addresses
             this.scanEsp(config.esp, list => {
                 // Send request to all esps with scan options
                 request.requestAll(list, { scan: true }, () => {
-                    scheduleJob(this.captureImage, list); // Schedule job function
+                    // Schedule job function
+                    scheduleJob(this.captureImage, list);
+                    console.log('off initialize --->')
                 });
             });
         };
 
         this.captureImage = (config, callback) => {
+            console.log('gpio off --->')
+
             this.scanEsp(config.esp, list => {
-                // Specify options for 
-                let commands = { capture: true, sleep: config.time_interval };
                 // Send response to all esps on the network
-                request.requestAll(list, commands, response => {
+                request.requestAll(list, { capture: true }, response => {
                     // Map response to image data
-                    response.map(esp => {
-                        // Save images in S3
-                        this.saveImage(esp, imgs => {
-                            callback(list, imgs); // Callback for logger
-                        });
+                    let result = response.map(esp => {
+                        return this.saveImage(esp);
+                    });
+
+                    // Parse async data and callback arr
+                    Promise.all(result).then(saved => {
+                        callback(list, saved);
+                        console.log('gpio off --->')
                     });
                 });
             });
         };
     };
 
-    switcher = () => {
-
-    };
-
-    saveImage = async (esp, callback) => {
+    saveImage = async esp => {
         // Current time
         let time = `${moment().hour()}:${moment().minute()}`;
 
@@ -47,9 +49,7 @@ class Camera {
         let name = `${time}__${esp.position}`;
 
         // Save image in storage
-        storage.saveImage(esp.response, name, info => {
-            callback(info);
-        });
+        return await storage.saveImage(esp.response, name);
     };
 
     scanEsp = async (espList, register) => {

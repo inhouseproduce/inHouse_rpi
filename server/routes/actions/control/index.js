@@ -1,4 +1,5 @@
 const store = require('../../../../store');
+const gpio = require('../../../../utility/gpio');
 
 module.exports = (req, res) => {
     let { action } = req.body; // Body
