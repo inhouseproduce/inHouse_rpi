@@ -25,8 +25,10 @@ class Camera {
                 request.requestAll(list, commands, response => {
                     // Map response to image data
                     response.map(esp => {
+                        console.log('esp', esp)
                         // Save images in S3
                         this.saveImage(esp, imgs => {
+                            console.log('images-->')
                             callback(list, imgs); // Callback for logger
                         });
                     });

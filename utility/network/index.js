@@ -9,17 +9,23 @@ module.exports.networkList = callback => {
         if (!!err) return console.log('arp: ' + err.message);
         if (!entry) return;
 
-        let data = `
-        "${entry.mac}":{
+        let data = `"${entry.mac}" : {
             "ip": "${entry.ip}",
             "mac": "${entry.mac}"
         },`;
 
-        // Write esp with set ip addresses
-        fs.appendFile(filepath, data, (err) => {
+        console.log('net->>', entry)
+        // First clear old net list
+        fs.appendFile(filepath, '', (err) => {
             if (err) {
-                return console.log('appending failed');
-            }
+                return console.log('File was not cleared');
+            };
+            // Write esp with set ip addresses
+            fs.appendFile(filepath, data, (err) => {
+                if (err) {
+                    return console.log('appending failed');
+                }
+            });
         });
     });
 
@@ -29,9 +35,10 @@ module.exports.networkList = callback => {
                 return console.log('reading file failed');
             };
 
+            // Get network list as string convert to json
             netList = netList.trim();
             netList = netList.substring(0, netList.length - 1);
-            callback(JSON.parse(`{${netList}}`))
+            callback(JSON.parse(`{${netList}}`));
         });
     }, 3000);
 };

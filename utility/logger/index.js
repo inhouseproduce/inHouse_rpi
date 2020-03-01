@@ -21,18 +21,20 @@ class Logger {
         };
 
         this.modules = (key, modules, result) => {
+            console.log('result----->', result)
+            console.log('modules', modules)
             if (modules) {
                 let res = this.moduleList(modules);
                 this.saveToStore('module', key, res);
             };
             if (result) {
-                console.log('saving imags -->')
                 this.saveImages(result);
             };
         };
     };
 
     saveImages = async data => {
+        console.log('save images ---> ')
         try {
             // Client info
             let client = await actionDB.findClient();
