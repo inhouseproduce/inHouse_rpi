@@ -19,12 +19,11 @@ class Modules {
 
                     // Schedule job based on callback from moduleAction
                     let cronJobs = schedule(config[key], option,
-                    () => {
-                        return job(config[key], (modules, result) => {
-                            logger.modules(key, modules, result);
+                        () => {
+                            return job(config[key], (modules, result) => {
+                                logger.modules(key, modules, result);
+                            });
                         });
-                    });
-
                     // Callback cron jobs list
                     callback(readyCronJobs(cronJobs));
                 });

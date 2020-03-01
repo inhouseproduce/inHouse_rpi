@@ -14,7 +14,6 @@ module.exports.networkList = callback => {
             "mac": "${entry.mac}"
         },`;
 
-        console.log('net->>', entry)
         // First clear old net list
         fs.appendFile(filepath, '', (err) => {
             if (err) {

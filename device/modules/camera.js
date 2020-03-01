@@ -3,6 +3,7 @@ const moment = require('moment');
 const request = require('../../utility/request');
 const network = require('../../utility/network');
 const storage = require('../../utility/storage');
+const gpio = require('../../utility/gpio');
 
 class Camera {
     constructor() {
@@ -11,8 +12,7 @@ class Camera {
             this.scanEsp(config.esp, list => {
                 // Send request to all esps with scan options
                 request.requestAll(list, { scan: true }, () => {
-                    // Schedule job function
-                    scheduleJob(this.captureImage, list);
+                    scheduleJob(this.captureImage, list); // Schedule job function
                 });
             });
         };
@@ -25,16 +25,18 @@ class Camera {
                 request.requestAll(list, commands, response => {
                     // Map response to image data
                     response.map(esp => {
-                        console.log('esp', esp)
                         // Save images in S3
                         this.saveImage(esp, imgs => {
-                            console.log('images-->')
                             callback(list, imgs); // Callback for logger
                         });
                     });
                 });
             });
         };
+    };
+
+    switcher = () => {
+
     };
 
     saveImage = async (esp, callback) => {
