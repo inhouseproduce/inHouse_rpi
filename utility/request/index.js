@@ -6,9 +6,9 @@ class Request {
             let resList = list.map(async esp => {
                 return await this.request(esp, options);
             });
-            Promise.all(resList).then(resp => {
+            return Promise.all(resList).then(resp => {
                 if (cb) cb(resp);
-                else return true;
+                return resp;
             });
         };
 

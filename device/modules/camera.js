@@ -28,10 +28,11 @@ class Camera {
         this.captureImage = (config, callback) => {
             console.log('gpio caputre on')
             GPIO.write(config.pin, GPIO['LOW']);
-            
-            this.scanEsp(config.esp, list => {
+
+            this.scanEsp(config.esp, async list => {
                 // Send response to all esps on the network
-                request.requestAll(list, { capture: true }, response => {
+                let test = await request.requestAll(list, { capture: true }, response => {
+                    console.log('response', response)
                     // Map response to image data
                     if (response) {
                         let result = response.map(esp => {
@@ -46,13 +47,10 @@ class Camera {
                                 GPIO.write(config.pin, GPIO['HIGH']);
                                 console.log('gpio caputre off')
                             });
-                        }
-                        else {
-                            GPIO.write(config.pin, GPIO['HIGH']);
-                            console.log('No result')
-                        }
+                        };
                     };
                 });
+                console.log('tesing--->', test)
             });
         };
     };

@@ -18,7 +18,7 @@
             },
             "lights": {
                 "type": "clock",
-                "pin": 7,
+                "pin": 23,
                 "pwm": 12,
                 "direction": "OUTPUT",
                 "actions": [
