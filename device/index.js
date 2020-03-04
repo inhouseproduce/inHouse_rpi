@@ -2,6 +2,7 @@ const engine = require('./engine');
 const modules = require('./modules');
 const sensors = require('./sensors');
 const store = require('../store');
+const static = require('./static');
 
 class Device {
     constructor() {
@@ -18,6 +19,10 @@ class Device {
                 });
             });
         };
+    };
+
+    static = async (config, cb) => {
+        static.start(config);
     };
 
     sensors = async (config, cb) => {

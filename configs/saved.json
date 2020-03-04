@@ -1,7 +1,12 @@
 {
-    "client": "workshop",
+    "client": "hugos",
     "config": {
         "engine": {
+            "static": {
+                "pins": [
+                    32
+                ]
+            },
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
@@ -18,7 +23,7 @@
             },
             "lights": {
                 "type": "clock",
-                "pin": 7,
+                "pin": 23,
                 "pwm": 12,
                 "direction": "OUTPUT",
                 "actions": [
@@ -44,32 +49,7 @@
                 "type": "interval",
                 "time_interval": 1,
                 "pin": 15,
-                "esp": [
-                    {
-                        "position": 1,
-                        "mac": "24:6f:28:af:c9:28"
-                    },
-                    {
-                        "position": 2,
-                        "mac": "b4:e6:2d:f9:9d:91"
-                    },
-                    {
-                        "position": 3,
-                        "mac": "24:6f:28:af:d9:18"
-                    },
-                    {
-                        "position": 4,
-                        "mac": "b4:e6:2d:f9:98:09"
-                    },
-                    {
-                        "position": 5,
-                        "mac": "4c:11:ae:75:d0:cc"
-                    },
-                    {
-                        "position": 6,
-                        "mac": "b4:e6:2d:f9:a0:0d"
-                    }
-                ]
+                "esp": []
             }
         }
     }
