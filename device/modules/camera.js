@@ -3,50 +3,75 @@ const moment = require('moment');
 const request = require('../../utility/request');
 const network = require('../../utility/network');
 const storage = require('../../utility/storage');
-const gpio = require('../../utility/gpio');
+const GPIO = require('rpio');
 
 class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
-            console.log('gpio initialize --->')
+            GPIO.open(config.pin, GPIO.OUTPUT, GPIO['HIGH']);
+            GPIO.write(config.pin, GPIO['HIGH']);
+            GPIO.write(config.pin, GPIO['LOW']);
+            console.log("gpio on")
+
             // Scan network list and match ip addresses
             this.scanEsp(config.esp, list => {
                 // Send request to all esps with scan options
                 request.requestAll(list, { scan: true }, () => {
                     // Schedule job function
                     scheduleJob(this.captureImage, list);
-                    console.log('off initialize --->')
+                    GPIO.write(config.pin, GPIO['HIGH']);
+                    console.log('gpo off')
                 });
             });
         };
 
         this.captureImage = (config, callback) => {
-            console.log('gpio off --->')
-
+            console.log('gpio caputre on')
+            GPIO.write(config.pin, GPIO['LOW']);
+            
             this.scanEsp(config.esp, list => {
                 // Send response to all esps on the network
                 request.requestAll(list, { capture: true }, response => {
                     // Map response to image data
-                    let result = response.map(esp => {
-                        return this.saveImage(esp);
-                    });
+                    if (response) {
+                        let result = response.map(esp => {
+                            return this.saveImage(esp);
+                        });
 
-                    // Parse async data and callback arr
-                    Promise.all(result).then(saved => {
-                        callback(list, saved);
-                        console.log('gpio off --->')
-                    });
+                        // Parse async data and callback arr
+                        console.log('result', result);
+                        if (result) {
+                            Promise.all(result).then(saved => {
+                                callback(list, saved);
+                                GPIO.write(config.pin, GPIO['HIGH']);
+                                console.log('gpio caputre off')
+                            });
+                        }
+                        else {
+                            GPIO.write(config.pin, GPIO['HIGH']);
+                            console.log('No result')
+                        }
+                    };
                 });
             });
         };
     };
 
+    camera = config => {
+        return {
+            on: cb => {
+                GPIO.write(config.pin, GPIO['LOW']);
+                setTimeout(() => { cb() }, 2200);
+            }
+        }
+    }
     saveImage = async esp => {
         // Current time
         let time = `${moment().hour()}:${moment().minute()}`;
 
         // Image file name -> time + camera position
         let name = `${time}__${esp.position}`;
+        console.log('imp check===------==>>', esp.response)
 
         // Save image in storage
         return await storage.saveImage(esp.response, name);

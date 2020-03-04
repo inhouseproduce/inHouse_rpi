@@ -12,9 +12,11 @@ class ActionsDB {
         };
 
         this.saveImages = async (id, data) => {
-            return await db.Record.updateOne({ id }, {
-                $set: { images: data }
-            }, { new: true });
+            if (data) {
+                return await db.Record.updateOne({ id }, {
+                    $set: { images: data }
+                }, { new: true });
+            }
         };
     };
 };

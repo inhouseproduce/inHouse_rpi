@@ -14,17 +14,11 @@ module.exports.networkList = callback => {
             "mac": "${entry.mac}"
         },`;
 
-        // First clear old net list
-        fs.appendFile(filepath, '', (err) => {
+        // Write esp with set ip addresses
+        fs.appendFile(filepath, data, (err) => {
             if (err) {
-                return console.log('File was not cleared');
-            };
-            // Write esp with set ip addresses
-            fs.appendFile(filepath, data, (err) => {
-                if (err) {
-                    return console.log('appending failed');
-                }
-            });
+                return console.log('Scaning network failed');
+            }
         });
     });
 

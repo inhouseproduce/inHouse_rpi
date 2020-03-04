@@ -27,6 +27,7 @@ class Logger {
             };
             if (result) {
                 let res = this.resultList(result);
+                console.log('res---->', res)
                 this.saveImages(res);
             };
         };
@@ -44,17 +45,15 @@ class Logger {
     };
 
     resultList = list => {
-        let resList = [];
-        list.map(item => {
+        return list.map(item => {
             if (item) {
-                let setList = {};
-                setList.name = item.Key;
-                setList.image = item.Location;
-                setList.createdAt = Date.now();
-                resList.push(setList);
+                return {
+                    name: item.Key,
+                    image: item.Location,
+                    createdAt: Date.now(),
+                }
             };
         });
-        return resList;
     };
 
     moduleList = list => {
