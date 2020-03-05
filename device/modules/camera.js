@@ -10,11 +10,9 @@ class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
             this.camera(config).init((cameraOff) => {
-                // Scan network list and match ip addresses
                 this.scanEsp(config.esp, list => {
-                    // Send request to all esps with scan options
                     request.requestAll(list, { scan: true }, () => {
-                        scheduleJob(this.captureImage, list); // Schedule job function
+                        scheduleJob(this.captureImage, list);
                         cameraOff();
                     });
                 });
@@ -24,27 +22,22 @@ class Camera {
         this.captureImage = (config, callback) => {
             this.camera(config).on((cameraOff) => {
                 this.scanEsp(config.esp, async list => {
-                    this.requestAll(list, { capture: true }, (test) => {
-                        console.log('request test', test)
+                    this.requestAll(list, { capture: true }, saved => {
+                        Promise.all(saved).then(async resp => {
+                            let test = resp.map(async item => {
+                                return await this.saveImage(item);
+                            });
+                            Promise.all(test).then(async imp => {
+                                await imp.map((xx, index) => {
+                                    if (!xx) {
+                                        imp.concat(0, index)
+                                    }
+                                });
+                                callback(list, imp);
+                            });
+                            cameraOff();
+                        });
                     });
-
-
-                    // console.log('array', arr);
-
-                    // Promise.all(imageList).then(saved => {
-                    //     console.log('saved', saved)
-                    //     test()
-                    //     cameraOff();
-                    //     console.log('promise---->')
-                    //     callback(list, saved);
-                    // }).catch(err => {
-                    //     console.log('promiss all error -->')
-                    //     cameraOff();
-                    // });
-
-                    // function test(data) {
-                    //     console.log('test data -->', data)
-                    // }
                 });
             });
         };
@@ -77,16 +70,19 @@ class Camera {
         }
     };
 
-    requestAll = async (list, command) => {
+    requestAll = async (list, command, callback) => {
         let test = await list.map(async esp => {
             try {
-                let request = await axios.post(`http://${esp.ip}/`, command);
-                return request.data;
+                let image = await axios.post(`http://${esp.ip}/`, command);
+                esp.response = image.data;
+                return esp;
             }
-            catch (err) { return false };
+            catch (err) {
+                esp.response = false;
+                return esp;
+            };
         });
-        console.log('test', test)
-        return await test
+        callback(await test);
     };
 
     saveImage = async (esp) => {
