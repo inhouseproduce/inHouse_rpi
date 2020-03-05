@@ -21,6 +21,7 @@ class Logger {
         };
 
         this.modules = (key, modules, result) => {
+            console.log('logger')
             if (modules) {
                 let res = this.moduleList(modules);
                 this.saveToStore('module', key, res);

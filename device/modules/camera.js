@@ -15,7 +15,6 @@ class Camera {
                     // Send request to all esps with scan options
                     request.requestAll(list, { scan: true }, () => {
                         scheduleJob(this.captureImage, list); // Schedule job function
-                        GPIO.write(config.pin, GPIO['HIGH']); // Cameras to sleep
                         cameraOff();
                     });
                 });
@@ -24,20 +23,42 @@ class Camera {
 
         this.captureImage = (config, callback) => {
             this.camera(config).on((cameraOff) => {
-                this.scanEsp(config.esp, list => {
-                    let imageList = list.map(async esp => {
+                this.scanEsp(config.esp, async list => {
+                    await list.map(async esp => {
                         let image = await this.request(esp, { capture: true });
-                        return await this.saveImage(esp, image);
+                        if (image && typeof image === 'string' && image.length > 50) {
+                            esp.response = image;
+                        } else {
+                            esp.response = false
+                        }
                     });
 
-                    Promise.all(imageList).then(saved => {
-                        callback(list, saved);
-                        cameraOff();
-
-                    }).catch(err => {
-                        console.log('promiss all error -->')
-                        cameraOff();
+                    let imageList = await list.forEach(async esp => {
+                        let test = await this.saveImage(esp);
+                        console.log('test', test);
                     });
+
+                    Promise.all(imageList).then(resp => {
+                        console.log('resp', resp)
+                    })
+
+
+                    // console.log('array', arr);
+
+                    // Promise.all(imageList).then(saved => {
+                    //     console.log('saved', saved)
+                    //     test()
+                    //     cameraOff();
+                    //     console.log('promise---->')
+                    //     callback(list, saved);
+                    // }).catch(err => {
+                    //     console.log('promiss all error -->')
+                    //     cameraOff();
+                    // });
+
+                    // function test(data) {
+                    //     console.log('test data -->', data)
+                    // }
                 });
             });
         };
@@ -78,7 +99,9 @@ class Camera {
         catch (err) { return false };
     };
 
-    saveImage = async (esp, image) => {
+    saveImage = async (esp) => {
+        let image = esp.response;
+
         if (image && typeof image === 'string') {
             // Current time
             let time = `${moment().hour()}:${moment().minute()}`;
