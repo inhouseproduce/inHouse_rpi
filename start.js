@@ -1,7 +1,7 @@
-// // // Development environmental variables
-// if (!process.env.ENV_MODE) {
-//     require('dotenv').config()
-// };
+// // Development environmental variables
+if (!process.env.ENV_MODE) {
+    require('dotenv').config()
+};
 
 // Libs
 const device = require('./device');

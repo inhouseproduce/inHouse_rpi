@@ -24,23 +24,9 @@ class Camera {
         this.captureImage = (config, callback) => {
             this.camera(config).on((cameraOff) => {
                 this.scanEsp(config.esp, async list => {
-                    await list.map(async esp => {
-                        let image = await this.request(esp, { capture: true });
-                        if (image && typeof image === 'string' && image.length > 50) {
-                            esp.response = image;
-                        } else {
-                            esp.response = false
-                        }
+                    this.requestAll(list, { capture: true }, (test) => {
+                        console.log('request test', test)
                     });
-
-                    let imageList = await list.forEach(async esp => {
-                        let test = await this.saveImage(esp);
-                        console.log('test', test);
-                    });
-
-                    Promise.all(imageList).then(resp => {
-                        console.log('resp', resp)
-                    })
 
 
                     // console.log('array', arr);
@@ -91,12 +77,16 @@ class Camera {
         }
     };
 
-    request = async (esp, command) => {
-        try {
-            let request = await axios.post(`http://${esp.ip}/`, command);
-            return request.data;
-        }
-        catch (err) { return false };
+    requestAll = async (list, command) => {
+        let test = await list.map(async esp => {
+            try {
+                let request = await axios.post(`http://${esp.ip}/`, command);
+                return request.data;
+            }
+            catch (err) { return false };
+        });
+        console.log('test', test)
+        return await test
     };
 
     saveImage = async (esp) => {
