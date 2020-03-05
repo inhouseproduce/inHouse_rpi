@@ -9,7 +9,6 @@ class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
             GPIO.open(config.pin, GPIO.OUTPUT, GPIO['HIGH']);
-            GPIO.write(config.pin, GPIO['HIGH']);
             GPIO.write(config.pin, GPIO['LOW']);
             console.log("gpio on")
 

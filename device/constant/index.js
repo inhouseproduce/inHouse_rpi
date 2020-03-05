@@ -1,15 +1,15 @@
-const gpio = require('../../utility/gpio');
+const GPIO = require('rpio');
 
-class Static {
+class constant {
     constructor() {
         this.start = (config) => {
             console.log('config.pin', config.pins);
             config.pins.map(pin => {
-                gpio.initializeGpio(pin, true);
-                gpio.writeGpio(pin, true);
+                GPIO.open(pin, GPIO.OUTPUT, GPIO['HIGH']);
+                GPIO.write(pin, GPIO['HIGH']);
             });
         };
     };
 };
 
-module.exports = new Static;
+module.exports = new constant;

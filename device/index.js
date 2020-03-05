@@ -2,12 +2,13 @@ const engine = require('./engine');
 const modules = require('./modules');
 const sensors = require('./sensors');
 const store = require('../store');
-const static = require('./static');
+const constant = require('./constant');
 
 class Device {
     constructor() {
         this.start = sysOp => {
             Object.keys(sysOp.config).map(key => {
+                console.log('key', key)
                 let config = sysOp.config[key];
                 let runAction = this[key];
 
@@ -21,8 +22,8 @@ class Device {
         };
     };
 
-    static = async (config, cb) => {
-        static.start(config);
+    constant = async (config, cb) => {
+        constant.start(config);
     };
 
     sensors = async (config, cb) => {

@@ -1,12 +1,12 @@
 {
     "client": "hugos",
     "config": {
+        "constant": {
+            "pins": [
+                32
+            ]
+        },
         "engine": {
-            "static": {
-                "pins": [
-                    32
-                ]
-            },
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
@@ -48,7 +48,7 @@
             "camera": {
                 "type": "interval",
                 "time_interval": 1,
-                "pin": 15,
+                "pin": 38,
                 "esp": []
             }
         }

@@ -10,7 +10,7 @@ class Engine {
 
             Object.keys(sysOp).map(key => {
                 let config = sysOp[key];
-
+                console.log('config--->', config.pin)
                 // --> Initialize Gpio pins based on config
                 engine.initialize(config, res => {
                     logger.engine(key, res);
@@ -18,6 +18,7 @@ class Engine {
 
                 // Get scheduler type funcs based on config
                 let schedule = scheduler[config.type];
+
                 // Get engine type(interval/clock) funcs
                 let engineAction = engine[config.type];
 
