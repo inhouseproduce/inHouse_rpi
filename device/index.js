@@ -10,12 +10,14 @@ class Device {
                 let config = sysOp.config[key];
                 let runAction = this[key];
 
-                runAction(config, job => {
-                    store.dispatch({
-                        type: 'CURRENT_JOB',
-                        schedule: job
+                if (runAction) {
+                    runAction(config, job => {
+                        store.dispatch({
+                            type: 'CURRENT_JOB',
+                            schedule: job
+                        });
                     });
-                });
+                }
             });
         };
     };

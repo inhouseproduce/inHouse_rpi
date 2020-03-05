@@ -25,9 +25,19 @@ class Logger {
                 let res = this.moduleList(modules);
                 this.saveToStore('module', key, res);
             };
+            console.log('result', result)
+
             if (result) {
-                let res = this.resultList(result);
-                console.log('res---->', res)
+                let res = result.map(item => {
+                    if (item) {
+                        return {
+                            name: item.Key,
+                            image: item.Location,
+                            createdAt: Date.now(),
+                        }
+                    };
+                });
+                console.log('res',res)
                 this.saveImages(res);
             };
         };
@@ -35,25 +45,12 @@ class Logger {
 
     saveImages = async data => {
         try {
-            // Client info
-            let client = await actionDB.findClient();
+            if (data) {
+                let client = await actionDB.findClient(); // Client info
+                await actionDB.saveImages(client.id, data);// Save in mongodb
+            }
 
-            // Save images in mongodb /records
-            await actionDB.saveImages(client.id, data);
-
-        } catch (error) { throw error; return false };
-    };
-
-    resultList = list => {
-        return list.map(item => {
-            if (item) {
-                return {
-                    name: item.Key,
-                    image: item.Location,
-                    createdAt: Date.now(),
-                }
-            };
-        });
+        } catch (error) { return false };
     };
 
     moduleList = list => {

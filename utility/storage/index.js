@@ -5,7 +5,6 @@ class Storage {
         this.saveImage = async (image, name, callback) => {
             if (image && typeof image === 'string') {
                 let buffer = Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-                console.log('image', image)
                 const params = {
                     Bucket: 'unit-images',
                     ACL: 'public-read',

@@ -15,6 +15,11 @@ module.exports.networkList = callback => {
         },`;
 
         // Write esp with set ip addresses
+        fs.writeFile(filepath, '', (err) => {
+            if (err) {
+                return console.log('Scaning network failed');
+            }
+        });
         fs.appendFile(filepath, data, (err) => {
             if (err) {
                 return console.log('Scaning network failed');

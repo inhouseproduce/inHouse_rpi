@@ -12,11 +12,24 @@ class ActionsDB {
         };
 
         this.saveImages = async (id, data) => {
-            if (data) {
-                return await db.Record.updateOne({ id }, {
-                    $set: { images: data }
-                }, { new: true });
+            let list = validate(data);
+            console.log('list')
+            if (list) {
+                try {
+                    return await db.Record.updateOne({ id }, {
+                        $set: { images: list }
+                    }, { new: true });
+                } catch (err) { throw err };
             }
+            function validate(data) {
+                data.map((item, index) => {
+                    if (!item) {
+                        data.splice(index, 1);
+
+                    }
+                });
+                return data;
+            };
         };
     };
 };

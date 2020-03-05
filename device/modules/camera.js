@@ -1,80 +1,97 @@
 const moment = require('moment');
+const axios = require('axios');
+const GPIO = require('rpio');
 
 const request = require('../../utility/request');
 const network = require('../../utility/network');
 const storage = require('../../utility/storage');
-const GPIO = require('rpio');
 
 class Camera {
     constructor() {
         this.start = (config, scheduleJob) => {
-            GPIO.open(config.pin, GPIO.OUTPUT, GPIO['HIGH']);
-            GPIO.write(config.pin, GPIO['HIGH']);
-            GPIO.write(config.pin, GPIO['LOW']);
-            console.log("gpio on")
-
-            // Scan network list and match ip addresses
-            this.scanEsp(config.esp, list => {
-                // Send request to all esps with scan options
-                request.requestAll(list, { scan: true }, () => {
-                    // Schedule job function
-                    scheduleJob(this.captureImage, list);
-                    GPIO.write(config.pin, GPIO['HIGH']);
-                    console.log('gpo off')
+            this.camera(config).init((cameraOff) => {
+                // Scan network list and match ip addresses
+                this.scanEsp(config.esp, list => {
+                    // Send request to all esps with scan options
+                    request.requestAll(list, { scan: true }, () => {
+                        scheduleJob(this.captureImage, list); // Schedule job function
+                        GPIO.write(config.pin, GPIO['HIGH']); // Cameras to sleep
+                        cameraOff();
+                    });
                 });
             });
         };
 
         this.captureImage = (config, callback) => {
-            console.log('gpio caputre on')
-            GPIO.write(config.pin, GPIO['LOW']);
-            
-            this.scanEsp(config.esp, list => {
-                // Send response to all esps on the network
-                request.requestAll(list, { capture: true }, response => {
-                    // Map response to image data
-                    if (response) {
-                        let result = response.map(esp => {
-                            return this.saveImage(esp);
-                        });
+            this.camera(config).on((cameraOff) => {
+                this.scanEsp(config.esp, list => {
+                    let imageList = list.map(async esp => {
+                        let image = await this.request(esp, { capture: true });
+                        return await this.saveImage(esp, image);
+                    });
 
-                        // Parse async data and callback arr
-                        console.log('result', result);
-                        if (result) {
-                            Promise.all(result).then(saved => {
-                                callback(list, saved);
-                                GPIO.write(config.pin, GPIO['HIGH']);
-                                console.log('gpio caputre off')
-                            });
-                        }
-                        else {
-                            GPIO.write(config.pin, GPIO['HIGH']);
-                            console.log('No result')
-                        }
-                    };
+                    Promise.all(imageList).then(saved => {
+                        callback(list, saved);
+                        cameraOff();
+
+                    }).catch(err => {
+                        console.log('promiss all error -->')
+                        cameraOff();
+                    });
                 });
             });
         };
     };
 
-    camera = config => {
-        return {
-            on: cb => {
-                GPIO.write(config.pin, GPIO['LOW']);
-                setTimeout(() => { cb() }, 2200);
-            }
+    camera = (config) => {
+        function cameraOff() {
+            GPIO.write(config.pin, GPIO['HIGH']);
+            console.log('camera off -->')
         }
-    }
-    saveImage = async esp => {
-        // Current time
-        let time = `${moment().hour()}:${moment().minute()}`;
+        return {
+            init: (cb) => {
+                GPIO.open(config.pin, GPIO.OUTPUT, GPIO['HIGH']);
+                GPIO.write(config.pin, GPIO['HIGH']);
+                setTimeout(() => {
+                    GPIO.write(config.pin, GPIO['LOW']);
+                    setTimeout(() => {
+                        cb(cameraOff);
+                        console.log('gpio initialize')
+                    }, 5000);
+                }, 1000);
+            },
+            on: (cb) => {
+                GPIO.write(config.pin, GPIO['LOW']);
+                setTimeout(() => {
+                    cb(cameraOff);
+                    console.log('camera On')
+                }, 500);
+            },
+        }
+    };
 
-        // Image file name -> time + camera position
-        let name = `${time}__${esp.position}`;
-        console.log('imp check===------==>>', esp.response)
+    request = async (esp, command) => {
+        try {
+            let request = await axios.post(`http://${esp.ip}/`, command);
+            return request.data;
+        }
+        catch (err) { return false };
+    };
 
-        // Save image in storage
-        return await storage.saveImage(esp.response, name);
+    saveImage = async (esp, image) => {
+        if (image && typeof image === 'string') {
+            // Current time
+            let time = `${moment().hour()}:${moment().minute()}`;
+
+            // Image file name -> time + camera position
+            let name = `${time}__${esp.position}`;
+
+            // Save image in storage
+            if (image && typeof image === 'string' && image.length > 100) {
+                return await storage.saveImage(image, name);
+            }
+            return false;
+        }
     };
 
     scanEsp = async (espList, register) => {
