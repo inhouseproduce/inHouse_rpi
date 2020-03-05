@@ -9,10 +9,11 @@ const server = require('./server');
 const mongodb = require('./utility/mongodb');
 
 // Register Server api
-server.registerServer(client => {
+server.registerServer(config => {
+    console.log('config', config.config)
     // Initialize mongodb
     mongodb.connect(() => {
         // Start device
-        device.start(client);
+        device.start(config);
     });
 });

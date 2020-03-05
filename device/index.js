@@ -20,6 +20,10 @@ class Device {
         };
     };
 
+    constant = () => {
+
+    };
+    
     sensors = async (config, cb) => {
         sensors.start(config, jobs => {
             cb(jobs);

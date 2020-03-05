@@ -3,6 +3,11 @@
     "client": "hugos",
     "config": {
         "engine": {
+            "constant": {
+                "pins": [
+                    32
+                ]
+            },
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
@@ -19,7 +24,7 @@
             },
             "lights": {
                 "type": "clock",
-                "pin": 7,
+                "pin": 23,
                 "pwm": 12,
                 "direction": "OUTPUT",
                 "actions": [
@@ -44,39 +49,15 @@
             "camera": {
                 "type": "interval",
                 "time_interval": 1,
+                "pin": 38,
                 "esp": [
-                    {
-                        "position": 1,
-                        "mac": "4c:11:ae:75:c2:1c"
-                    },
-                    {
-                        "position": 2,
-                        "mac": "24:6f:28:b1:58:1c"
-                    },
-                    {
-                        "position": 3,
-                        "mac": "b4:e6:2d:f9:9a:81"
-                    },
-                    {
-                        "position": 4,
-                        "mac": "24:6f:28:af:d0:7c"
-                    },
-                    {
-                        "position": 5,
-                        "mac": "24:6f:28:b1:69:e8"
-                    },
-                    {
-                        "position": 6,
-                        "mac": "4c:11:ae:75:a4:e4"
-                    }
+                    
                 ]
             }
         },
         "sensors": {
             "type": "interval",
-            "time_interval": 2,
-            "pin": 19,
-            "direction": "OUTPUT"
+            "time_interval": 2
         }
     }
 }
