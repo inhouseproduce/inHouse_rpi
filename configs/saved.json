@@ -1,5 +1,5 @@
 {
-    "client": "hugos",
+    "client": "test",
     "config": {
         "constant": {
             "pins": [
@@ -10,7 +10,7 @@
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
-                "run_period": 0.1,
+                "run_period": 0.5,
                 "pin": 11,
                 "direction": "OUTPUT"
             },
