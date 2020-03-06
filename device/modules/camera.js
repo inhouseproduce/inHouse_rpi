@@ -37,7 +37,7 @@ class Camera {
                                     callback(list, arr);
                                 });
                             });
-                        } else { cameraOff() }
+                        } else { cameraOff() };
                     });
                 });
             });
