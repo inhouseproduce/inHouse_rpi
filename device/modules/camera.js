@@ -23,20 +23,21 @@ class Camera {
             this.camera(config).on((cameraOff) => {
                 this.scanEsp(config.esp, async list => {
                     this.requestAll(list, { capture: true }, saved => {
-                        Promise.all(saved).then(async resp => {
-                            let test = resp.map(async item => {
-                                return await this.saveImage(item);
-                            });
-                            Promise.all(test).then(async imp => {
-                                await imp.map((xx, index) => {
-                                    if (!xx) {
-                                        imp.concat(0, index)
-                                    }
+                        if (saved.length) {
+                            Promise.all(saved).then(async resp => {
+                                let test = resp.map(async item => {
+                                    return await this.saveImage(item);
                                 });
-                                callback(list, imp);
+                                Promise.all(test).then(async imp => {
+                                    let arr = []
+                                    await imp.forEach((xx, index) => {
+                                        if (xx) { arr.push(xx) }
+                                    });
+                                    console.log('callback')
+                                    callback(list, arr);
+                                });
                             });
-                            cameraOff();
-                        });
+                        } else { cameraOff() }
                     });
                 });
             });
