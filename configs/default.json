@@ -1,5 +1,5 @@
 {
-    "client": "hugos",
+    "client": "test",
     "config": {
         "constant": {
             "pins": [
@@ -32,13 +32,8 @@
                         "time": "21:00"
                     },
                     {
-                        "action": "dim",
+                        "action": "on",
                         "time": "23:00",
-                        "level": "50"
-                    },
-                    {
-                        "action": "dim",
-                        "time": "23:30",
                         "level": "50"
                     }
                 ]
