@@ -21,12 +21,10 @@ class Logger {
         };
 
         this.modules = (key, modules, result) => {
-            console.log('logger')
             if (modules) {
                 let res = this.moduleList(modules);
                 this.saveToStore('module', key, res);
             };
-            console.log('result', result)
 
             if (result) {
                 let res = result.map(item => {
@@ -38,7 +36,6 @@ class Logger {
                         }
                     };
                 });
-                console.log('res',res)
                 this.saveImages(res);
             };
         };
