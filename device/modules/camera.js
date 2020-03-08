@@ -2,7 +2,6 @@ const moment = require("moment");
 const axios = require("axios");
 const GPIO = require("rpio");
 
-const request = require("../../utility/request");
 const network = require("../../utility/network");
 const storage = require("../../utility/storage");
 
@@ -10,72 +9,40 @@ class Camera {
   constructor() {
     this.start = (config, scheduleJob) => {
       this.camera(config).init(cameraOff => {
-        this.scanEsp(config.esp, list => {
-          request.requestAll(list, { scan: true }, () => {
-            scheduleJob(this.captureImage, list);
-            cameraOff();
-          });
+        this.requestAll(config.esp, { scan: true }, (resp, list) => {
+          scheduleJob(this.captureImage, list);
+          cameraOff();
         });
       });
     };
 
-    this.captureImage = (config, callback) => {
+    this.captureImage = (config, callback, options) => {
       this.camera(config).on(cameraOff => {
-        this.scanEsp(config.esp, async list => {
-          this.requestAll(list, { capture: true }, saved => {
-            this.parseRequest(saved, arr => {
-              if (arr) {
-                callback(list, arr);
-                this.handleUncapturedImages(list);
-                cameraOff();
-              } else {
-                cameraOff();
-              }
+        this.requestAll(config.esp, { capture: true }, (resp, list) => {
+          if(options.save){
+            this.handleSaveImage(resp, arr => {
+              callback(list, arr);
+              cameraOff();
             });
-          });
+          }
+          else {
+            callback(resp,list)
+          }
         });
       });
     };
   }
 
-  handleUncapturedImages = list => {
-    let test = list.map(item => {
-      if (!item.response) {
-        return item;
+  handleSaveImage = (resp, callback) => {
+    console.log("response", await resp);
+    resp.map(item=>{
+      if(!item.response){
+        
       }
+    })
+    this.saveImage(resp, arr => {
+      callback(arr);
     });
-    console.log("testing-->", test);
-  };
-
-  parseRequest = (list, callback) => {
-    if (!list.length) callback([]);
-
-    // Parse binary image
-    Promise.all(list)
-      .then(async resp => {
-        let savedList = resp.map(async item => {
-          return await this.S3SaveImage(item);
-        });
-        // Parse s3 saved data
-        Promise.all(savedList)
-          .then(async imgs => {
-            let arr = [];
-            await imgs.forEach(data => {
-              if (data) {
-                arr.push(data);
-              }
-            });
-            callback(arr);
-          })
-          .catch(error => {
-            console.log("parse 1 error", error);
-            callback(false);
-          });
-      })
-      .catch(err => {
-        console.log("parsing error", err);
-        callback(false);
-      });
   };
 
   camera = config => {
@@ -98,28 +65,49 @@ class Camera {
       on: cb => {
         GPIO.write(config.pin, GPIO["LOW"]);
         setTimeout(() => {
-          cb(cameraOff);
+          if (cb) cb(cameraOff);
+          else return;
           console.log("camera On");
         }, 500);
+      },
+      off: cb => {
+        GPIO.write(config.pin, GPIO["HIGH"]);
+        if (cb) cb();
+        else return;
       }
     };
   };
 
-  requestAll = async (list, command, callback) => {
-    let response = await list.map(async esp => {
-      try {
-        let image = await axios.post(`http://${esp.ip}/`, command);
-        esp.response = image.data;
-        return esp;
-      } catch (err) {
-        esp.response = false;
-        return esp;
-      }
-    });
-    callback(await response);
+  saveImage = (list, callback) => {
+    if (!list.length) callback([]);
+
+    // Parse binary image
+    Promise.all(list)
+      .then(async resp => {
+        let savedList = resp.map(async item => {
+          return await this.saveToS3(item);
+        });
+        // Parse s3 saved data
+        Promise.all(savedList)
+          .then(async imgs => {
+            let arr = [];
+            await imgs.forEach(data => {
+              if (data) arr.push(data);
+            });
+            callback(arr);
+          })
+          .catch(error => {
+            console.log("parse 1 error", error);
+            callback(false);
+          });
+      })
+      .catch(err => {
+        console.log("parsing error", err);
+        callback(false);
+      });
   };
 
-  S3SaveImage = async esp => {
+  saveToS3 = async esp => {
     let image = esp.response;
 
     if (image && typeof image === "string") {
@@ -135,6 +123,22 @@ class Camera {
       }
       return false;
     }
+  };
+
+  requestAll = async (esps, command, callback) => {
+    this.scanEsp(esps, async list => {
+      let response = await list.map(async esp => {
+        try {
+          let image = await axios.post(`http://${esp.ip}/`, command);
+          esp.response = image.data;
+          return esp;
+        } catch (err) {
+          esp.response = false;
+          return esp;
+        }
+      });
+      callback(await response, list);
+    });
   };
 
   scanEsp = async (espList, register) => {
