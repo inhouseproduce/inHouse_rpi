@@ -5,8 +5,8 @@ const AWS = require('aws-sdk');
 const uuid = require('uuid-random')
 
 // Change KEY and SECRET to match with site
-KEY = 'AKIAZSWGEH2KGH2NUZ5U'
-SECRET = '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'
+KEY = 'KEY'
+SECRET = 'SECRET'
 temp_f = 0.5
 temp_c = 0.1
 humidity = 100.0
