@@ -16,32 +16,63 @@ class Camera {
       });
     };
 
-    this.captureImage = (config, callback, options) => {
+    this.captureImage = (config, callback) => {
       this.camera(config).on(cameraOff => {
-        this.requestAll(config.esp, { capture: true }, (resp, list) => {
-          if(options.save){
-            this.handleSaveImage(resp, arr => {
-              callback(list, arr);
-              cameraOff();
-            });
-          }
-          else {
-            callback(resp,list)
-          }
+        this.requestAll(config.esp, { capture: true }, (response, espList) => {
+          this.handleCameraResponse(response, config, savedList => {
+            callback(espList, savedList);
+            cameraOff();
+          });
         });
       });
     };
   }
 
-  handleSaveImage = (resp, callback) => {
-    console.log("response", await resp);
-    resp.map(item=>{
-      if(!item.response){
-        
+  handleCameraResponse = (resp, config, callback) => {
+    this.handleFailedCameras(resp, config, result => {
+      Promise.all(result).then(test => {
+        let failed = 0;
+        test.map(item => {
+          if (!item.response) {
+            failed++, console.log("item.position", item.position);
+          }
+        });
+        console.log("failed", failed);
+        this.saveImage(test, arr => {
+          callback(arr);
+        });
+      });
+    });
+  };
+
+  handleFailedCameras = async (resp, config, callback) => {
+    let x = true;
+    await resp.map(async item => {
+      // Check whats is item =====>>>
+      console.log("checkpoint--->");
+      if (item && item.active && !item.response) {
+        console.log('inactive checkpoint---->')
+        if (x) {
+          this.camera({ pin: 33 }).init(() => {
+            x = false;
+          });
+        }
+        this.reTakeImage([item], async retaken => {
+          console.log("retaken");
+          Promise.all(retaken).then(async data => {
+            // DOSNT REACH RECOVERed ====>
+            console.log("Recovered", resp[index].position);
+            resp[index].response = await data;
+          });
+        });
       }
-    })
-    this.saveImage(resp, arr => {
-      callback(arr);
+    });
+    callback(resp);
+  };
+
+  reTakeImage = (esps, callback) => {
+    this.requestAll(esps, { capture: true }, resp => {
+      callback(resp);
     });
   };
 
@@ -127,17 +158,21 @@ class Camera {
 
   requestAll = async (esps, command, callback) => {
     this.scanEsp(esps, async list => {
-      let response = await list.map(async esp => {
-        try {
-          let image = await axios.post(`http://${esp.ip}/`, command);
-          esp.response = image.data;
-          return esp;
-        } catch (err) {
-          esp.response = false;
-          return esp;
-        }
-      });
-      callback(await response, list);
+      try {
+        let response = await list.map(async esp => {
+          try {
+            let image = await axios.post(`http://${esp.ip}/`, command);
+            esp.response = image.data;
+            return esp;
+          } catch (err) {
+            esp.response = false;
+            return esp;
+          }
+        });
+        callback(await response, list);
+      } catch (error) {
+        callback(false);
+      }
     });
   };
 
