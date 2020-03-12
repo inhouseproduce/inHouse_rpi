@@ -27,19 +27,19 @@ class Camera {
     let savedList = list.map(async item => {
       return await this.saveToS3(item);
     });
+
     // Parse s3 saved data
-    Promise.all(savedList)
-      .then(async imgs => {
-        let arr = [];
-        await imgs.forEach(data => {
-          if (data) arr.push(data);
-        });
-        callback(arr);
-      })
-      .catch(error => {
-        console.log("parse 1 error", error);
-        callback(false);
+    Promise.all(savedList).then(async imgs => {
+      let arr = [];
+      await imgs.forEach(data => {
+        if (data) arr.push(data);
       });
+      callback(arr);
+    }
+    ).catch(error => {
+      console.log("parse 1 error", error);
+      callback(false);
+    });
   };
 
   saveToS3 = async esp => {

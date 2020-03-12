@@ -19,9 +19,6 @@ class ModuleControl {
         this.handleResponse = async (res, config, callback) => {
             let data = await formatArr(res);
 
-            console.log('response', res)
-            console.log('data', data);
-
             async function formatArr(resp) {
                 let arr = [];
                 await resp.map(item => {
@@ -73,7 +70,8 @@ class ModuleControl {
             if (res.data) {
                 esp.response = res.data;
                 return list;
-            } else {
+            }
+            else {
                 esp.response = false;
                 return list;
             };
@@ -82,13 +80,6 @@ class ModuleControl {
         Promise.all(data).then(testing => {
             console.log('testing', testing)
         });
-
-        async function send(ip, cb) {
-            try {
-                let req = await axios.post(`http://${ip}/`, command);
-                return cb(req);
-            } catch (err) { cb(false) };
-        };
     };
 
     scanEsp = async (espList, register) => {
