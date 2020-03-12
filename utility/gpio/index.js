@@ -19,7 +19,8 @@ class GpioActions {
         // Pwm Initializeation
         this.initializePwm = (config) => {
             if (config.pin && config.pwm) {
-                GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+                let direction = config.direction || 'OUTPUT';
+                GPIO.open(config.pin, GPIO[direction], GPIO.LOW);
                 // Open PWM
                 GPIO.open(config.pwm, GPIO.PWM)
                 // Set ~Hz
