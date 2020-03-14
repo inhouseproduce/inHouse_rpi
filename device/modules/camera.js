@@ -16,7 +16,6 @@ class Camera {
     };
 
     this.captureImage = (config, callback) => {
-      console.log('---------')
       request.sendCommand(config, { capture: true }, (resp, espList) => {
         this.handleResponse(resp, config, savedList => {
           callback(espList, savedList);

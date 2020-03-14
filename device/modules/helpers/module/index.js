@@ -16,6 +16,7 @@ const moduleSwitch = {
         });
         console.log('camera initialize')
     },
+
     on: (config, callback) => {
         gpio.writeGpio(config, true);
         deleay(() => {
@@ -25,6 +26,7 @@ const moduleSwitch = {
         });
         console.log('camera ON')
     },
+
     off: (config, callback) => {
         gpio.writeGpio(config, false);
         deleay(() => {
@@ -33,6 +35,7 @@ const moduleSwitch = {
         });
         console.log('camera OFF')
     },
+
     restart: (config, callback) => {
         gpio.writeGpio(config, false);
         deleay(() => {
@@ -40,6 +43,7 @@ const moduleSwitch = {
         });
         deleay(() => {
             callback(() => moduleSwitch.off(config));
+            console.log('restarted')
         });
     }
 };

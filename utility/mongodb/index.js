@@ -14,11 +14,11 @@ class MongoDB {
         this.connect = callback => {
             const MONGODB_URI = process.env.MONGODB_URI;
             mongoose.set('useCreateIndex', true);
-            mongoose.set('useFindAndModify', true);
+            mongoose.set('useFindAndModify', false);
             
             const mdbConfig = {
                 useNewUrlParser: true,
-                useFindAndModify: true,
+                useFindAndModify: false,
                 useCreateIndex: true,
                 useUnifiedTopology: true
             };
