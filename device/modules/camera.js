@@ -1,24 +1,37 @@
-const control = require("./control");
+const moment = require('moment');
+
+const request = require("./helpers/request");
+const moduleSwitch = require('./helpers/module');
+
 const storage = require("../../utility/storage");
 
 class Camera {
   constructor() {
     this.start = (config, scheduleJob) => {
-      control.module.init(config, () => {
-        control.sendCommand(config, { scan: true }, (resp, espList) => {
+      moduleSwitch.init(config, () => {
+        request.sendCommand(config, { scan: true }, (resp, espList) => {
           scheduleJob(this.captureImage, espList);
         });
       });
     };
 
     this.captureImage = (config, callback) => {
-      control.sendCommand(config, { capture: true }, (resp, espList) => {
-        control.handleResponse(espList, config, savedList => {
+      console.log('---------')
+      request.sendCommand(config, { capture: true }, (resp, espList) => {
+        this.handleResponse(resp, config, savedList => {
           callback(espList, savedList);
         });
       });
     };
   };
+
+  handleResponse = (resp, config, callback) => {
+    this.saveImage(resp, (result) => {
+      console.log('images has been saved', result.length)
+      callback(result);
+    });
+  };
+
 
   saveImage = (list, callback) => {
     if (!list.length) callback([]);
