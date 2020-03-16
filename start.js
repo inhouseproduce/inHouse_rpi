@@ -2,7 +2,7 @@
 if (!process.env.ENV_MODE) {
     require('dotenv').config()
 };
-
+console.log('=======', process.env.NEW_UNIT)
 // Libs
 const device = require('./device');
 const server = require('./server');
@@ -16,3 +16,4 @@ server.registerServer(client => {
         await device.start(client);
     });
 });
+
