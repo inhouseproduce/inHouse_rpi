@@ -5,8 +5,8 @@ const store = require('../store');
 
 class Device {
     constructor() {
-        this.start = sysOp => {
-            Object.keys(sysOp.config).map(key => {
+        this.start = async (sysOp, callback) => {
+            await Object.keys(sysOp.config).map(key => {
                 let config = sysOp.config[key];
                 let runAction = this[key];
 
@@ -19,6 +19,28 @@ class Device {
                     });
                 }
             });
+            if (callback) callback();
+            return
+        };
+
+        this.stop = callback => {
+            // Jobs objct in store
+            let jobs = store.getState().jobs;
+
+            // Stop All jobs. 
+            Object.keys(jobs).map(each => {
+                jobs[each].map(job => {
+                    job.stop();
+                });
+            });
+
+            store.dispatch({
+                type: 'CURRENT_JOB',
+                schedule: {}
+            });
+
+            if (callback) callback();
+            return
         };
     };
 

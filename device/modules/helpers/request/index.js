@@ -29,7 +29,7 @@ class Request {
             let ready = filterList(combine);
 
             console.log('updated', ready.length)
-            callback(result);// change to filter
+            callback(result); // change to filter
         });
 
         async function filterList(list) {

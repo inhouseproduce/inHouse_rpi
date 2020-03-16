@@ -11,8 +11,8 @@ const mongodb = require('./utility/mongodb');
 // Register Server api
 server.registerServer(client => {
     // Initialize mongodb
-    mongodb.connect(() => {
+    mongodb.connect(async () => {
         // Start device
-        device.start(client);
+        await device.start(client);
     });
 });

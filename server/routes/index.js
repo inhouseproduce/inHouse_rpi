@@ -12,5 +12,5 @@ module.exports.initializeRoutes = app => {
 
     app.get('/update/config/', headerAuth, (req, res) => {
         actions.configUpdate(req, res);
-    })
+    });
 };

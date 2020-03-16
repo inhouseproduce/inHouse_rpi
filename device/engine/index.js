@@ -28,8 +28,9 @@ class Engine {
                         logger.engine(key, res);
                     });
                 });
-                // --> Jet jobs to jobList object
-                cronJobs.map(job => { jobList[key] = job });
+
+                // --> Set jobs to jobList object
+                jobList[key] = cronJobs
             });
 
             // Return created cron jobs, delete varible
