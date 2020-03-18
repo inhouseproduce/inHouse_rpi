@@ -58,6 +58,6 @@ class Modules {
       action(job, list);
     });
   };
-}
+};
 
 module.exports = new Modules();

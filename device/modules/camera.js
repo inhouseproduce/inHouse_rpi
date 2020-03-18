@@ -37,39 +37,44 @@ class Camera {
 
     // Parse binary image
     let savedList = list.map(async item => {
-      return await this.saveToS3(item);
+      return await saveToS3(item);
     });
 
-    // Parse s3 saved data
-    Promise.all(savedList).then(async imgs => {
-      let arr = [];
-      await imgs.forEach(data => {
-        if (data) arr.push(data);
+    parseData(savedList, parsed => {
+      callback(parsed);
+    });
+
+    function parseData(savedList, cb) {
+      // Parse s3 saved data
+      Promise.all(savedList).then(async imgs => {
+        let arr = [];
+        await imgs.forEach(data => {
+          if (data) arr.push(data);
+        });
+        cb(arr);
+      }).catch(error => {
+        console.log("parse 1 error", error);
+        cb(false);
       });
-      callback(arr);
-    }
-    ).catch(error => {
-      console.log("parse 1 error", error);
-      callback(false);
-    });
-  };
+    };
 
-  saveToS3 = async esp => {
-    let image = esp.response;
+    async function saveToS3(esp) {
+      let image = esp.response;
 
-    if (image && typeof image === "string") {
-      // Current time
-      let time = `${moment().hour()}:${moment().minute()}`;
+      if (image && typeof image === "string") {
+        // Current time
+        let time = `${moment().hour()}:${moment().minute()}`;
 
-      // Image file name -> time + camera position
-      let name = `${time}__${esp.position}`;
+        // Image file name -> time + camera position
+        let name = `${time}__${esp.position}`;
 
-      // Save image in storage
-      if (image && typeof image === "string" && image.length > 100) {
-        return await storage.saveImage(image, name);
+        // Save image in storage
+        if (image && typeof image === "string" && image.length > 100) {
+          return await storage.saveImage(image, name);
+        }
+        return false;
       }
-      return false;
-    }
+    };
   };
 };
 

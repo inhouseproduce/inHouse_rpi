@@ -30,7 +30,6 @@ class Device {
 
             // Stop All jobs. 
             Object.keys(jobs).map(each => { // map jobs in store
-
                 //====== needs to be fixed to all ==== 
                 // ========== camera schedule obj is missing =====
                 if (each !== 'camera') {
