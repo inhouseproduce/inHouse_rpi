@@ -10,7 +10,7 @@ module.exports.initializeRoutes = app => {
         actions.cameras(req, res);
     });
 
-    app.get('/update/config/', headerAuth, (req, res) => {
-        actions.configUpdate(req, res);
+    app.get('/update/config/', (req, res) => {
+        actions.configs(req, res);
     });
 };

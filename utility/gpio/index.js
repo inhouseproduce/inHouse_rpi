@@ -4,8 +4,19 @@ const GPIO = require('rpio');
 GPIO.init({ gpiomem: false });
 
 const NEW_UNIT = process.env.NEW_UNIT;
-const HIGH = NEW_UNIT ? 'LOW' : 'HIGH';
-const LOW = NEW_UNIT ? 'HIGH' : 'LOW';
+let HIGH, LOW;
+
+if (!NEW_UNIT) {
+    console.log('old unit')
+    HIGH = 'HIGH';
+    LOW = 'LOW'
+}
+
+if (NEW_UNIT) {
+    console.log('new unit')
+    HIGH = 'LOW';
+    LOW = 'HIGH'
+}
 
 class GpioActions {
     constructor() {

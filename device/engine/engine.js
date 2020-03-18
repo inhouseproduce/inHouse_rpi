@@ -48,7 +48,7 @@ class Controller {
                 gpio.initializePwm(config);
                 gpio.writePwm(config, job.level);
             };
-            action({ state: switcher});
+            action({ state: switcher });
         };
     };
 };

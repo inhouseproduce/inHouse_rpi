@@ -9,23 +9,23 @@ class Server {
     constructor() {
         this.registerServer = callback => {
             // Register server api
-            api.register(async config => {
-                const PORT = process.env.PORT || 80;
-                const app = express();
+            const PORT = process.env.PORT || 80;
+            const app = express();
 
-                // Body
-                app.use(logger('dev'));
-                app.use(bodyParser.urlencoded({ extended: true }));
-                app.use(bodyParser.json({ limit: '1mb' }));
+            // Body
+            app.use(logger('dev'));
+            app.use(bodyParser.urlencoded({ extended: true }));
+            app.use(bodyParser.json({ limit: '1mb' }));
 
-                // Headers
-                this.headers(app);
+            // Headers
+            this.headers(app);
 
-                // Initialize Routes
-                routes.initializeRoutes(app);
+            // Initialize Routes
+            routes.initializeRoutes(app);
 
-                // Server Listen
-                app.listen(PORT, () => {
+            // Server Listen
+            app.listen(PORT, () => {
+                api.register(config => {
                     callback(config);
                 });
             });

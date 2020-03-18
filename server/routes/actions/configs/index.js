@@ -1,10 +1,12 @@
 const device = require('../../../../device');
-const server = require('../../../../server');
+const api = require('../../../../server/api');
 
 module.exports = (req, res) => {
     device.stop(() => {
-        server.registerServer(client => {
-            device.start(client); // Start device
+        api.register(config => {
+            device.start(config);
         });
     });
+
+    res.status(200).end();
 };

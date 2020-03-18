@@ -34,6 +34,7 @@ class Api {
 
       // Make get request to register and get config
       this.request(endpoint, token, async data => {
+        console.log('data', data)
         if (data) {
           try {
             // Store client data in store
@@ -70,23 +71,22 @@ class Api {
     store.dispatch({ type: "CONFIG", config: clientDoc.config });
   };
 
-  jwtSign = () => {};
+  jwtSign = () => { };
 
   request = async (endpoint, token, callback) => {
     try {
       // Make request to website server endpoint
-      let request = await axios({
-        method: "get",
-        url: endpoint,
-        timeout: 8000,
+      let request = await axios.get(endpoint, {
         headers: {
           Authorization: "Bearer " + token
         }
       });
+
       // Return request data
       callback(request.data);
 
     } catch (error) {
+      throw error
       callback(false);
     }
   };
