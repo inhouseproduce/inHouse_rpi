@@ -1,4 +1,4 @@
-const gpio = require('../../../../utility/gpio');
+const gpio = require('../../../../../utility/gpio');
 
 const deleay = cb => {
     setTimeout(() => { cb() }, 1000);

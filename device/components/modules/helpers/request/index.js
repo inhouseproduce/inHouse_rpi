@@ -1,4 +1,4 @@
-const network = require('../../../../utility/network');
+const network = require('../../../../../utility/network');
 
 const moduleSwitch = require('../module');
 const request = require('./request');

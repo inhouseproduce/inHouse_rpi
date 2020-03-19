@@ -1,5 +1,5 @@
 const device = require('../../../../device');
-const api = require('../../../../server/api');
+const api = require('../../../../api');
 
 module.exports = (req, res) => {
     device.stop(() => {

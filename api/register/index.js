@@ -2,7 +2,7 @@ const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const store = require("../../../store");
+const store = require("../../store");
 const handleJson = require("./handleJson");
 
 class Api {

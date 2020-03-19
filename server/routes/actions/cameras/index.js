@@ -1,5 +1,5 @@
 const store = require('../../../../store');
-const camera = require('../../../../device/modules/camera');
+const camera = require('../../../../device/components/modules/camera');
 
 module.exports = (req, res) => {
     let config = store.getState().config.modules.camera;

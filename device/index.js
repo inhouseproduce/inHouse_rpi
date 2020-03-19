@@ -1,27 +1,28 @@
-const engine = require('./engine');
-const modules = require('./modules');
-const sensors = require('./sensors');
+
 const store = require('../store');
+const Components = require('./components');
 
 class Device {
-    constructor() {
-        this.start = async (sysOp, callback) => {
-            // Loop through config json
-            await Object.keys(sysOp.config).map(key => {
-                let config = sysOp.config[key]; // specific config dir
-                let runAction = this[key];
+    constructor(logger, sysCon) {
+        this.start = async callback => {
+            // extract config from system config
+            const config = sysCon.config;
 
-                if (runAction) {
-                    runAction(config, job => {
-                        store.dispatch({
-                            type: 'CURRENT_JOB',
-                            schedule: job
-                        });
-                    });
-                }
+            // Initialize components
+            let components = new Components(logger, config);
+
+            // Map each component with job callback
+            await Object.keys(config).map(item => {
+                // Map each component as action function
+                const action = components[item];
+                // Run each action get back sceduled job obj
+                action(job => {
+                    this.saveJobToStore(job); // Save job in state
+                });
             });
-            if (callback) callback();
-            return
+
+            if (callback) callback(); // Callback sync
+            return; //return if async
         };
 
         this.stop = async callback => {
@@ -40,34 +41,21 @@ class Device {
             });
 
             // Empty store jobs obj
-            store.dispatch({
-                type: 'CURRENT_JOB',
-                schedule: {}
-            });
+            this.saveJobToStore({});
 
             // If callback make callback
             if (callback) callback();
             return
         };
-    };
+    }
 
-    sensors = async (config, cb) => {
-        sensors.start(config, jobs => {
-            cb(jobs);
-        });
-    };
-
-    engine = async (config, cb) => {
-        engine.start(config, jobs => {
-            cb(jobs);
-        });
-    };
-
-    modules = async (config, cb) => {
-        modules.start(config, jobs => {
-            cb(jobs);
-        });
-    };
+    saveJobToStore = job => {
+        let saveStore = {
+            type: 'CURRENT_JOB',
+            schedule: job || {}
+        }
+        store.dispatch(saveStore);
+    }
 };
 
-module.exports = new Device;
+module.exports = Device;

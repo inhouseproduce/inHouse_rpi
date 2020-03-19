@@ -1,11 +1,16 @@
-const store = require('../../store');
-const db = require('../mongodb/modules');
+const store = require('../store');
+const db = require('../utility/mongodb/modules');
 const os = require('os');
 const osUtil = require('os-utils');
-const actionDB = require('../mongodb/actions');
+const actionDB = require('../utility/mongodb/actions');
 
 class Logger {
     constructor() {
+
+        this.test = () => {
+            console.log('logger is recording')
+        }
+
         this.engine = (key, data) => {
             this.saveToStore('engine', key, data);
 

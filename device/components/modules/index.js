@@ -1,10 +1,8 @@
-const scheduler = require("../../utility/scheduler");
-const logger = require("../../utility/logger");
-
+const scheduler = require("../../../utility/scheduler");
 const camera = require("./camera");
 
 class Modules {
-  constructor() {
+  constructor(logger) {
     this.start = (config, callback) => {
       Object.keys(config).map(async key => {
         // Gether data
@@ -12,9 +10,7 @@ class Modules {
 
         // select specific function from this (this.camera/sensors)
         let moduleAction = this[key];
-
         moduleAction(config[key], (job, list) => {
-          // Record Scaned esp list
           logger.modules(key, list);
 
           // Schedule job based on callback from moduleAction
@@ -60,4 +56,4 @@ class Modules {
   };
 };
 
-module.exports = new Modules();
+module.exports = Modules;

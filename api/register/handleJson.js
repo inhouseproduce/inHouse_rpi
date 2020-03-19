@@ -4,14 +4,14 @@ class HandleConfigFile {
     constructor() {
         this.getJsonFile = () => {
             // Get saved.json config file and validate
-            let savedConfig = require('../../../configs/saved.json');
+            let savedConfig = require('../../configs/saved.json');
             let isValid = this.validateConfig(savedConfig);
 
             if (isValid) {
                 return savedConfig;
             }
             else {
-                let defaultConfig = require('../../../configs/default.json');
+                let defaultConfig = require('../../configs/default.json');
                 let defIsValid = this.validateConfig(defaultConfig);
                 if (defIsValid) {
                     return defaultConfig;

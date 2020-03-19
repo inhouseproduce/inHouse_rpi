@@ -1,10 +1,8 @@
 const engine = require('./engine');
-
-const logger = require('../../utility/logger');
-const scheduler = require('../../utility/scheduler');
+const scheduler = require('../../../utility/scheduler');
 
 class Engine {
-    constructor() {
+    constructor(logger) {
         this.start = (sysOp, callback) => {
             let jobList = {};
 
@@ -39,4 +37,4 @@ class Engine {
     };
 };
 
-module.exports = new Engine;
+module.exports = Engine;

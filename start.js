@@ -1,18 +1,22 @@
 // // Development environmental variables
 if (!process.env.ENV_MODE) {
-    require('dotenv').config()
+    require('dotenv').config();
 };
 
 // Libs
-const device = require('./device');
+const Device = require('./device');
 const server = require('./server');
 const mongodb = require('./utility/mongodb');
+
+const logger = require('./logger');
 
 // Register Server api
 server.registerServer(client => {
     // Initialize mongodb
     mongodb.connect(async () => {
         // Start device
-        await device.start(client);
+        let device = new Device(logger, client);
+
+        device.start();
     });
 });

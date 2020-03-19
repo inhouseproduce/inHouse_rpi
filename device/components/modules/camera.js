@@ -3,7 +3,7 @@ const moment = require('moment');
 const request = require("./helpers/request");
 const moduleSwitch = require('./helpers/module');
 
-const storage = require("../../utility/storage");
+const storage = require("../../../utility/storage");
 
 class Camera {
   constructor() {

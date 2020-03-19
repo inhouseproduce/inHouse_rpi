@@ -3,7 +3,7 @@ const express = require('express');
 const logger = require('morgan');
 
 const routes = require('./routes');
-const api = require('./api');
+const api = require('../api');
 
 class Server {
     constructor() {

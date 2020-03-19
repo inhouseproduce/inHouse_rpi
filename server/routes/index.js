@@ -1,5 +1,5 @@
 const actions = require('./actions');
-const headerAuth = require('../auth');
+const headerAuth = require('../../auth');
 
 module.exports.initializeRoutes = app => {
     app.post('/control/', headerAuth, (req, res) => {
