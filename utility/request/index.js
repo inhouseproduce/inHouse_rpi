@@ -7,7 +7,8 @@ class Request {
                 return await this.request(esp, options);
             });
             Promise.all(resList).then(resp => {
-                cb(resp);
+                if (cb) cb(resp);
+                else return true;
             });
         };
 
@@ -30,10 +31,6 @@ class Request {
                     return esp;
                 };
             };
-        };
-
-        this.postRequest = async (url, options ) => {
-            return await axios.post(url, options);
         };
     };
 };

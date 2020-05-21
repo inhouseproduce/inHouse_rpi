@@ -1,25 +1,24 @@
 {
-    "system": "1",
     "client": "hugos",
     "config": {
         "engine": {
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
-                "run_period": 0.4,
+                "run_period": 0.1,
                 "pin": 11,
                 "direction": "OUTPUT"
             },
             "irrigation": {
                 "type": "interval",
-                "time_interval": 240,
-                "run_period": 1,
+                "time_interval": 1,
+                "run_period": 3,
                 "pin": 13,
                 "direction": "OUTPUT"
             },
             "lights": {
                 "type": "clock",
-                "pin": 7,
+                "pin": 23,
                 "pwm": 12,
                 "direction": "OUTPUT",
                 "actions": [
@@ -44,15 +43,8 @@
             "camera": {
                 "type": "interval",
                 "time_interval": 1,
+                "pin": 33,
                 "esp": [
-                    {
-                        "position": 1,
-                        "mac": "4c:11:ae:75:c2:48"
-                    },
-                    {
-                        "position": 2,
-                        "mac": "23:6f:28:b1:58:23"
-                    }
                 ]
             }
         }

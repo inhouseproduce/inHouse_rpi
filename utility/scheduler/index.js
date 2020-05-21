@@ -34,7 +34,7 @@ class Scheduler {
                 });
 
                 // Return next date and current job
-                return { date: cron.nextDates(), job: job };
+                return { date: cron.nextDates(), job: job, cron };
             });
 
             // Run current state, action passed as arg
@@ -44,7 +44,7 @@ class Scheduler {
 
             // Return array of next dates
             return nextDates.map(data => {
-                return data.date;
+                return data.cron
             });
         };
     };

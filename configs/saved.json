@@ -1,0 +1,4 @@
+{
+                    "client": "test",
+                    "config": {"engine":{"pump":{"type":"interval","time_interval":15,"run_period":0.3,"pin":11,"direction":"OUTPUT"},"irrigation":{"type":"interval","time_interval":1,"run_period":3,"pin":13,"direction":"OUTPUT"},"lights":{"type":"clock","pin":23,"pwm":12,"direction":"OUTPUT","actions":[{"action":"on","time":"12:00"},{"action":"dim","time":"10:10","level":100}]}},"modules":{"camera":{"type":"interval","time_interval":1,"pin":38,"esp":[]}}}
+                }

@@ -1,38 +1,61 @@
-const engine = require('./engine');
-const modules = require('./modules');
 
 const store = require('../store');
-
-let { CURRENT_JOB } = require('../store/actionTypes');
+const Components = require('./components');
 
 class Device {
-    constructor() {
-        this.start = sysOp => {
-            Object.keys(sysOp.config).map(opp => {
-                let config = sysOp.config[opp];
-                let runAction = this[opp];
+    constructor(logger, sysCon) {
+        this.start = async callback => {
+            // extract config from system config
+            const config = sysCon.config;
 
-                runAction(config, job => {
-                    store.dispatch({
-                        type: CURRENT_JOB,
-                        schedule: job
-                    });
+            // Initialize components
+            let components = new Components(logger, config);
+
+            // Map each component with job callback
+            await Object.keys(config).map(item => {
+                // Map each component as action function
+                const action = components[item];
+                // Run each action get back sceduled job obj
+                action(job => {
+                    this.saveJobToStore(job); // Save job in state
                 });
             });
+
+            if (callback) callback(); // Callback sync
+            return; //return if async
         };
-    };
 
-    engine = async (config, cronJobs) => {
-        engine.start(config, jobs => {
-            cronJobs(jobs);
-        });
-    };
+        this.stop = async callback => {
+            // Jobs objct in store
+            let jobs = await store.getState().jobs;
 
-    modules = async (config, cronJobs) => {
-        modules.start(config, jobs => {
-            cronJobs(jobs);
-        });
-    };
+            // Stop All jobs. 
+            Object.keys(jobs).map(each => { // map jobs in store
+                //====== needs to be fixed to all ==== 
+                // ========== camera schedule obj is missing =====
+                if (each !== 'camera') {
+                    jobs[each].map(job => { // map each job
+                        job.stop();
+                    });
+                };
+            });
+
+            // Empty store jobs obj
+            this.saveJobToStore({});
+
+            // If callback make callback
+            if (callback) callback();
+            return
+        };
+    }
+
+    saveJobToStore = job => {
+        let saveStore = {
+            type: 'CURRENT_JOB',
+            schedule: job || {}
+        }
+        store.dispatch(saveStore);
+    }
 };
 
-module.exports = new Device;
+module.exports = Device;

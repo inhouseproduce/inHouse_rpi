@@ -1,24 +1,24 @@
-const gpio = require('../../utility/gpio');
+const gpio = require('../../../utility/gpio');
 
 class Controller {
     constructor() {
         this.initialize = (config, action) => {
             if (config.pin) {
                 gpio.initializeGpio(config, true);
-                action('Gpio has been initialzied')
+                action({ pin: config.pin });
             };
 
             if (config.pwd && config.pin) {
                 gpio.initializePwm(config, 100);
-                action('PWM has been initialzied')
+                action({ pwm: config.pwm });
             };
         };
 
         // Interval Action
         this.interval = (config, job, action) => {
-            action('imp action')
             if (config.pin) {
                 gpio.writeGpio(config, true);
+                action({ state: true });
             };
 
             // Off based on Run_period
@@ -26,6 +26,7 @@ class Controller {
                 setTimeout(() => {
                     if (config.pin) {
                         gpio.writeGpio(config, false);
+                        action({ state: false });
                     };
                 }, config.run_period * 60000);
             };
@@ -34,10 +35,10 @@ class Controller {
 
         // Clock Action
         this.clock = (config, job, action) => {
-            action('imp action')
+            let switcher = job.action === 'on' ? true : false;
+
             // Gpio switcher 
             if (job.action === 'on' || job.action === 'off') {
-                let switcher = job.action === 'on' ? true : false;
                 gpio.writeGpio(config, switcher);
             };
 
@@ -47,6 +48,7 @@ class Controller {
                 gpio.initializePwm(config);
                 gpio.writePwm(config, job.level);
             };
+            action({ state: switcher });
         };
     };
 };

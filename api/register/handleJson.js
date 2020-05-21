@@ -4,14 +4,14 @@ class HandleConfigFile {
     constructor() {
         this.getJsonFile = () => {
             // Get saved.json config file and validate
-            let savedConfig = require('./configs/saved.json');
+            let savedConfig = require('../../configs/saved.json');
             let isValid = this.validateConfig(savedConfig);
 
             if (isValid) {
                 return savedConfig;
             }
             else {
-                let defaultConfig = require('./configs/default.json');
+                let defaultConfig = require('../../configs/default.json');
                 let defIsValid = this.validateConfig(defaultConfig);
                 if (defIsValid) {
                     return defaultConfig;
@@ -22,14 +22,18 @@ class HandleConfigFile {
             };
         };
 
-        this.saveJsonFile = data => {
+        this.saveJsonFile = (data, name) => {
             if (this.validateConfig(data)) {
-                // Convert to json and save
-                let config = JSON.stringify(data);
-
                 // Save to saved.json file
                 let saveTo = './configs/saved.json';
-                fs.writeFileSync(saveTo, config);
+
+                // JSON format
+                let fileData = `{
+                    "client": "${name}",
+                    "config": ${JSON.stringify(data)}
+                }`;
+
+                fs.writeFileSync(saveTo, fileData);
             }
             else {
                 console.log('Config file is not valid');

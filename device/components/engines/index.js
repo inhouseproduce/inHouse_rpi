@@ -1,0 +1,40 @@
+const engine = require('./engine');
+const scheduler = require('../../../utility/scheduler');
+
+class Engine {
+    constructor(logger) {
+        this.start = (sysOp, callback) => {
+            let jobList = {};
+
+            Object.keys(sysOp).map(key => {
+                let config = sysOp[key];
+
+                // --> Initialize Gpio pins based on config
+                engine.initialize(config, res => {
+                    logger.engine(key, res);
+                });
+
+                // Get scheduler type funcs based on config
+                let schedule = scheduler[config.type];
+                // Get engine type(interval/clock) funcs
+                let engineAction = engine[config.type];
+
+                // --> Schedule a job based on config type
+                let cronJobs = schedule(config, { int: true }, (action, job) => {
+                    // Run engine (interval/clock) functions based on config
+                    engineAction(config, job, res => {
+                        logger.engine(key, res);
+                    });
+                });
+
+                // --> Set jobs to jobList object
+                jobList[key] = cronJobs
+            });
+
+            // Return created cron jobs, delete varible
+            callback(jobList);
+        };
+    };
+};
+
+module.exports = Engine;

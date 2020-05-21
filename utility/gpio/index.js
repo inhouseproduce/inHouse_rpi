@@ -3,13 +3,28 @@ const GPIO = require('rpio');
 // Initial gpio option
 GPIO.init({ gpiomem: false });
 
+const NEW_UNIT = process.env.NEW_UNIT;
+let HIGH, LOW;
+
+if (!NEW_UNIT) {
+    console.log('old unit')
+    HIGH = 'HIGH';
+    LOW = 'LOW'
+}
+
+if (NEW_UNIT) {
+    console.log('new unit')
+    HIGH = 'LOW';
+    LOW = 'HIGH'
+}
+
 class GpioActions {
     constructor() {
         // Gpio Initializeation
         this.initializeGpio = (config, init) => {
             if (config.pin && config.direction) {
                 // LOW is on High is off
-                let initialState = GPIO[init ? 'LOW' : 'LOW'];
+                let initialState = GPIO[LOW];
                 let direction = GPIO[config.direction];
                 let pin = config.pin;
                 GPIO.open(pin, direction, initialState);
@@ -19,7 +34,8 @@ class GpioActions {
         // Pwm Initializeation
         this.initializePwm = (config) => {
             if (config.pin && config.pwm) {
-                GPIO.open(config.pin, GPIO[config.direction], GPIO.LOW);
+                let direction = config.direction || 'OUTPUT';
+                GPIO.open(config.pin, GPIO[direction], GPIO[LOW]);
                 // Open PWM
                 GPIO.open(config.pwm, GPIO.PWM)
                 // Set ~Hz
@@ -34,7 +50,7 @@ class GpioActions {
         // Write gpio
         this.writeGpio = (config, init) => {
             if (config.pin) {
-                GPIO.write(config.pin, GPIO[init ? 'LOW' : 'HIGH']);
+                GPIO.write(config.pin, GPIO[init ? LOW : HIGH]);
                 // initialize at 100% - if pwm;
                 if (config.pwm) {
                     GPIO.pwmSetData(config.pwm, 100);
