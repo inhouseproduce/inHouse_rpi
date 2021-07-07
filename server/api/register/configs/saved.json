@@ -50,11 +50,17 @@
                         "mac": "4c:11:ae:75:c2:48"
                     },
                     {
-                        "position": 2,
-                        "mac": "23:6f:28:b1:58:23"
+                        "position": 1,
+                        "mac": "xx:11:zz:75:c2:xx"
                     }
                 ]
             }
+        },
+        "sensors": {
+            "type": "interval",
+            "time_interval": 1,
+            "pin": 19,
+            "direction": "OUTPUT"
         }
     }
 }

@@ -1,9 +1,12 @@
-let { CURRENT_JOB, SET_CLIENT, REGISTER_TOKEN } = require('../actionTypes');
+let { CURRENT_JOB, SET_CLIENT, REGISTER_TOKEN, ENGINE } = require('../actionTypes');
 
 const initialState = {
-    isAuth: false,
     auth: {},
-    jobs: {}
+    jobs: {},
+    state: {
+        engine: {},
+        module: {}
+    },
 };
 
 const user = (state = initialState, action) => {
@@ -33,6 +36,30 @@ const user = (state = initialState, action) => {
                     token: action.token
                 }
             }
+
+        case 'STATE':
+            return {
+                ...state,
+                state: {
+                    ...state.state,
+                    [action.to]: {
+                        ...state.state[action.to],
+                        [action.key]: {
+                            ...state.state[action.to][action.key],
+                            ...action.res
+                        }
+                    }
+                }
+            };
+
+        case 'CONFIG': {
+            return {
+                ...state,
+                config: {
+                    ...action.config
+                }
+            }
+        };
 
         default: return state;
     };

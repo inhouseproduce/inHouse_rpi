@@ -6,14 +6,14 @@
             "pump": {
                 "type": "interval",
                 "time_interval": 15,
-                "run_period": 0.1,
+                "run_period": 0.4,
                 "pin": 11,
                 "direction": "OUTPUT"
             },
             "irrigation": {
                 "type": "interval",
-                "time_interval": 1,
-                "run_period": 3,
+                "time_interval": 240,
+                "run_period": 1,
                 "pin": 13,
                 "direction": "OUTPUT"
             },
@@ -50,11 +50,17 @@
                         "mac": "4c:11:ae:75:c2:48"
                     },
                     {
-                        "position": 2,
-                        "mac": "23:6f:28:b1:58:23"
+                        "position": 1,
+                        "mac": "xx:11:zz:75:c2:xx"
                     }
                 ]
             }
+        },
+        "sensors": {
+            "type": "interval",
+            "time_interval": 2,
+            "pin": 19,
+            "direction": "OUTPUT"
         }
     }
 }

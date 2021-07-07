@@ -1,20 +1,18 @@
 const engine = require('./engine');
 const modules = require('./modules');
-
+const sensors = require('./sensors');
 const store = require('../store');
-
-let { CURRENT_JOB } = require('../store/actionTypes');
 
 class Device {
     constructor() {
         this.start = sysOp => {
-            Object.keys(sysOp.config).map(opp => {
-                let config = sysOp.config[opp];
-                let runAction = this[opp];
+            Object.keys(sysOp.config).map(key => {
+                let config = sysOp.config[key];
+                let runAction = this[key];
 
                 runAction(config, job => {
                     store.dispatch({
-                        type: CURRENT_JOB,
+                        type: 'CURRENT_JOB',
                         schedule: job
                     });
                 });
@@ -22,15 +20,21 @@ class Device {
         };
     };
 
-    engine = async (config, cronJobs) => {
-        engine.start(config, jobs => {
-            cronJobs(jobs);
+    sensors = async (config, cb) => {
+        sensors.start(config, jobs => {
+            cb(jobs);
         });
     };
 
-    modules = async (config, cronJobs) => {
+    engine = async (config, cb) => {
+        engine.start(config, jobs => {
+            cb(jobs);
+        });
+    };
+
+    modules = async (config, cb) => {
         modules.start(config, jobs => {
-            cronJobs(jobs);
+            cb(jobs);
         });
     };
 };
